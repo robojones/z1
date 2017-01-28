@@ -1,14 +1,17 @@
 const autoSave = require('save-on-change')
 
+const init = require('./module/init')
+
 const Worker = require('./class/Worker')
 const createServer = require('./module/remoteServer')
-const init = require('./module/init')
 
 const start = require('./operation/start')
 const stop = require('./operation/stop')
 const restart = require('./operation/restart')
+const list = require('./operation/list')
 const ping = require('./operation/ping')
 const exit = require('./operation/exit')
+
 
 const dir = init.dir
 
@@ -34,6 +37,7 @@ const operation = {
   start: start,
   stop: stop,
   restart: restart,
+  list: list,
   ping: ping,
   exit: exit
 }

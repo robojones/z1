@@ -34,6 +34,12 @@ class Remote extends BetterEvents {
     })
   }
 
+  list() {
+    return this.send({
+      name: 'list'
+    })
+  }
+
   ping() {
     return this.send({
       name: 'ping'
