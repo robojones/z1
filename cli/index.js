@@ -57,10 +57,18 @@ program
     connect().then(() => {
       return z1.list()
     }).then(data => {
+      const props = Object.keys(data)
+
+      if(!props.length) {
+        console.log('no workers running')
+        return
+      }
+
       const max = process.stdout.columns
       const stuff = '                    '
+
       console.log(' workers name                 directory')
-      for(const prop of Object.keys(data)) {
+      for(const prop of props) {
         let obj = data[prop]
         let p = (stuff + obj.pending).substr(-2)
         let a = (stuff + obj.available).substr(-2)
