@@ -88,7 +88,7 @@ program
   .description('kill the z1 daemon')
   .action(() => {
     connect().then(() => {
-      return z1.exit(dir)
+      return z1.exit()
     }).then(data => {
       console.log('master stopped')
     }).catch(handle)
