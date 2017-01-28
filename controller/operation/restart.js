@@ -14,7 +14,7 @@ module.exports = function restart(config, command) {
   })
 
   if(!old.length) {
-    return Promise.reject(`app ${command.app} not found.`)
+    return Promise.reject(new Error(`"${command.app}" not found.`))
   }
 
   command.dir = old[0].dir
