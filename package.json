@@ -1,0 +1,38 @@
+{
+  "name": "z1",
+  "version": "2.0.0",
+  "description": "Node.js worker manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha"
+  },
+  "bin": "cli/index.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robojones/z1.git"
+  },
+  "keywords": [
+    "cluster",
+    "manage",
+    "manager",
+    "management",
+    "process"
+  ],
+  "author": "robojones",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robojones/z1/issues"
+  },
+  "homepage": "https://github.com/robojones/z1#readme",
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "better-events": "^1.3.1",
+    "functs": "^1.1.7",
+    "save-on-change": "^1.0.6"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "exampleApp",
+  "ports": [8080, 8081],
+  "main": "server.js",
+  "workers": 2
+}
