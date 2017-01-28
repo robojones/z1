@@ -13,49 +13,46 @@ program
   .version(pack.version)
 program
   .command('start [dir]')
+  .description('start the app in the dir')
   .action((dir) => {
     z1.start(dir).then(data => {
       console.log('started')
       console.log('name:', data.app)
       console.log('workers started:', data.started)
-    }).catch(err => {
-      console.error(err.message)
-    })
+    }).catch(handle)
   })
 program
   .command('stop <appName> [timeout]')
+  .description('stop the app specified by the appName')
   .action((appName, timeout) => {
     z1.stop(appName, timeout).then(data => {
       console.log('stopped')
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
-    }).catch(err => {
-      console.error(err.message)
-    })
+    }).catch(err => handle)
   })
 program
   .command('restart <appName> [timeout]')
+  .description('restart the app specified by the appName')
   .action((appName, timeout) => {
     z1.restart(appName, timeout).then(data => {
       console.log('restarted')
       console.log('name:', data.app)
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
-    }).catch(err => {
-      console.error(err.message)
-    })
+    }).catch(handle)
   })
 program
   .command('exit')
+  .description('kill the z1 daemon')
   .action((dir) => {
     z1.exit(dir).then(data => {
       console.log('master stopped')
-    }).catch(err => {
-      console.error(err)
-    })
+    }).catch(handle)
   })
 program
   .command('resurrect')
+  .description('start the z1 daemon and started apps')
   .action(() => {
     z1.ping().then(() => {
       console.log('z1 already running')
@@ -81,9 +78,12 @@ program
       p.unref()
 
       console.log('master started')
-    }).catch(err => {
-      console.error(err.message)
-    })
+    }).catch(handle)
   })
 
 program.parse(process.argv)
+
+function handle(err) {
+  console.error(err)
+  process.exit(1)
+}
