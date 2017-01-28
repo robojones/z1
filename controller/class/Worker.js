@@ -65,6 +65,10 @@ class Worker extends BetterEvents {
 
     const w = this.w
 
+    if(!w) {
+      return
+    }
+
     w.disconnect()
 
     if(typeof time === 'number') {

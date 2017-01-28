@@ -112,23 +112,25 @@ function connect() {
     const file = path.join(z1Path, 'controller/index.js')
     const node = process.argv[0]
 
-    const p = cp.spawn(node, [file], {
-      stdio: 'ignore',
-      detached: true
+    return new Promise((resolve, reject) => {
+
+      const p = cp.spawn(node, [file], {
+        stdio: 'ignore',
+        detached: true
+      })
+      p.on('error', reject)
+      p.unref()
+
+      ping().then(resolve)
     })
-    p.on('error', err => console.log(err))
-    p.unref()
-
-    return ping
-
   })
 }
 
 function ping() {
   return z1.ping().catch(() => {
-    return xTime(100)
-  }).then(() => {
-    return ping()
+    return xTime(100).then(() => {
+      return ping()
+    })
   })
 }
 
