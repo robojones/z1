@@ -8,13 +8,20 @@ const ex = module.exports = {}
 process.chdir(process.env.HOME)
 try {
   fs.mkdirSync('.z1')
-  fs.mkdirSync(['.', '.z1', 'z1'].join(path.sep))
-
 } catch(err) {
   if(err.code !== 'EEXIST') {
     throw err
   }
 }
+
+try {
+  fs.mkdirSync(['.', '.z1', 'z1'].join(path.sep))
+} catch(err) {
+  if(err.code !== 'EEXIST') {
+    throw err
+  }
+}
+
 
 ex.dir = path.join(process.env.HOME, '.z1')
 
