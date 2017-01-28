@@ -1,6 +1,6 @@
 {
   "name": "z1",
-  "version": "2.0.0",
+  "version": "3.0.1",
   "description": "Node.js worker manager",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "better-events": "^1.3.1",
+    "commander": "^2.9.0",
     "functs": "^1.1.7",
     "save-on-change": "^1.0.6"
   }
