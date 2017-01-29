@@ -5,14 +5,6 @@ const init = require('./module/init')
 const Worker = require('./class/Worker')
 const createServer = require('./module/remoteServer')
 
-const start = require('./operation/start')
-const stop = require('./operation/stop')
-const restart = require('./operation/restart')
-const list = require('./operation/list')
-const ping = require('./operation/ping')
-const exit = require('./operation/exit')
-
-
 const dir = init.dir
 
 const config = autoSave('config.json', err => {
@@ -25,21 +17,16 @@ if(!config.apps) {
   config.apps = []
 }
 
-config.apps.forEach(d => {
-  start(null, {
-    dir: d
-  }).catch(handle)
-})
-
 process.chdir(dir)
 
 const operation = {
-  start: start,
-  stop: stop,
-  restart: restart,
-  list: list,
-  ping: ping,
-  exit: exit
+  resurrect: require('./operation/resurrect'),
+  start: require('./operation/start'),
+  stop: require('./operation/stop'),
+  restart: require('./operation/restart'),
+  list: require('./operation/list'),
+  ping: require('./operation/ping'),
+  exit: require('./operation/exit')
 }
 
 const server = createServer('sick.sock', command => {

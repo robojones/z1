@@ -12,6 +12,12 @@ class Remote extends BetterEvents {
     this.socketFile = socketFile
   }
 
+  resurrect() {
+    return this.connectAndSend({
+      name: 'resurrect'
+    })
+  }
+
   start(dir) {
     return this.connectAndSend({
       name: 'start',
@@ -109,8 +115,6 @@ class Remote extends BetterEvents {
           })
         })
       }
-
-      console.log('starting daemon')
 
       try {
         fs.unlinkSync(this.socketFile)

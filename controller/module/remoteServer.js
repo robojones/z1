@@ -57,16 +57,5 @@ module.exports = (filename, run) => {
 
   server.on('error', handle)
 
-  //cleanup
-
-  cleanup.add(() => {
-    try {
-      fs.unlinkSync(file)
-    } catch(err) {
-      // this case is unimportant
-    }
-    process.exit()
-  })
-
   return server
 }

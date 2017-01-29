@@ -12,6 +12,20 @@ const pack = require('./../package.json')
 
 program
   .version(pack.version)
+  .arguments('<cmd>')
+  .action(function (cmd) {
+    console.log(cmd)
+  })
+program
+  .command('resurrect')
+  .description('start the apps that were started before exit')
+  .action(() => {
+    return z1.resurrect().then(data => {
+      console.log('resurrected')
+      console.log('apps:', data.apps)
+      console.log('workers started:', data.started)
+    }).catch(handle)
+  })
 program
   .command('start [dir]')
   .description('start the app in the dir')
@@ -83,9 +97,14 @@ program
     }).catch(handle)
   })
 
+if(process.argv.length === 2) {
+  console.log('no command given')
+  process.exit(1)
+}
+
 program.parse(process.argv)
 
 function handle(err) {
-  console.error(err)
+  console.error('[ERROR] - ' + err.message)
   process.exit(1)
 }

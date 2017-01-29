@@ -30,15 +30,6 @@ process.chdir(path.join(ex.dir, 'z1'))
 // initiate global error handle function
 require('./handle')
 
+global.isResurrected = false
+
 process.chdir(ex.dir)
-
-// initiate global cleanup
-global.cleanup = functs()
-
-process.on('SIGINT', clean)
-process.on('beforeExit', clean)
-
-function clean() {
-  global.cleanup()
-  process.exit()
-}

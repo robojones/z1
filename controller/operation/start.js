@@ -28,6 +28,10 @@ module.exports = function start(config, command) {
 
   return new Promise((resolve, reject) => {
 
+    if(!global.isResurrected) {
+      config.apps = []
+    }
+
     if(!path.isAbsolute(command.dir)) {
       throw new Error('command.dir must be an absolute path')
     }
