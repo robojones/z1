@@ -30,6 +30,7 @@ module.exports = function start(config, command) {
 
     if(!global.isResurrected) {
       config.apps = []
+      global.isResurrected = true
     }
 
     if(!path.isAbsolute(command.dir)) {
