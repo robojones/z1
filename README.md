@@ -113,7 +113,7 @@ They will finish their outstanding requests before they exit.
 
 ### Stop
 
-To stop a app just type:
+To stop an app just type:
 
 ```
 z1 stop homepage
@@ -241,6 +241,6 @@ Example:
 }
 ```
 
-It will be rejected if `z1.resurrect()` or `z1.start()` has been called before.
+It will be rejected if `z1.resurrect()` or `z1.start()` was called before.
 
 Resurrect will start all apps that were running before the daemon was killed.
