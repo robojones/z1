@@ -12,7 +12,14 @@
   - [Stop](#stop)
   - [Exit](#exit)
   - [Resurrect](#resurrect)
-
+3. [Docs](#docs)
+  - [z1.start](#z1startdir)
+  - [z1.restart](#z1restartapp-timeout)
+  - [z1.stop](#z1stopapp-timeout)
+  - [z1.list](#z1list)
+  - [z1.exit](#z1exit)
+  - [z1.resurrect](#z1resurrect)
+  
 ## Setup
 
 ### Installation
@@ -91,7 +98,7 @@ Displays a list of all running apps.
 Example:
 ```
  workers name                 directory
- 0  2  0 homepage             /home/jonathan/apps/homepage
+ 0  2  0 homepage             /home/jones/apps/homepage
  |  |  |
  |  | killed
  | available
@@ -134,3 +141,106 @@ z1 resurrect
 ```
 
 Note: If you are starting a new app before `z1 resurrect` the old apps will not be restored.
+
+## Docs
+
+Besides the CLI you can also require z1 to control your apps with a Node.js program.
+
+```javascript
+const z1 = require('z1')
+```
+
+### z1.start([dir])
+
+__Arguments__
+- __dir__ `<String>` Path to the directory where the `package.json` of the app is located
+
+__Returns__ a `<Promise>` that gets resolved when the app is started. It resolves to an object with the following data:
+```javascript
+{
+  app: String,
+  dir: String,
+  started: Number
+}
+```
+- __app__ The name of the app specified in the `package.json`. You will need this in order to restart/stop the app.
+- __dir__ Absolute path to the directory where the package.json is located
+- __started__ Number of workers started for this app
+
+### z1.restart(app[, timeout])
+
+__Arguments__
+- __app__ `<String>` The name specified in the package.json of the app you want to restart.
+- __timeout__ `<Number>` Maximum time until the old workers get killed.
+
+__Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
+```javascript
+  app: String,
+  dir: String,
+  started: Number,
+  killed: Number
+```
+- __app__ the app name
+- __dir__ directory of the app
+- __started__ Number of started workers
+- __killed__ Number of killed workers
+
+### z1.stop(app[, timeout])
+
+__Arguments__
+- __app__ `<String>` The name specified in the package.json of the app you want to restart.
+- __timeout__ `<Number>` Maximum time until the old workers get killed.
+
+__Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
+```javascript
+  app: String,
+  dir: String,
+  killed: Number
+```
+- __app__ the app name
+- __dir__ directory of the app
+- __killed__ Number of killed workers
+
+### z1.list()
+
+__Returns__ a `<Promise>` that resolves to an object containing data about all running workers.
+
+You can access the data for an app by using the name as key:
+```
+z1.list().then(data => {
+  console.log(data['homepage'])
+})
+```
+
+The output would be:
+```javascript
+{
+  dir: '/home/jones/apps/homepage',
+  file: 'index.js',
+  pending: 0,
+  available: 2,
+  killed: 0
+}
+```
+
+### z1.exit()
+
+__Returns__ a `<Promise>` that resolves to an empty object. It gets resolvet after the z1 daemon recieved the exit command.
+
+The daemon will continue running for ca. 1000ms before it exits.
+
+### z1.resurrect()
+
+__Returns__ a `<Promise>` that resolves to an object.
+
+Example:
+```javascript
+{
+  apps: 1, // one app started
+  started: 2 // two workers started
+}
+```
+
+It will be rejected if `z1.resurrect()` or `z1.start()` has been called before.
+
+Resurrect will start all apps that were running before the daemon was killed.
