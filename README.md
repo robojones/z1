@@ -1,8 +1,28 @@
 # z1
 
-## Usage
+## Table of contents
 
-### Setup
+1. [Setup](#setup)
+  - [Installation](#installation)
+  - [Prepare package.json](#prepare-packagejson)
+2. [CLI](#cli)
+  - [Start](#start)
+  - [Restart](#restart)
+  - [List](#list)
+  - [Stop](#stop)
+  - [Exit](#exit)
+  - [Resurrect](#resurrect)
+
+## Setup
+
+### Installation
+
+Via [NPM](https://npmjs.com)
+```
+npm install z1 -g
+```
+
+### Prepare package.json
 
 Before you can cluster your Node.js app,
 you need to add a few things to your
@@ -22,6 +42,8 @@ Example:
   "workers": 2
 }
 ```
+
+## CLI
 
 ### Start
 
