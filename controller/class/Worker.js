@@ -16,6 +16,10 @@ class Worker extends BetterEvents {
     this.ports = ports.slice()
     this.state = 0
 
+    // change cwd
+    const owd = process.cwd()
+    process.chdir(dir)
+
     cluster.setupMaster({
       exec: path.join(dir, file)
     })
@@ -23,6 +27,9 @@ class Worker extends BetterEvents {
     // fork new worker
     const w = cluster.fork(env)
     this.id = w.id
+
+    // restore cwd
+    process.chdir(owd)
 
     // add to workers
     workers[this.id] = this
