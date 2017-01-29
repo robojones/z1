@@ -121,8 +121,10 @@ module.exports = function start(config, command) {
     }
 
     function fork() {
-      const file = path.basename(pack.main)
-      const worker = new Worker(command.dir, file, pack.name, pack.ports)
+      const env = {
+        PWD: command.dir
+      }
+      const worker = new Worker(command.dir, pack.main, pack.name, pack.ports, env)
       const w = worker.w
 
       w.process.stdout.pipe(stdio[command.dir].stdout, noEnd)
@@ -166,11 +168,14 @@ function connect(stdio) {
   }
 
   //create new streams
+  const opts = {
+    flags: 'a'
+  }
   const date = formatDate()
   const outFile = path.join(stdio.output, `log-${date}.txt`)
   const errFile = path.join(stdio.output, `err-${date}.txt`)
-  stdio.currentOut = fs.createWriteStream(outFile)
-  stdio.currentErr = fs.createWriteStream(errFile)
+  stdio.currentOut = fs.createWriteStream(outFile, opts)
+  stdio.currentErr = fs.createWriteStream(errFile, opts)
 
   stdio.stdout.pipe(stdio.currentOut)
   stdio.stderr.pipe(stdio.currentErr)

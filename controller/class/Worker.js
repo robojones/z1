@@ -7,7 +7,7 @@ const workers = {}
 const workerList = []
 
 class Worker extends BetterEvents {
-  constructor(dir, file, name, ports) {
+  constructor(dir, file, name, ports, env) {
     super()
 
     this.dir = dir
@@ -21,7 +21,7 @@ class Worker extends BetterEvents {
     })
 
     // fork new worker
-    const w = cluster.fork()
+    const w = cluster.fork(env)
     this.id = w.id
 
     // add to workers
