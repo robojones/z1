@@ -2,17 +2,17 @@
 
 ## Table of contents
 
-1. [Setup](#setup)
+- [Setup](#setup)
   - [Installation](#installation)
   - [Prepare package.json](#prepare-packagejson)
-2. [CLI](#cli)
+- [CLI](#cli)
   - [Start](#start)
   - [Restart](#restart)
   - [List](#list)
   - [Stop](#stop)
   - [Exit](#exit)
   - [Resurrect](#resurrect)
-3. [Docs](#docs)
+- [Docs](#docs)
   - [z1.start](#z1startdir)
   - [z1.restart](#z1restartapp-timeout)
   - [z1.stop](#z1stopapp-timeout)
