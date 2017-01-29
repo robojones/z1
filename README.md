@@ -19,7 +19,7 @@
   - [z1.list](#z1list)
   - [z1.exit](#z1exit)
   - [z1.resurrect](#z1resurrect)
-  
+
 ## Setup
 
 ### Installation
@@ -28,6 +28,8 @@ Via [NPM](https://npmjs.com)
 ```
 npm install z1 -g
 ```
+
+__Note:__ You might want to add `z1 resurrect` to your startup applications. If you do so the z1 daemon will start automatically after you reboot your system. It will also start all the apps that were running before.
 
 ### Prepare package.json
 
