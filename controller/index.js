@@ -33,7 +33,7 @@ const server = createServer('sick.sock', command => {
   console.log('run command', command)
 
   if(!operation.hasOwnProperty(command.name)) {
-    return Promise.reject(new Error(`command ${command.name} not found`))
+    return Promise.reject(new Error(`command "${command.name}" not found`))
   }
 
   return operation[command.name](config, command)

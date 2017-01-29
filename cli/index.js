@@ -14,7 +14,7 @@ program
   .version(pack.version)
   .arguments('<cmd>')
   .action(function (cmd) {
-    console.log(cmd)
+    handle(new Error(`command "${cmd}" not found`))
   })
 program
   .command('resurrect')
