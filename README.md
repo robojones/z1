@@ -4,19 +4,6 @@
 
 ### Setup
 
-To start the z1 daemon run the following command:
-```
-z1 resurrect
-```
-
-Note: You might want to add this to your startup applications. It will start all apps that were running when the daemon was killed.
-
-To kill z1 type:
-```
-z1 exit
-```
-
-
 ### Start
 
 Before you can cluster your Node.js app,
@@ -53,7 +40,9 @@ workers started: 2
 
 ### Restart
 
-You can restart your app to apply updates or changes to your `package.json`. Just type the following command:
+You can restart your app to apply updates or changes to your `package.json`.
+The restart process will be gapless and no requests will be refused.
+Just type the following command:
 
 ```
 z1 restart homepage 3000
@@ -69,6 +58,28 @@ workers started: 2
 workers killed: 2
 ```
 
+### List
+
+```
+z1 list
+```
+
+Displays a list of all running apps.
+
+Example:
+```
+ workers name                 directory
+ 0  2  0 homepage             /home/jonathan/apps/homepage
+ |  |  |
+ |  | killed
+ | available
+pending
+```
+1. __Pending__ processes are currently starting.
+2. __Available__ workers are listening to all the ports specified in the `package.json`
+3. __Killed__ workers are not listening for new connections.
+They will finish their outstanding requests before they exit.
+
 ### Stop
 
 To stop a app just type:
@@ -83,3 +94,21 @@ killed
 name: homepage
 workers killed: 2
 ```
+
+### Exit
+
+```
+z1 exit
+```
+
+Will kill the z1 daemon process and therefore all apps and workers.
+
+### Resurrect
+
+After you typed exit you can use the following to start all the apps that were running before:
+
+```
+z1 resurrect
+```
+
+Note: If you are starting a new app before `z1 resurrect` the old apps will not be restored.
