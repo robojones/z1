@@ -3,7 +3,6 @@
 const net = require('net')
 const fs = require('fs')
 const path = require('path')
-const cp = require('child_process')
 const util = require('util')
 const program = require('commander')
 const xTime = require('x-time')
@@ -17,9 +16,7 @@ program
   .command('start [dir]')
   .description('start the app in the dir')
   .action((dir) => {
-    connect().then(() => {
-      return z1.start(dir)
-    }).then(data => {
+    return z1.start(dir).then(data => {
       console.log('started')
       console.log('name:', data.app)
       console.log('workers started:', data.started)
@@ -29,9 +26,7 @@ program
   .command('stop <appName> [timeout]')
   .description('stop the app specified by the appName')
   .action((appName, timeout) => {
-    connect().then(() => {
-      return z1.stop(appName, timeout)
-    }).then(data => {
+    return z1.stop(appName, timeout).then(data => {
       console.log('stopped')
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
@@ -41,9 +36,7 @@ program
   .command('restart <appName> [timeout]')
   .description('restart the app specified by the appName')
   .action((appName, timeout) => {
-    connect().then(() => {
-      return z1.restart(appName, timeout)
-    }).then(data => {
+    return z1.restart(appName, timeout).then(data => {
       console.log('restarted')
       console.log('name:', data.app)
       console.log('workers started:', data.started)
@@ -54,9 +47,7 @@ program
   .command('list')
   .description('overview of all running workers')
   .action(() => {
-    connect().then(() => {
-      return z1.list()
-    }).then(data => {
+    return z1.list().then(data => {
       const props = Object.keys(data)
 
       if(!props.length) {
@@ -87,52 +78,12 @@ program
   .command('exit')
   .description('kill the z1 daemon')
   .action(() => {
-    connect().then(() => {
-      return z1.exit()
-    }).then(data => {
+    return z1.exit().then(data => {
       console.log('master stopped')
     }).catch(handle)
   })
 
 program.parse(process.argv)
-
-function connect() {
-  return z1.ping().catch(err => {
-    console.log('starting daemon')
-
-    try {
-      fs.unlinkSync(z1.socketFile)
-    } catch(err) {
-      if(err.code !== 'ENOENT') {
-        throw err
-      }
-    }
-
-    const z1Path = path.dirname(require.resolve('z1'))
-    const file = path.join(z1Path, 'controller/index.js')
-    const node = process.argv[0]
-
-    return new Promise((resolve, reject) => {
-
-      const p = cp.spawn(node, [file], {
-        stdio: 'ignore',
-        detached: true
-      })
-      p.on('error', reject)
-      p.unref()
-
-      ping().then(resolve)
-    })
-  })
-}
-
-function ping() {
-  return z1.ping().catch(() => {
-    return xTime(100).then(() => {
-      return ping()
-    })
-  })
-}
 
 function handle(err) {
   console.error(err)

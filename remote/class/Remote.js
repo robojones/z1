@@ -1,7 +1,8 @@
 const BetterEvents = require('better-events')
+const xTime = require('x-time')
 const net = require('net')
 const fs = require('fs')
-const childProcess = require('child_process')
+const cp = require('child_process')
 const path = require('path')
 const StringDecoder = require('string_decoder').StringDecoder
 
@@ -12,14 +13,14 @@ class Remote extends BetterEvents {
   }
 
   start(dir) {
-    return this.send({
+    return this.connectAndSend({
       name: 'start',
       dir: path.resolve(dir || '')
     })
   }
 
   stop(app, timeout) {
-    return this.send({
+    return this.connectAndSend({
       name: 'stop',
       app: app,
       timeout: timeout
@@ -27,7 +28,7 @@ class Remote extends BetterEvents {
   }
 
   restart(app, timeout) {
-    return this.send({
+    return this.connectAndSend({
       name: 'restart',
       app: app,
       timeout: timeout
@@ -35,7 +36,7 @@ class Remote extends BetterEvents {
   }
 
   list() {
-    return this.send({
+    return this.connectAndSend({
       name: 'list'
     })
   }
@@ -43,11 +44,11 @@ class Remote extends BetterEvents {
   ping() {
     return this.send({
       name: 'ping'
-    })
+    }, true)
   }
 
   exit() {
-    return this.send({
+    return this.connectAndSend({
       name: 'exit'
     })
   }
@@ -88,6 +89,51 @@ class Remote extends BetterEvents {
 
       socket.on('error', err => {
         reject(err)
+      })
+    })
+  }
+
+  connectAndSend(object) {
+    return this.connect().then(() => {
+      return this.send(object)
+    })
+  }
+
+  connect() {
+    return this.ping().catch(err => {
+
+      const ping = () => {
+        return this.ping().catch(() => {
+          return xTime(100).then(() => {
+            return ping()
+          })
+        })
+      }
+
+      console.log('starting daemon')
+
+      try {
+        fs.unlinkSync(this.socketFile)
+      } catch(err) {
+        if(err.code !== 'ENOENT') {
+          throw err
+        }
+      }
+
+      const z1Path = path.dirname(require.resolve('z1'))
+      const file = path.join(z1Path, 'controller', 'index.js')
+      const node = process.argv[0]
+
+      return new Promise((resolve, reject) => {
+
+        const p = cp.spawn(node, [file], {
+          stdio: 'ignore',
+          detached: true
+        })
+        p.on('error', reject)
+        p.unref()
+
+        ping().then(resolve)
       })
     })
   }
