@@ -166,13 +166,13 @@ __Returns__ a `<Promise>` that gets resolved when the app is started. It resolve
 }
 ```
 - __app__ The name of the app specified in the `package.json`. You will need this in order to restart/stop the app.
-- __dir__ Absolute path to the directory where the package.json is located
+- __dir__ Absolute path to the directory where the `package.json` is located
 - __started__ Number of workers started for this app
 
 ### z1.restart(app[, timeout])
 
 __Arguments__
-- __app__ `<String>` The name specified in the package.json of the app you want to restart.
+- __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
 - __timeout__ `<Number>` Maximum time until the old workers get killed.
 
 __Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
@@ -190,7 +190,7 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
 ### z1.stop(app[, timeout])
 
 __Arguments__
-- __app__ `<String>` The name specified in the package.json of the app you want to restart.
+- __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
 - __timeout__ `<Number>` Maximum time until the old workers get killed.
 
 __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
@@ -227,9 +227,7 @@ The output would be:
 
 ### z1.exit()
 
-__Returns__ a `<Promise>` that resolves to an empty object. It gets resolvet after the z1 daemon recieved the exit command.
-
-The daemon will continue running for ca. 1000ms before it exits.
+__Returns__ a `<Promise>` that resolves to an empty object. It gets resolves after the z1 daemon has exited.
 
 ### z1.resurrect()
 

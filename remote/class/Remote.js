@@ -56,6 +56,20 @@ class Remote extends BetterEvents {
   exit() {
     return this.connectAndSend({
       name: 'exit'
+    }).then(() => {
+      const unPing = () => {
+        return this.ping().then(() => {
+          return xTime(100).then(() => {
+            return unPing()
+          })
+        })
+      }
+
+      return unPing().catch(err => {
+        if(err.code !== 'ECONNREFUSED') {
+          throw err
+        }
+      })
     })
   }
 
@@ -129,7 +143,6 @@ class Remote extends BetterEvents {
       const node = process.argv[0]
 
       return new Promise((resolve, reject) => {
-
         const p = cp.spawn(node, [file], {
           stdio: 'ignore',
           detached: true
