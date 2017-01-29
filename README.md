@@ -29,7 +29,7 @@ Via [NPM](https://npmjs.com)
 npm install z1 -g
 ```
 
-__Note:__ You might want to add `z1 resurrect` to your startup applications. If you do so the z1 daemon will start automatically after you reboot your system. It will also start all the apps that were running before.
+__Note:__ You might want to add `z1 resurrect` to your startup applications. If you do so, the z1 daemon will start automatically after you reboot your system. It will also start all the apps that were running before.
 
 ### Prepare package.json
 
@@ -71,7 +71,7 @@ workers started: 2
 
 ### Restart
 
-You can restart your app to apply updates for your app, or changes to the `package.json`.
+You can restart your app to apply updates for your app or changes to the `package.json`.
 The restart process will be gapless and no requests will be refused.
 Just type the following command:
 
@@ -79,7 +79,7 @@ Just type the following command:
 z1 restart homepage 3000
 ```
 
-The first argument for the `z1 restart` command is the app name, that was in the `package.json` when you started the app. The second argument is optional. It is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms). If you don't provide this argument the old processes might run forever.
+The first argument for the `z1 restart` command is the app name that was in the `package.json` when you started the app. The second argument is optional. It is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms). If you don't provide this argument, the old processes might run forever.
 
 Output of the example from above:
 ```
@@ -136,17 +136,17 @@ Will kill the z1 daemon process and therefore all apps and workers.
 
 ### Resurrect
 
-After you typed exit you can use the following to start all the apps that were running before:
+After you typed exit, you can use the following to start all the apps that were running before:
 
 ```
 z1 resurrect
 ```
 
-Note: If you are starting a new app before `z1 resurrect` the old apps will not be restored.
+Note: If you are starting a new app before `z1 resurrect`, the old apps will not be restored.
 
 ## Docs
 
-Besides the CLI you can also require z1 to control your apps with a Node.js program.
+Besides the CLI, you can also require z1 to control your apps with a Node.js program.
 
 ```javascript
 const z1 = require('z1')
