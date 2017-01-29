@@ -98,8 +98,7 @@ program
   })
 
 if(process.argv.length === 2) {
-  console.log('no command given')
-  process.exit(1)
+  handle(new Error('no command given'))
 }
 
 program.parse(process.argv)
