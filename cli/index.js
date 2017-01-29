@@ -93,7 +93,7 @@ program
   .description('kill the z1 daemon')
   .action(() => {
     return z1.exit().then(data => {
-      console.log('master stopped')
+      console.log('daemon stopped')
     }).catch(handle)
   })
 

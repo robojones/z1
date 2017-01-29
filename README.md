@@ -4,8 +4,6 @@
 
 ### Setup
 
-### Start
-
 Before you can cluster your Node.js app,
 you need to add a few things to your
 `package.json` file.
@@ -25,6 +23,8 @@ Example:
 }
 ```
 
+### Start
+
 Starting the app:
 First go to the directory where the `package.json` is located. Type the following command into your terminal:
 ```
@@ -40,7 +40,7 @@ workers started: 2
 
 ### Restart
 
-You can restart your app to apply updates or changes to your `package.json`.
+You can restart your app to apply updates for your app, or changes to the `package.json`.
 The restart process will be gapless and no requests will be refused.
 Just type the following command:
 
