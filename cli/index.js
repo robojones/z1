@@ -105,5 +105,6 @@ program.parse(process.argv)
 
 function handle(err) {
   console.error('[ERROR] - ' + err.message)
+  console.log(err)
   process.exit(1)
 }

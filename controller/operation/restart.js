@@ -1,5 +1,7 @@
 const Worker = require('./../class/Worker')
 const start = require('./start')
+const once = require('better-events').once
+const assert = require('assert')
 
 /*
 command {

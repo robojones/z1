@@ -1,4 +1,5 @@
 const Worker = require('./../class/Worker')
+const once = require('better-events').once
 
 /*
 command {
@@ -12,7 +13,7 @@ module.exports = function stop(config, command) {
 
     const q = []
     let dir = null
-
+    console.log('stop')
     Worker.workerList.forEach(worker => {
       if(worker.name === command.app) {
         if(!dir) {

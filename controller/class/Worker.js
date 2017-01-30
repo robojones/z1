@@ -73,7 +73,7 @@ class Worker extends BetterEvents {
     const w = this.w
 
     if(!w) {
-      return
+      return false
     }
 
     w.disconnect()
@@ -86,6 +86,8 @@ class Worker extends BetterEvents {
         clearTimeout(timeout)
       })
     }
+
+    return true
   }
 
   get w() {

@@ -121,7 +121,7 @@ z1 stop homepage
 
 Example output:
 ```
-killed
+stopped
 name: homepage
 workers killed: 2
 ```
