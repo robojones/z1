@@ -9,16 +9,16 @@ module.exports = function resurrect(config) {
 
   global.isResurrected = true
 
-  console.log(config)
-
-  config.apps.forEach(d => {
-    start(null, {
+  const q = config.apps.map(d => {
+    return start(config, {
       dir: d
-    }).catch(handle)
+    }, true)
   })
 
-  return Promise.resolve({
-    apps: config.apps.length,
-    started: Worker.workerList.length
+  return Promise.all(q).then(() => {
+    return {
+      apps: config.apps.length,
+      started: Worker.workerList.length
+    }
   })
 }

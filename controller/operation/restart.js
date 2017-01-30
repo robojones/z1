@@ -23,7 +23,7 @@ module.exports = function restart(config, command) {
 
   const q = []
 
-  return start(null, command).then(data => {
+  return start(null, command, true).then(data => {
     Worker.workerList.forEach(worker => {
       if(old.includes(worker)) {
         worker.kill(+command.timeout || null)

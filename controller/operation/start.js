@@ -24,12 +24,14 @@ command: start {
 }
 */
 
-module.exports = function start(config, command) {
+module.exports = function start(config, command, dontThrow) {
 
   return new Promise((resolve, reject) => {
 
     if(!global.isResurrected) {
-      config.apps = []
+      if(config) {
+        config.apps = []
+      }
       global.isResurrected = true
     }
 
@@ -57,13 +59,15 @@ module.exports = function start(config, command) {
 
       // check if already started
       if(config.apps.includes(command.dir)) {
-        throw new Error(`app "${pack.name}" (${command.dir}) already started.`)
+        if(!dontThrow) {
+          throw new Error(`app "${pack.name}" (${command.dir}) already started.`)
+        }
+      } else {
+        config.apps.push(command.dir)
       }
 
       // check if name is already taken
       checkName(pack.name)
-
-      config.apps.push(command.dir)
     }
 
     // resolve (& create) output path
@@ -133,7 +137,7 @@ module.exports = function start(config, command) {
       w.process.stderr.pipe(stdio[command.dir].stderr, noEnd)
 
       worker.once('exit', (code, sig) => {
-        if(worker.state !== Worker.KILLED) {
+        if(worker.state === Worker.AVAILABLE) {
           // start again, when crashed
           fork()
         }
@@ -143,8 +147,9 @@ module.exports = function start(config, command) {
       r.push(worker.once('exit'))
     }
 
-    Promise.race(r).then(() => {
-      reject(new Error('unable to start'))
+    Promise.race(r).then(exitCode => {
+      config.apps.splice(config.apps.indexOf(command.dir), 1)
+      reject(new Error(`worker of "${pack.name}" crashed (exit code ${exitCode})`))
     })
     Promise.all(q).then(() => {
       resolve({

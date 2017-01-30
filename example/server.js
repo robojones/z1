@@ -3,6 +3,8 @@ const http = require('http')
 console.log('pwd', process.env.PWD)
 console.log('cwd', process.cwd())
 
+// process.exit(10)
+
 process.on('message', msg => {
   if(msg === 'exit') {
     process.exit(0)
