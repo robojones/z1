@@ -150,7 +150,7 @@ class Remote extends BetterEvents {
         p.on('error', reject)
         p.unref()
 
-        ping().then(resolve)
+        ping().then(resolve).then(() => console.log('daemon started'))
       })
     })
   }

@@ -33,6 +33,8 @@ module.exports = function start(config, command) {
       global.isResurrected = true
     }
 
+    console.log('config', config)
+
     if(!path.isAbsolute(command.dir)) {
       throw new Error('command.dir must be an absolute path')
     }
@@ -131,7 +133,7 @@ module.exports = function start(config, command) {
       w.process.stderr.pipe(stdio[command.dir].stderr, noEnd)
 
       worker.once('exit', (code, sig) => {
-        if(code && !sig) {
+        if(worker.state !== Worker.KILLED) {
           // start again, when crashed
           fork()
         }
