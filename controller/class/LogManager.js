@@ -25,36 +25,39 @@ class LogManager extends BetterEvents {
     return streams[id] = {
       log: new Tube(),
       err: new Tube(),
-      logFile: null,
-      errFile: null,
+      logStream: null,
+      errStream: null,
       interval: null
     }
   }
 
   setup(id, dir) {
 
+    const tubes = this.get(id)
+
     const connect = () => {
 
       const d = formatDate()
 
-      const logFile = path.join(dir, `log-${d}.txt`)
-      const errFile = path.join(dir, `err-${d}.txt`)
+      const logFile = path.resolve(path.join(dir, `log-${d}.txt`))
+      const errFile = path.resolve(path.join(dir, `err-${d}.txt`))
 
       const log = fs.createWriteStream(logFile, APPEND)
       const err = fs.createWriteStream(errFile, APPEND)
 
-      this.collect(log, 'error')
-      this.collect(err, 'error')
-
-      const tubes = this.get(id)
+      this.collect('error', log)
+      this.collect('error', err)
 
       tubes.log.pipe(log, NOEND)
       tubes.err.pipe(err, NOEND)
 
-      if(tubes.logFile) {
-        tubes.logFile.end()
-        tubes.errFile.end()
+      if(tubes.logStream) {
+        tubes.logStream.end()
+        tubes.errStream.end()
       }
+
+      tubes.logStream = log
+      tubes.errStream = err
     }
 
     clearInterval(tubes.interval)
