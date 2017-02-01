@@ -1,7 +1,7 @@
 const assert = require('assert')
 
 describe('Tube', function () {
-  const Tube = require('./../controller/class/Tube')
+  const Tube = local('controller/class/Tube')
 
   it('should be a function (class)', function () {
     assert.strictEqual(typeof Tube, 'function')

@@ -4,8 +4,8 @@ const util = require('util')
 
 describe('handle', function () {
 
-  const formatDate = require('./../controller/snippet/formatDate')
-  const handle = require('./../controller/module/handle')
+  const formatDate = local('controller/snippet/formatDate')
+  const handle = local('controller/module/handle')
 
   afterEach(function (cb) {
     if(this.filename) {

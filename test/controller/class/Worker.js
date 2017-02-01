@@ -3,11 +3,13 @@ const path = require('path')
 const cluster = require('cluster')
 const http = require('http')
 
+const killWorkers = test('snippet/killWorkers')
+
 const pwd = process.env.PWD
 
 describe('Worker', function () {
 
-  const Worker = require('./../controller/class/Worker')
+  const Worker = local('controller/class/Worker')
 
   it('should be a class (function)', function () {
     assert.strictEqual(typeof Worker, 'function')
@@ -58,56 +60,48 @@ describe('Worker', function () {
       this.worker = new Worker(this.dir, this.file, this.name, this.ports)
     })
 
-    afterEach(function (cb) {
-      const keys = Object.keys(cluster.workers)
+    afterEach(killWorkers)
 
-      if(!keys.length) {
-        cb()
-      }
-
-      for(id of keys) {
-        let w = cluster.workers[id]
-        w.kill()
-        w.once('exit', () => {
-          if(!Object.keys(cluster.workers).length) {
-            cb()
-          }
-        })
-      }
+    it('should be in .workers', function () {
+      assert(Worker.workers[this.worker.id])
     })
 
-    describe('#dir', function () {
+    it('should be in .workerList', function () {
+      assert(Worker.workerList.includes(this.worker))
+    })
+
+    describe('.dir', function () {
       it('should be the given directory', function () {
         assert.strictEqual(this.worker.dir, this.dir)
       })
     })
 
-    describe('#file', function () {
+    describe('.file', function () {
       it('should be the given file(-path)', function () {
         assert.strictEqual(this.worker.file, this.file)
       })
     })
 
-    describe('#name', function () {
+    describe('.name', function () {
       it('should be the given name', function () {
         assert.strictEqual(this.worker.name, this.name)
       })
     })
 
-    describe('#ports', function () {
+    describe('.ports', function () {
       it('should be a copy of ports', function () {
         assert.notStrictEqual(this.worker.ports, this.ports)
         assert.deepEqual(this.worker.ports, this.ports)
       })
     })
 
-    describe('#state', function () {
+    describe('.state', function () {
       it('should be PENDING (0)', function () {
         assert.strictEqual(this.worker.state, Worker.PENDING)
       })
     })
 
-    describe('#id', function () {
+    describe('.id', function () {
       it('should be a number', function () {
         assert.strictEqual(typeof this.worker.id, 'number')
       })
@@ -117,7 +111,7 @@ describe('Worker', function () {
       })
     })
 
-    describe('#kill(timeout)', function () {
+    describe('.kill([timeout])', function () {
 
       beforeEach(function () {
         return this.worker.once('available')
@@ -127,7 +121,7 @@ describe('Worker', function () {
         this.worker.kill()
         return this.worker.once('exit')
       })
-      it('should set #state to KILLED (2)', function () {
+      it('should set .state to KILLED (2)', function () {
         this.worker.kill()
         assert.deepEqual(this.worker.state, Worker.KILLED)
       })
@@ -155,11 +149,10 @@ describe('Worker', function () {
 
           this.worker.kill(timeout)
         })
-
       })
     })
 
-    describe('#w (getter)', function () {
+    describe('.w (getter)', function () {
       it('should return the referenced worker', function () {
         assert.deepEqual(this.worker.w, cluster.workers[this.worker.id])
       })
@@ -171,7 +164,7 @@ describe('Worker', function () {
           assert(!this.worker.ports.length)
         })
       })
-      it('should set #state to AVAILABLE (1)', function () {
+      it('should set .state to AVAILABLE (1)', function () {
         return this.worker.once('available').then(() => {
           assert.strictEqual(this.worker.state, Worker.AVAILABLE)
         })
@@ -180,8 +173,22 @@ describe('Worker', function () {
 
     describe('Event: "exit"', function () {
       it('should fire when worker exits', function () {
-        this.worker.w.send('exit')
+        this.worker.kill()
         return this.worker.once('exit')
+      })
+
+      it('should have the worker removed from .workers', function () {
+        this.worker.kill()
+        return this.worker.once('exit').then(() => {
+          assert.deepEqual(Worker.workers, {}, 'worker still in .workers')
+        })
+      })
+
+      it('should have the worker removed from .workerList', function () {
+        this.worker.kill()
+        return this.worker.once('exit').then(() => {
+          assert.deepEqual(Worker.workers, [], 'worker still in .workerList')
+        })
       })
     })
   })

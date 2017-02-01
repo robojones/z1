@@ -5,7 +5,7 @@ const ARRAY = ['2017', '01', '21']
 
 describe('Function: formatDate(date[, space])', function () {
 
-  const formatDate = require('./../controller/snippet/formatDate')
+  const formatDate = local('controller/snippet/formatDate')
 
   it('should be a function', function () {
     assert.strictEqual(typeof formatDate, 'function')
