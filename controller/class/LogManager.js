@@ -39,8 +39,8 @@ class LogManager extends BetterEvents {
 
       const d = formatDate()
 
-      const logFile = path.resolve(path.join(dir || '', `log-${d}.txt`))
-      const errFile = path.resolve(path.join(dir || '', `err-${d}.txt`))
+      const logFile = path.resolve(path.join(dir || '', d + '-log.txt'))
+      const errFile = path.resolve(path.join(dir || '', d + '-error.txt'))
 
       const log = fs.createWriteStream(logFile, APPEND)
       const err = fs.createWriteStream(errFile, APPEND)
