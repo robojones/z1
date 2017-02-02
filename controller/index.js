@@ -1,11 +1,24 @@
 const autoSave = require('save-on-change')
-
-const init = require('./module/init')
+const path = require('path')
 
 const Worker = require('./class/Worker')
 const createServer = require('./module/remoteServer')
 
 const dir = init.dir
+
+try {
+  process.chdir(process.env.HOME)
+  mkdirSync('.z1')
+  process.chdir(path.join(process.env.HOME, '.z1'))
+} catch(err) {
+  if(err.code !== 'EEXIST') {
+    throw err
+  }
+}
+
+require('./module/logs')
+
+
 
 const config = autoSave('config.json', err => {
   if(err) {

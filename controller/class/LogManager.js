@@ -33,7 +33,7 @@ class LogManager extends BetterEvents {
 
   setup(id, dir) {
 
-    const tubes = this.get(id)
+    const stuff = this.get(id)
 
     const connect = () => {
 
@@ -48,25 +48,39 @@ class LogManager extends BetterEvents {
       this.collect('error', log)
       this.collect('error', err)
 
-      tubes.log.pipe(log, NOEND)
-      tubes.err.pipe(err, NOEND)
+      stuff.log.pipe(log, NOEND)
+      stuff.err.pipe(err, NOEND)
 
-      if(tubes.logStream) {
-        tubes.logStream.end()
-        tubes.errStream.end()
+      if(stuff.logStream) {
+        stuff.logStream.end()
+        stuff.errStream.end()
       }
 
-      tubes.logStream = log
-      tubes.errStream = err
+      stuff.logStream = log
+      stuff.errStream = err
     }
 
-    clearInterval(tubes.interval)
+    clearInterval(stuff.interval)
 
     connect()
 
-    tubes.interval = setInterval(connect, DAY)
+    stuff.interval = setInterval(connect, DAY)
 
-    return tubes
+    return stuff
+  }
+
+  remove(id) {
+    const stuff = this.get(id)
+
+    stuff.logStream.end()
+    stuff.errStream.end()
+
+    stuff.log.end()
+    stuff.err.end()
+
+    clearInterval(stuff.interval)
+
+    delete streams[id]
   }
 }
 

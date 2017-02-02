@@ -2,6 +2,7 @@ const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
 const Writable = require('stream').Writable
+const once = require('better-events').once
 
 const Tube = local('controller/class/Tube')
 
@@ -95,6 +96,68 @@ describe('LogManager', function () {
           assert(obj.hasOwnProperty('interval'))
         })
       })
+
+      describe('returned object', function () {
+
+        describe('.log', function () {
+
+          it('should write into the log file', function (cb) {
+
+            const stuff = this.logs.setup('hi', exampleDir)
+
+            fs.readdir(exampleDir, (err, files) => {
+
+              if(err) {
+                cb(err)
+                return
+              }
+
+              const filename = files.filter(f => f.includes('log'))[0]
+
+              stuff.log.write('hallo')
+
+              stuff.logStream.once('close', () => {
+                fs.readFile(path.join(exampleDir, filename), (err, contents) => {
+                  assert.strictEqual(contents.toString(), 'hallo')
+                  cb(err)
+                })
+              })
+
+              this.logs.remove('hi')
+            })
+          })
+        })
+
+
+        describe('.err', function () {
+
+          it('should write into the error file', function (cb) {
+
+            const stuff = this.logs.setup('hi', exampleDir)
+
+            fs.readdir(exampleDir, (err, files) => {
+
+              if(err) {
+                cb(err)
+                return
+              }
+
+              const filename = files.filter(f => f.includes('error'))[0]
+
+              stuff.err.write('hallo')
+
+              stuff.errStream.once('close', () => {
+                fs.readFile(path.join(exampleDir, filename), (err, contents) => {
+                  assert.strictEqual(contents.toString(), 'hallo')
+                  cb(err)
+                })
+              })
+
+              this.logs.remove('hi')
+            })
+          })
+        })
+      })
     })
 
     describe('.setup(id, dir)', function () {
@@ -124,6 +187,32 @@ describe('LogManager', function () {
             assert(files.length, 'no files created')
           })
         })
+      })
+    })
+
+    describe('.remove(id)', function () {
+
+      it('should delete the old object', function () {
+
+        const obj = this.logs.setup('hi', exampleDir)
+        this.logs.remove('hi')
+
+        assert.notStrictEqual(obj, this.logs.get('hi'))
+      })
+
+      it('should close the old streams', function () {
+
+        const stuff = this.logs.setup('hi', exampleDir)
+
+        const q = []
+        q.push(once(stuff.log, 'end'))
+        q.push(once(stuff.err, 'end'))
+        q.push(once(stuff.logStream, 'close'))
+        q.push(once(stuff.errStream, 'close'))
+
+        this.logs.remove('hi')
+
+        return Promise.all(q)
       })
     })
   })
