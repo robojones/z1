@@ -30,13 +30,17 @@ module.exports = function restart(config, command) {
     const pack = require(packPath)
 
     // if name changed
-    if(pack.name !== app.name) {
+    const nameChanged = pack.name !== app.name
+    if(nameChanged) {
       // check name
       if(config.apps.some(app => app.name === pack.name)) {
         throw new Error(`new name "${pack.name}" already in use`)
       }
 
-      app.name = pack.name
+      config.apps.push({
+        dir: app.dir,
+        name: command.app
+      })
     }
 
     // remember old workers
@@ -54,6 +58,14 @@ module.exports = function restart(config, command) {
       })
 
       return Promise.all(killed).then(() => {
+
+        if(nameChanged) {
+          // remove old version
+          if(config.apps[i] === app) {
+            config.apps.splice(i, 1)
+          }
+        }
+
         data.killed = killed.length
         resolve(data)
       })
