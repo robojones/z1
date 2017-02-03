@@ -87,7 +87,6 @@ module.exports = function fork(dir, pack) {
 
 function verify(pack) {
 
-  // TODO verify name in start/restart
   // name
   if(!pack.name) {
     throw new Error('name in package.json must be set')
