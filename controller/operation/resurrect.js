@@ -23,8 +23,6 @@ module.exports = function resurrect(config) {
       return startWorkers(app.dir, pack)
     })
 
-    q.push(Promise.resolve())
-
     Promise.all(q).then(() => {
       resolve({
         started: Worker.workerList.length

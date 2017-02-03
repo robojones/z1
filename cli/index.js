@@ -22,7 +22,6 @@ program
   .action(() => {
     return z1.resurrect().then(data => {
       console.log('resurrected')
-      console.log('apps:', data.apps)
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -42,7 +41,6 @@ program
   .action((appName, timeout) => {
     return z1.stop(appName, timeout).then(data => {
       console.log('stopped')
-      console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(err => handle)
   })

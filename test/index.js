@@ -20,3 +20,4 @@ global.test.resolve = testResolve
 global.local.resolve = localResolve
 
 test('controller/index')
+test('remote/index')

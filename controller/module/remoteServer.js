@@ -2,6 +2,7 @@ const net = require('net')
 const fs = require('fs')
 const path = require('path')
 const StringDecoder = require('string_decoder').StringDecoder
+const log = require('./log')
 
 const OPT = {
   allowHalfOpen: true
@@ -55,7 +56,13 @@ module.exports = (filename, run) => {
 
   server.listen(file)
 
-  server.on('error', handle)
+  server.on('error', err => {
+    handle(err)
+    log.get('z1').stderr.once('close', () => {
+      process.exit(1)
+    })
+    log.remove('z1')
+  })
 
   return server
 }
