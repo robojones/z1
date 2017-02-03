@@ -24,7 +24,7 @@ describe('start (operation)', function () {
     assert.strictEqual(typeof start, 'function')
   })
 
-  describe('with connect arguments', function () {
+  describe('with valid arguments', function () {
 
     beforeEach(function () {
       return start(this.config, this.command)
@@ -35,7 +35,9 @@ describe('start (operation)', function () {
     })
 
     it('should add the app to config.apps', function () {
-      assert(this.config.apps.some(worker => worker.dir === this.dir))
+      assert(this.config.apps.some(worker => {
+        return worker.dir === this.dir && worker.name === pack.name
+      }))
     })
 
     describe('started twice', function () {

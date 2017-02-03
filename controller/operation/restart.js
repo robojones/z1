@@ -1,7 +1,9 @@
-const Worker = require('./../class/Worker')
-const start = require('./start')
 const once = require('better-events').once
 const assert = require('assert')
+const path = require('path')
+
+const Worker = require('./../class/Worker')
+const startWorkers = require('./../module/startWorkers')
 
 /*
 command {
@@ -38,20 +40,21 @@ module.exports = function restart(config, command) {
     }
 
     // remember old workers
-    const workers = Worker.workerList.map(worker => worker.dir === app.dir)
+    const workers = Worker.workerList.filter(worker => worker.dir === app.dir)
 
-    return startWorkers(command.dir, pack).then(data => {
+    startWorkers(app.dir, pack).then(data => {
 
       // kill old workers
       const timeout = +command.timeout || null
 
-      const killed = Worker.workerList.map(worker => {
+      const killed = workers.map(worker => {
         if(worker.kill(timeout)) {
           return worker.once('exit')
         }
       })
 
       return Promise.all(killed).then(() => {
+        data.killed = killed.length
         resolve(data)
       })
     }).catch(reject)

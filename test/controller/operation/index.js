@@ -1,1 +1,2 @@
+require('./restart')
 require('./start')

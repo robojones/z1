@@ -2,9 +2,9 @@ const fs = require('fs')
 const path = require('path')
 const cpuCount = require('os').cpus().length
 const cluster = require('cluster')
-const log = require('./../module/log')
 
 const Worker = require('./../class/Worker')
+const log = require('./log')
 
 const NOEND = {
   end: false
@@ -63,7 +63,11 @@ module.exports = function startWorkers(dir, pack) {
       w.process.stdout.pipe(out.log, NOEND)
       w.process.stderr.pipe(out.err, NOEND)
 
-      e.push(worker.once('error'))
+      w.on('error', handle)
+
+      e.push(worker.once('exit').then(() => {
+        throw new Error(`worker of app "${pack.name}" not started`)
+      }))
       q.push(worker.once('available'))
     }
 
