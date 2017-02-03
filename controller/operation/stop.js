@@ -29,7 +29,7 @@ module.exports = function stop(config, command) {
       }
 
       resolve({
-        name: command.app,
+        app: command.app,
         killed: killed.length
       })
     }).catch(reject)

@@ -122,7 +122,6 @@ z1 stop homepage
 Example output:
 ```
 stopped
-name: homepage
 workers killed: 2
 ```
 
@@ -177,10 +176,12 @@ __Arguments__
 
 __Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
 ```javascript
+{
   app: String,
   dir: String,
   started: Number,
   killed: Number
+}
 ```
 - __app__ the app name
 - __dir__ directory of the app
@@ -195,12 +196,12 @@ __Arguments__
 
 __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
 ```javascript
-  app: String,
-  dir: String,
+{
+  app: Number,
   killed: Number
+}
 ```
 - __app__ the app name
-- __dir__ directory of the app
 - __killed__ Number of killed workers
 
 ### z1.list()
@@ -208,20 +209,22 @@ __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It
 __Returns__ a `<Promise>` that resolves to an object containing data about all running workers.
 
 You can access the data for an app by using the name as key:
-```
+```javascript
 z1.list().then(data => {
-  console.log(data['homepage'])
+  console.log(data)
 })
 ```
 
 The output would be:
 ```javascript
 {
-  dir: '/home/jones/apps/homepage',
-  file: 'index.js',
-  pending: 0,
-  available: 2,
-  killed: 0
+  homepage: {
+    dir: '/home/jones/apps/homepage',
+    file: 'index.js',
+    pending: 0,
+    available: 2,
+    killed: 0
+  }
 }
 ```
 
@@ -236,7 +239,6 @@ __Returns__ a `<Promise>` that resolves to an object.
 Example:
 ```javascript
 {
-  apps: 1, // one app started
   started: 2 // two workers started
 }
 ```
