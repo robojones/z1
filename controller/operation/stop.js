@@ -21,9 +21,8 @@ module.exports = function stop(config, command) {
       }
     })
 
-    Promise.race(killed).then(() => {
+    Promise.all(killed).then(() => {
       let i = config.apps.findIndex(app => app.name === command.app)
-      const app = config.apps[i]
 
       if(i !== -1) {
         config.apps.splice(i, 1)
@@ -31,7 +30,6 @@ module.exports = function stop(config, command) {
 
       resolve({
         name: command.app,
-        dir: app.dir
         killed: killed.length
       })
     }).catch(reject)

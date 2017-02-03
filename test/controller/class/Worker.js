@@ -50,13 +50,14 @@ describe('Worker', function () {
     beforeEach(function () {
       this.dir = pwd
       this.file = path.join('example', 'server.js')
+      this.name = 'exampleApp'
       this.ports = [8080, 8081]
 
       cluster.setupMaster({
         stdio: ['ignore', 'ignore', 'ignore', 'ipc']
       })
 
-      this.worker = new Worker(this.dir, this.file, this.ports)
+      this.worker = new Worker(this.dir, this.file, this.name, this.ports)
     })
 
     afterEach(killWorkers)
@@ -78,6 +79,12 @@ describe('Worker', function () {
     describe('.file', function () {
       it('should be the given file(-path)', function () {
         assert.strictEqual(this.worker.file, this.file)
+      })
+    })
+
+    describe('.name', function () {
+      it('should be the given name', function () {
+        assert.strictEqual(this.worker.name, this.name)
       })
     })
 

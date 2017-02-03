@@ -40,6 +40,12 @@ describe('start (operation)', function () {
       }))
     })
 
+    it('should give every worker the right name', function () {
+      Worker.workerList.forEach(worker => {
+        assert.strictEqual(worker.name, pack.name)
+      })
+    })
+
     describe('started twice', function () {
       it('should not remove the app from apps', function () {
         return start(this.config, this.command).then(() => {

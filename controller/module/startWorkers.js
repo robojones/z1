@@ -58,7 +58,7 @@ module.exports = function startWorkers(dir, pack) {
     }
 
     for(let i = 0; i < workerCount; i++) {
-      let worker = new Worker(dir, pack.main, pack.ports, ENV)
+      let worker = new Worker(dir, pack.main, pack.name, pack.ports, ENV)
       let w = worker.w
       w.process.stdout.pipe(out.log, NOEND)
       w.process.stderr.pipe(out.err, NOEND)
