@@ -22,13 +22,18 @@ class LogManager extends BetterEvents {
       return streams[id]
     }
 
-    return streams[id] = {
+    const s = streams[id] = {
       log: new Tube(),
       err: new Tube(),
       logStream: null,
       errStream: null,
       interval: null
     }
+
+    this.collect('error', s.log)
+    this.collect('error', s.err)
+
+    return s
   }
 
   setup(id, dir) {

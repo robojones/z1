@@ -3,9 +3,9 @@ const fs = require('fs')
 
 const LogManager = require('./../class/LogManager')
 
-const logs = module.exports = new LogManager()
+const log = module.exports = new LogManager()
 
-const z1Logs = logs.get('z1')
+const z1Logs = log.get('z1')
 
 try {
   fs.mkdirSync('z1')
@@ -15,7 +15,7 @@ try {
   }
 }
 
-logs.setup('z1', 'z1')
+log.setup('z1', 'z1')
 
 global.handle = err => {
   z1Logs.err.write(util.inspect(err) + '\n')
@@ -23,10 +23,8 @@ global.handle = err => {
 
 global.log = (...stuff) => {
   z1Logs.log.write(stuff.map(item => {
-    if(typeof item === 'object') {
+    if(typeof item === 'object' || typeof item === 'undefined') {
       return util.inspect(item)
-    } else if(typeof item === 'undefined') {
-      return 'undefined'
     } else {
       return item
     }

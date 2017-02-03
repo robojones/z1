@@ -1,22 +1,22 @@
 const autoSave = require('save-on-change')
 const path = require('path')
+const fs = require('fs')
 
 const Worker = require('./class/Worker')
 const createServer = require('./module/remoteServer')
 
-const dir = init.dir
+const z1Dir = path.join(process.env.HOME, '.z1')
 
 try {
-  process.chdir(process.env.HOME)
-  mkdirSync('.z1')
-  process.chdir(path.join(process.env.HOME, '.z1'))
+  fs.mkdirSync(z1Dir)
+  process.chdir(z1Dir)
 } catch(err) {
   if(err.code !== 'EEXIST') {
     throw err
   }
 }
 
-require('./module/logs')
+require('./module/log')
 
 
 
@@ -29,8 +29,6 @@ const config = autoSave('config.json', err => {
 if(!config.apps) {
   config.apps = []
 }
-
-process.chdir(dir)
 
 const operation = {
   resurrect: require('./operation/resurrect'),
