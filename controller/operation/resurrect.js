@@ -1,24 +1,34 @@
-const start = require('./start')
+const path = require('path')
+
+const startWorkers = require('./../module/startWorkers')
 const Worker = require('./../class/Worker')
 
+global.isResurrectable = true
+
 module.exports = function resurrect(config) {
+  return new Promise((resolve, reject) => {
 
-  if(global.isResurrected) {
-    return Promise.reject(new Error('already resurrected'))
-  }
+    console.log('resurrecting', global.isResurrectable)
 
-  global.isResurrected = true
-
-  const q = config.apps.map(d => {
-    return start(config, {
-      dir: d
-    }, true)
-  })
-
-  return Promise.all(q).then(() => {
-    return {
-      apps: config.apps.length,
-      started: Worker.workerList.length
+    if(!global.isResurrectable) {
+      throw new Error('already resurrected')
     }
+
+    global.isResurrectable = false
+
+    console.log(config.apps)
+
+    const q = config.apps.map(app => {
+      const pack = require(path.join(app.dir, 'package.json'))
+      return startWorkers(app.dir, pack)
+    })
+
+    q.push(Promise.resolve())
+
+    Promise.all(q).then(() => {
+      resolve({
+        started: Worker.workerList.length
+      })
+    }).catch(reject)
   })
 }

@@ -9,16 +9,15 @@ const z1Dir = path.join(process.env.HOME, '.z1')
 
 try {
   fs.mkdirSync(z1Dir)
-  process.chdir(z1Dir)
 } catch(err) {
   if(err.code !== 'EEXIST') {
     throw err
   }
 }
 
+process.chdir(z1Dir)
+
 require('./module/log')
-
-
 
 const config = autoSave('config.json', err => {
   if(err) {
@@ -39,6 +38,8 @@ const operation = {
   ping: require('./operation/ping'),
   exit: require('./operation/exit')
 }
+
+console.log(process.cwd())
 
 const server = createServer('sick.sock', command => {
   console.log('run command', command)

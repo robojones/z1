@@ -14,6 +14,10 @@ command: start {
 module.exports = function start(config, command) {
   return new Promise((resolve, reject) => {
 
+    if(global.isResurrectable) {
+      global.isResurrectable = false
+    }
+
     // check for duplicate path
     if(config.apps.some(app => app.dir === command.dir)) {
       throw new Error(`app in directory "${command.dir}" already running`)
