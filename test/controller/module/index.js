@@ -1,2 +1,2 @@
 require('./log')
-require('./start')
+require('./startWorkers')

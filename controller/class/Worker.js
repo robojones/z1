@@ -7,12 +7,11 @@ const workers = {}
 const workerList = []
 
 class Worker extends BetterEvents {
-  constructor(dir, file, name, ports, env) {
+  constructor(dir, file, ports, env) {
     super()
 
     this.dir = dir
     this.file = file
-    this.name = name
     this.ports = ports.slice()
     this.state = 0
 

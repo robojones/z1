@@ -11,7 +11,7 @@ const NOEND = {
 }
 
 
-module.exports = function fork(dir, pack) {
+module.exports = function startWorkers(dir, pack) {
   return new Promise((resolve, reject) => {
     verify(pack)
 
@@ -58,7 +58,7 @@ module.exports = function fork(dir, pack) {
     }
 
     for(let i = 0; i < workerCount; i++) {
-      let worker = new Worker(dir, pack.main, pack.name, pack.ports, ENV)
+      let worker = new Worker(dir, pack.main, pack.ports, ENV)
       let w = worker.w
       w.process.stdout.pipe(out.log, NOEND)
       w.process.stderr.pipe(out.err, NOEND)

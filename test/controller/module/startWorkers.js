@@ -8,9 +8,9 @@ const cpuCount = require('os').cpus().length
 const exampleServer = path.join(process.env.PWD, 'example')
 const examplePackage = require(path.join(exampleServer, 'package.json'))
 
-describe('start (module)', function () {
+describe('startWorkers', function () {
 
-  const start = local('controller/module/start')
+  const start = local('controller/module/startWorkers')
 
   beforeEach(function () {
     this.pack = Object.assign({}, examplePackage)

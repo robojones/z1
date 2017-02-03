@@ -24,3 +24,172 @@ Error: this error is only a test error
     at runCallback (timers.js:649:20)
     at tryOnImmediate (timers.js:622:5)
     at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
+Error: this error is only a test error
+    at Context.<anonymous> (/home/jonathan/Desktop/z1-mk3/test/controller/module/log.js:6:14)
+    at callFn (/usr/lib/node_modules/mocha/lib/runnable.js:345:21)
+    at Test.Runnable.run (/usr/lib/node_modules/mocha/lib/runnable.js:337:7)
+    at Runner.runTest (/usr/lib/node_modules/mocha/lib/runner.js:444:10)
+    at /usr/lib/node_modules/mocha/lib/runner.js:550:12
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:361:14)
+    at /usr/lib/node_modules/mocha/lib/runner.js:371:7
+    at next (/usr/lib/node_modules/mocha/lib/runner.js:295:14)
+    at Immediate.<anonymous> (/usr/lib/node_modules/mocha/lib/runner.js:339:5)
+    at runCallback (timers.js:649:20)
+    at tryOnImmediate (timers.js:622:5)
+    at processImmediate [as _immediateCallback] (timers.js:594:5)
