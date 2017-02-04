@@ -1,7 +1,7 @@
 {
   "name": "z1",
-  "version": "3.1.17",
-  "description": "Node.js worker manager",
+  "version": "3.1.18",
+  "description": "Node.js cluster manager",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha"
@@ -16,8 +16,10 @@
   },
   "keywords": [
     "cluster",
+    "worker",
     "manage",
     "manager",
+    "clusters",
     "management",
     "process"
   ],
@@ -33,7 +35,6 @@
   "dependencies": {
     "better-events": "^1.3.1",
     "commander": "^2.9.0",
-    "functs": "^1.1.7",
     "save-on-change": "^1.0.6",
     "x-time": "^1.1.1"
   }
