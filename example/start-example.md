@@ -35,3 +35,11 @@ The output should look like that:
 pending
 
 ```
+
+To kill the app you can use the stop command:
+
+```
+z1 stop exampleApp
+```
+
+See the [README](https://github.com/robojones/z1) for more information.
