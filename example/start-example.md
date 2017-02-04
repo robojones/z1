@@ -1,32 +1,18 @@
 # Guide - Start the example app
 
-
-1. Install z1
-
-  ```
-  npm install z1 -g
-  ```
-
-  If an error occurs try:
-
-  ```
-  sudo npm install z1 -g
-  ```
-
-2. Move to the example app that is included in z1
+1. Move to the example app that is included in z1
 
   ```
   cd $(npm root -g)/z1/example
   ```
 
-3. Start the example app
+2. Start the example app
 
   ```
   z1 start
   ```
-  
-  __That's it.__
-  
+
+3. Dance around and be happy!
   
 ## Useful information:
   
