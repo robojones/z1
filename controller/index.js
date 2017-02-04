@@ -2,9 +2,6 @@ const autoSave = require('save-on-change')
 const path = require('path')
 const fs = require('fs')
 
-const Worker = require('./class/Worker')
-const createServer = require('./module/remoteServer')
-
 const z1Dir = path.join(process.env.HOME, '.z1')
 
 try {
@@ -17,7 +14,11 @@ try {
 
 process.chdir(z1Dir)
 
+// setup global log functions
 require('./module/log')
+
+const Worker = require('./class/Worker')
+const createServer = require('./module/remoteServer')
 
 const config = autoSave('config.json', err => {
   if(err) {
@@ -38,8 +39,6 @@ const operation = {
   ping: require('./operation/ping'),
   exit: require('./operation/exit')
 }
-
-console.log(process.cwd())
 
 const server = createServer('sick.sock', command => {
   console.log('run command', command)

@@ -58,7 +58,7 @@ module.exports = (filename, run) => {
 
   server.on('error', err => {
     handle(err)
-    log.get('z1').stderr.once('close', () => {
+    log.get('z1').err.once('close', () => {
       process.exit(1)
     })
     log.remove('z1')

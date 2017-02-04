@@ -5,8 +5,6 @@ const LogManager = require('./../class/LogManager')
 
 const log = module.exports = new LogManager()
 
-const z1Logs = log.get('z1')
-
 try {
   fs.mkdirSync('z1')
 } catch(err) {
@@ -15,7 +13,7 @@ try {
   }
 }
 
-log.setup('z1', 'z1')
+const z1Logs = log.setup('z1', 'z1')
 
 global.handle = err => {
   z1Logs.err.write(util.inspect(err) + '\n')
