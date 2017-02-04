@@ -90,7 +90,7 @@ Just type the following command:
 z1 restart homepage 3000
 ```
 
-The first argument for the `z1 restart` command is the app name that was in the `package.json` when you started the app. The second argument is optional. It is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms). If you don't provide this argument, the old processes might run forever.
+The first argument for the `z1 restart` command is the app name that was in the `package.json` when you started the app. The second argument is optional. It is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms). The default value is 30000 (30s). If you set it to "infinity" the old processes might run forever.
 
 Output of the example from above:
 ```
@@ -183,7 +183,7 @@ __Returns__ a `<Promise>` that gets resolved when the app is started. It resolve
 
 __Arguments__
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
-- __timeout__ `<Number>` Maximum time until the old workers get killed.
+- __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
 
 __Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
 ```javascript
@@ -203,7 +203,7 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
 
 __Arguments__
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
-- __timeout__ `<Number>` Maximum time until the old workers get killed.
+- __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
 
 __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
 ```javascript

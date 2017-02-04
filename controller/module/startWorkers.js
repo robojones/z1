@@ -98,7 +98,7 @@ function verify(pack) {
 
   // ports
   if(!Array.isArray(pack.ports)) {
-    throw new Error('ports in package.json must be an Array')
+    throw new Error('ports in package.json must be an array')
   }
 
   if(!pack.ports.length) {

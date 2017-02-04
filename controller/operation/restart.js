@@ -15,6 +15,16 @@ command {
 module.exports = function restart(config, command) {
   return new Promise((resolve, reject) => {
 
+    let timeout = 1000 * 30
+
+    if(command.timeout) {
+      if(isNaN(+command.timeout)) {
+        timeout = null
+      } else {
+        timeout = +command.timeout
+      }
+    }
+
     // find old app
     const i = config.apps.findIndex(app => app.name === command.app)
 
@@ -49,8 +59,6 @@ module.exports = function restart(config, command) {
     startWorkers(app.dir, pack).then(data => {
 
       // kill old workers
-      const timeout = +command.timeout || null
-
       const killed = workers.map(worker => {
         if(worker.kill(timeout)) {
           return worker.once('exit')
