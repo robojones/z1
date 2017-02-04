@@ -21,7 +21,6 @@ program
   .description('start the apps that were started before exit')
   .action(() => {
     return z1.resurrect().then(data => {
-      console.log('resurrected')
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -30,7 +29,6 @@ program
   .description('start the app in the dir')
   .action((dir) => {
     return z1.start(dir).then(data => {
-      console.log('started')
       console.log('name:', data.app)
       console.log('workers started:', data.started)
     }).catch(handle)
@@ -40,7 +38,6 @@ program
   .description('stop the app specified by the appName')
   .action((appName, timeout) => {
     return z1.stop(appName, timeout).then(data => {
-      console.log('stopped')
       console.log('workers killed:', data.killed)
     }).catch(err => handle)
   })
@@ -49,7 +46,6 @@ program
   .description('restart the app specified by the appName')
   .action((appName, timeout) => {
     return z1.restart(appName, timeout).then(data => {
-      console.log('restarted')
       console.log('name:', data.app)
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
@@ -103,6 +99,5 @@ program.parse(process.argv)
 
 function handle(err) {
   console.error('[ERROR] - ' + err.message)
-  console.log(err)
   process.exit(1)
 }

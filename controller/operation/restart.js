@@ -15,6 +15,10 @@ command {
 module.exports = function restart(config, command) {
   return new Promise((resolve, reject) => {
 
+    if(global.isResurrectable) {
+      throw new Error('no apps running')
+    }
+
     let timeout = 1000 * 30
 
     if(command.timeout) {
