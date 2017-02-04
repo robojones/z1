@@ -13,11 +13,11 @@ module.exports = function stop(config, command) {
 
     const timeout = +command.timeout || null
 
-    const killed = Worker.workerList.map(worker => {
-      if(worker.name === command.app) {
-        if(worker.kill(timeout)) {
-          return worker.once('exit')
-        }
+    const killed = Worker.workerList.filter(worker => {
+      return worker.name === command.app
+    }).map(worker => {
+      if(worker.kill(timeout)) {
+        return worker.once('exit')
       }
     })
 
