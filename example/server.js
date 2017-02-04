@@ -16,7 +16,7 @@ process.on('message', msg => {
 console.log('started at', (new Date()).toUTCString())
 
 const server = http.createServer((req, res) => {
-  res.end('hallo')
+  res.end('it worked')
 })
 
 server.listen(8080)
