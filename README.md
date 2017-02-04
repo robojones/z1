@@ -32,9 +32,13 @@ z1 also comes with a __graceful restart__ functionality which allows you to rest
 ### Installation
 
 Via [NPM](https://npmjs.com)
+
 ```
-npm install z1 -g
+sudo npm install z1 -g
 ```
+
+You can verify the installation by starting the example app (see: [example guide](https://github.com/robojones/z1/blob/master/example/start-example.md))
+
 
 __Note:__ You might want to add `z1 resurrect` to your startup applications. If you do so, the z1 daemon will start automatically after you reboot your system. It will also start all the apps that were running before.
 
