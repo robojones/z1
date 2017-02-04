@@ -16,6 +16,7 @@ module.exports = function start(config, command) {
 
     if(global.isResurrectable) {
       global.isResurrectable = false
+      config.apps = []
     }
 
     // check for duplicate path
