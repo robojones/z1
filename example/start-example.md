@@ -18,7 +18,7 @@
   
 If you want to make sure that everything worked you can visit [localhost:8080](http://localhost:8080/) with your browser.
 
-You can also use the following command
+You can also use the list command:
 
 ```
 z1 list
