@@ -49,7 +49,7 @@ module.exports = function restart(config, command) {
 
       config.apps.push({
         dir: app.dir,
-        name: command.app
+        name: pack.name
       })
     }
 
