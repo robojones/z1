@@ -29,7 +29,7 @@ class Remote extends BetterEvents {
     return this.connectAndSend({
       name: 'stop',
       app: app,
-      timeout: timeout
+      timeout: translateInfinity(timeout)
     })
   }
 
@@ -37,7 +37,7 @@ class Remote extends BetterEvents {
     return this.connectAndSend({
       name: 'restart',
       app: app,
-      timeout: timeout
+      timeout: translateInfinity(timeout)
     })
   }
 
@@ -154,6 +154,13 @@ class Remote extends BetterEvents {
       })
     })
   }
+}
+
+function translateInfinity(value) {
+  if(value && !isFinite(value)) {
+    return "infinity"
+  }
+  return value
 }
 
 module.exports = Remote
