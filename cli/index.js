@@ -12,7 +12,6 @@ const pack = require('./../package.json')
 
 program
   .version(pack.version)
-  .arguments('<cmd>')
   .action(function (cmd) {
     handle(new Error(`command "${cmd}" not found`))
   })
