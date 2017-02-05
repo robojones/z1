@@ -1,14 +1,12 @@
 # z1
 
-
 __z1__ is a Node.js cluster management program.
 When using Node.js on a __web server__, one will somehow come to the point where he wants to start __multiple processes__ for one app.
 The main goal of z1 is to __simplify__ the creation and management of clusters.
-Therefore it uses the existing [package.json](#prepare-packagejson) of your project and allows you to start your app by simply typing `z1 start` in the project folder.
-z1 also comes with a __graceful restart__ functionality which allows you to restart your cluster without rejecting any request.
 
 ## Table of contents
 
+- [Features](#features)
 - [Setup](#setup)
   - [Installation](#installation)
   - [Prepare package.json](#prepare-packagejson)
@@ -26,6 +24,11 @@ z1 also comes with a __graceful restart__ functionality which allows you to rest
   - [z1.list](#z1list)
   - [z1.exit](#z1exit)
   - [z1.resurrect](#z1resurrect)
+
+## Features
+The focus of z1 is on simplicity.
+Therefore it uses the __existing package.json__ of your project and allows you to start your app by simply typing `z1 start` in the project folder.
+z1 also comes with a __graceful restart__ functionality which allows you to restart your cluster without rejecting any request.
 
 ## Setup
 
