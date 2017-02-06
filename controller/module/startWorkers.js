@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const cpuCount = require('os').cpus().length
 const cluster = require('cluster')
+const mkdirp = require('mkdirp')
 
 const Worker = require('./../class/Worker')
 const log = require('./log')
@@ -41,7 +42,7 @@ module.exports = function startWorkers(dir, pack) {
 
     // create output dir
     n.push(new Promise((resolve, reject) => {
-      fs.mkdir(output, err => {
+      mkdirp(output, err => {
         if(err && err.code !== 'EEXIST') {
           reject(err)
           return

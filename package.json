@@ -1,6 +1,6 @@
 {
   "name": "z1",
-  "version": "3.1.28",
+  "version": "3.1.29",
   "description": "Node.js cluster manager",
   "main": "index.js",
   "scripts": {
@@ -35,6 +35,7 @@
   "dependencies": {
     "better-events": "^1.3.1",
     "commander": "^2.9.0",
+    "mkdirp": "^0.5.1",
     "save-on-change": "^1.0.7",
     "x-time": "^1.1.1"
   }
