@@ -37,10 +37,10 @@ program
   .action((dir, opts) => {
     const opt = {
       name: opts.name,
-      ports: opts.ports,
+      workers: opts.workers,
     }
-    if(opts.workers) {
-      opt.workers = opts.workers.split(',').map(v => +v)
+    if(opts.ports) {
+      opt.ports = opts.ports.split(',').map(v => +v)
     }
     if(opts.output) {
       opt.output = path.resolve(opts.output)
