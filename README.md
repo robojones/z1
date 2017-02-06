@@ -40,9 +40,6 @@ Via [NPM](https://npmjs.com)
 sudo npm install z1 -g
 ```
 
-You can verify the installation by starting the example app (see: [example guide](https://github.com/robojones/z1/blob/master/example/start-example.md)).
-
-
 __Note:__ You might want to add `z1 resurrect` to your startup applications. If you do so, the z1 daemon will start automatically after you reboot your system. It will also start all the apps that were running before.
 
 ### Prepare package.json
@@ -57,6 +54,7 @@ you need to add a few things to your
 4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. the default value is the number of CPU-cores in your system.
 
 Example:
+
 ```json
 {
   "name": "homepage",
@@ -72,15 +70,29 @@ Example:
 
 Starting the app:
 First go to the directory where the `package.json` is located. Type the following command into your terminal:
+
 ```
 z1 start
 ```
 
 In our example the output would be:
+
 ```
 started
 name: homepage
 workers started: 2
+```
+
+__options__
+If you want to start your app with different settings
+than the ones specified in the `package.json`,
+you can add them to to the `z1 start` command.
+
+```
+--name anotherName
+--ports 80,2020,8080
+--workers 4
+--output path/to/logs/
 ```
 
 ### Restart
@@ -96,6 +108,7 @@ z1 restart homepage 3000
 The first argument for the `z1 restart` command is the app name that was in the `package.json` when you started the app. The second argument is optional. It is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms). The default value is 30000 (30s). If you set it to "infinity" the old processes might run forever.
 
 Output of the example from above:
+
 ```
 restarted
 name: homepage
@@ -112,6 +125,7 @@ z1 list
 Displays a list of all running apps.
 
 Example:
+
 ```
  workers name                 directory
  0  2  0 homepage             /home/jones/apps/homepage
@@ -120,6 +134,7 @@ Example:
  | available
 pending
 ```
+
 1. __Pending__ processes are currently starting.
 2. __Available__ workers are listening to all the ports specified in the `package.json`
 3. __Killed__ workers are not listening for new connections.
@@ -134,6 +149,7 @@ z1 stop homepage
 ```
 
 Example output:
+
 ```
 stopped
 workers killed: 2
@@ -171,6 +187,7 @@ __Arguments__
 - __dir__ `<String>` Path to the directory where the `package.json` of the app is located
 
 __Returns__ a `<Promise>` that gets resolved when the app is started. It resolves to an object with the following data:
+
 ```javascript
 {
   app: String,
@@ -178,6 +195,7 @@ __Returns__ a `<Promise>` that gets resolved when the app is started. It resolve
   started: Number
 }
 ```
+
 - __app__ The name of the app specified in the `package.json`. You will need this in order to restart/stop the app.
 - __dir__ Absolute path to the directory where the `package.json` is located
 - __started__ Number of workers started for this app
@@ -189,6 +207,7 @@ __Arguments__
 - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
 
 __Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
+
 ```javascript
 {
   app: String,
@@ -197,6 +216,7 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
   killed: Number
 }
 ```
+
 - __app__ the app name
 - __dir__ directory of the app
 - __started__ Number of started workers
@@ -209,12 +229,14 @@ __Arguments__
 - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
 
 __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
+
 ```javascript
 {
   app: Number,
   killed: Number
 }
 ```
+
 - __app__ the app name
 - __killed__ Number of killed workers
 
@@ -223,6 +245,7 @@ __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It
 __Returns__ a `<Promise>` that resolves to an object containing data about all running workers.
 
 You can access the data for an app by using the name as key:
+
 ```javascript
 z1.list().then(data => {
   console.log(data)
@@ -230,6 +253,7 @@ z1.list().then(data => {
 ```
 
 The output would be:
+
 ```javascript
 {
   homepage: {
@@ -251,6 +275,7 @@ __Returns__ a `<Promise>` that resolves to an empty object. It gets resolves aft
 __Returns__ a `<Promise>` that resolves to an object.
 
 Example:
+
 ```javascript
 {
   started: 2 // two workers started
