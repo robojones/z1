@@ -10,6 +10,10 @@ const xTime = require('x-time')
 const z1 = require('./../remote/index')
 const pack = require('./../package.json')
 
+z1.on('daemon', () => {
+  console.log('daemon started')
+})
+
 program
   .version(pack.version)
   .action(function (cmd) {
