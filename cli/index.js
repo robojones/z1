@@ -38,10 +38,12 @@ program
     const opt = {
       name: opts.name,
       ports: opts.ports,
-      output: opts.output
     }
     if(opts.workers) {
       opt.workers = opts.workers.split(',').map(v => +v)
+    }
+    if(opts.output) {
+      opt.output = path.resolve(opts.output)
     }
     return z1.start(dir, opt).then(data => {
       console.log('name:', data.app)
