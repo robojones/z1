@@ -84,6 +84,7 @@ workers started: 2
 ```
 
 __options__
+
 If you want to start your app with different settings
 than the ones specified in the `package.json`,
 you can add them to to the `z1 start` command.
