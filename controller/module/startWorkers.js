@@ -81,7 +81,8 @@ module.exports = function startWorkers(dir, pack) {
       resolve({
         app: pack.name,
         dir: dir,
-        started: workerCount
+        started: workerCount,
+        ports: pack.ports
       })
     }).catch(err => {
       reject(err)

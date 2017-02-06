@@ -41,7 +41,7 @@ module.exports = function restart(config, command) {
     // reload package.json
     packPath = path.join(app.dir, 'package.json')
     delete require.cache[packPath]
-    const pack = require(packPath)
+    const pack = Object.assign({}, require(packPath), app.opt)
 
     // if name changed
     const nameChanged = pack.name !== app.name
@@ -73,9 +73,8 @@ module.exports = function restart(config, command) {
 
         if(nameChanged) {
           // remove old version
-          if(config.apps[i] === app) {
-            config.apps.splice(i, 1)
-          }
+          const oldIndex = config.apps.findIndex(app => app.name === command.app)
+          config.apps.splice(oldIndex, 1)
         }
 
         data.killed = killed.length

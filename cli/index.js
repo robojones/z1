@@ -26,9 +26,22 @@ program
 program
   .command('start [dir]')
   .description('start the app in the dir')
-  .action((dir) => {
-    return z1.start(dir).then(data => {
+  .option('-n, --name <name>', 'name of your app')
+  .option('-p, --ports <ports>', 'ports that your app listens to')
+  .option('-w, --workers <workers>', 'count of workers (default: number of CPUs)')
+  .option('-o, --output <output>', 'directory for the log files of this app')
+  .action((dir, opts) => {
+    const opt = {
+      name: opts.name,
+      ports: opts.ports,
+      output: opts.output
+    }
+    if(opts.workers) {
+      opt.workers = opts.workers.split(',').map(v => +v)
+    }
+    return z1.start(dir, opt).then(data => {
       console.log('name:', data.app)
+      console.log('ports:', data.ports.join(' '))
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -37,6 +50,7 @@ program
   .description('stop the app specified by the appName')
   .action((appName, timeout) => {
     return z1.stop(appName, timeout).then(data => {
+      console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(err => handle)
   })
@@ -46,6 +60,7 @@ program
   .action((appName, timeout) => {
     return z1.restart(appName, timeout).then(data => {
       console.log('name:', data.app)
+      console.log('ports:', data.ports.join(' '))
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
     }).catch(handle)

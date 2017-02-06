@@ -8,6 +8,12 @@ const startWorkers = require('./../module/startWorkers')
 /*
 command: start {
   dir // absolute path to dir
+  opt: {
+    name
+    ports
+    workers
+    output
+  }
 }
 */
 
@@ -24,7 +30,8 @@ module.exports = function start(config, command) {
       throw new Error(`app in directory "${command.dir}" already running`)
     }
 
-    const pack = require(path.join(command.dir, 'package.json'))
+    const originalPackage = require(path.join(command.dir, 'package.json'))
+    const pack = Object.assign({}, originalPackage, command.opt)
 
     // check for duplicate name
     if(config.apps.some(app => app.name === pack.name)) {
@@ -33,7 +40,8 @@ module.exports = function start(config, command) {
 
     config.apps.push({
       dir: command.dir,
-      name: pack.name
+      name: pack.name,
+      opt: command.opt,
     })
 
     return startWorkers(command.dir, pack).then(resolve).catch(err => {
