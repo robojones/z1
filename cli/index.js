@@ -47,7 +47,7 @@ program
     }
     return z1.start(dir, opt).then(data => {
       console.log('name:', data.app)
-      console.log('ports:', data.ports.join(', '))
+      console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -66,7 +66,7 @@ program
   .action((appName, timeout) => {
     return z1.restart(appName, timeout).then(data => {
       console.log('name:', data.app)
-      console.log('ports:', data.ports.join(', '))
+      console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
     }).catch(handle)
