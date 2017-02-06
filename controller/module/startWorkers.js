@@ -15,12 +15,20 @@ module.exports = function startWorkers(dir, pack) {
   return new Promise((resolve, reject) => {
     verify(pack)
 
+    if(pack.name === 'z1') {
+      throw new Error('the name "z1" is invalid')
+    }
+
     const out = log.get(dir)
 
     // output path
     let output = null
     if(typeof pack.output === 'string') {
-      path.join(dir, pack.output)
+      if(path.isAbsolute(pack.output)) {
+        output = pack.output
+      } else {
+        output = path.join(dir, pack.output)
+      }
     } else {
       output = path.join(process.env.HOME, '.z1', pack.name)
     }
@@ -39,7 +47,7 @@ module.exports = function startWorkers(dir, pack) {
           return
         }
 
-        log.setup(dir, output)
+        log.setup(pack.name, output)
 
         resolve()
       })
@@ -65,8 +73,8 @@ module.exports = function startWorkers(dir, pack) {
 
       w.on('error', handle)
 
-      e.push(worker.once('exit').then(() => {
-        throw new Error(`worker of app "${pack.name}" not started`)
+      e.push(worker.once('exit').then(code => {
+        throw new Error(`worker of app "${pack.name}" not started (exit code: ${code})`)
       }))
       q.push(worker.once('available'))
     }

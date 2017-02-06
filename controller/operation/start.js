@@ -25,11 +25,6 @@ module.exports = function start(config, command) {
       config.apps = []
     }
 
-    // check for duplicate path
-    if(config.apps.some(app => app.dir === command.dir)) {
-      throw new Error(`app in directory "${command.dir}" already running`)
-    }
-
     const originalPackage = require(path.join(command.dir, 'package.json'))
     const pack = Object.assign({}, originalPackage, command.opt)
 

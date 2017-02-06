@@ -1,6 +1,8 @@
 const Worker = require('./../class/Worker')
 const once = require('better-events').once
 
+const log = require('./../module/log')
+
 /*
 command {
   app,
@@ -33,8 +35,10 @@ module.exports = function stop(config, command) {
       let i = config.apps.findIndex(app => app.name === command.app)
 
       if(i !== -1) {
+        log.remove(config.apps[i].name)
         config.apps.splice(i, 1)
       }
+
 
       resolve({
         app: command.app,

@@ -75,17 +75,23 @@ class LogManager extends BetterEvents {
   }
 
   remove(id) {
-    const stuff = this.get(id)
+    if(streams[id]) {
+      const stuff = this.get(id)
 
-    stuff.logStream.end()
-    stuff.errStream.end()
+      stuff.logStream.end()
+      stuff.errStream.end()
 
-    stuff.log.end()
-    stuff.err.end()
+      stuff.log.end()
+      stuff.err.end()
 
-    clearInterval(stuff.interval)
+      clearInterval(stuff.interval)
 
-    delete streams[id]
+      delete streams[id]
+
+      return true
+    }
+
+    return false
   }
 }
 
