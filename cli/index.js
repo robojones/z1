@@ -9,6 +9,7 @@ const xTime = require('x-time')
 
 const z1 = require('./../remote/index')
 const pack = require('./../package.json')
+const spam = require('./message')
 
 z1.on('daemon', () => {
   console.log('daemon started')
@@ -37,7 +38,7 @@ program
   .action((dir, opts) => {
     const opt = {
       name: opts.name,
-      workers: opts.workers,
+      workers: opts.workers
     }
     if(opts.ports) {
       opt.ports = opts.ports.split(',').map(v => +v)
@@ -45,7 +46,11 @@ program
     if(opts.output) {
       opt.output = path.resolve(opts.output)
     }
+    console.log('starting app')
+    spam.start()
     return z1.start(dir, opt).then(data => {
+      spam.stop()
+      console.log('started')
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
@@ -55,7 +60,11 @@ program
   .command('stop <appName> [timeout]')
   .description('stop the app specified by the appName')
   .action((appName, timeout) => {
+    console.log(`stopping app "${appName}"`)
+    spam.start()
     return z1.stop(appName, timeout).then(data => {
+      spam.stop()
+      console.log('stopped')
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(err => handle)
@@ -64,7 +73,11 @@ program
   .command('restart <appName> [timeout]')
   .description('restart the app specified by the appName')
   .action((appName, timeout) => {
+    console.log(`restarting app "${appName}"`)
+    spam.start()
     return z1.restart(appName, timeout).then(data => {
+      spam.stop()
+      console.log('restarted')
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
