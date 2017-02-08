@@ -139,7 +139,7 @@ class Remote extends BetterEvents {
         }
       }
 
-      const z1Path = path.dirname(require.resolve('z1'))
+      const z1Path = path.join(__dirname, '..', '..')
       const file = path.join(z1Path, 'controller', 'index.js')
       const node = process.argv[0]
 
