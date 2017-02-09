@@ -37,13 +37,17 @@ describe('remote', function () {
       return remote.list().then(list => {
         assert(list[data.app], 'app not in the list')
         assert.strictEqual(list[data.app].available, data.started, 'wrong number of workers')
-        return remote.restart(data.app, 100)
+        return remote.restart(data.app, {
+          timeout: 100
+        })
       })
     }).then(data => {
       return remote.list().then(list => {
         assert(list[data.app], 'app not in the list')
         assert.strictEqual(list[data.app].available, data.started, 'wrong number of workers')
-        return remote.stop(data.app, 100)
+        return remote.stop(data.app, {
+          timeout: 100
+        })
       })
     }).then(data => {
       return remote.list().then(list => {

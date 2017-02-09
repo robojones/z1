@@ -11,10 +11,6 @@ const z1 = require('./../remote/index')
 const pack = require('./../package.json')
 const spam = require('./message')
 
-z1.on('daemon', () => {
-  console.log('daemon started')
-})
-
 program
   .version(pack.version)
   .action(function (cmd) {
@@ -57,12 +53,18 @@ program
     }).catch(handle)
   })
 program
-  .command('stop <appName> [timeout]')
+  .command('stop <appName>')
   .description('stop the app specified by the appName')
-  .action((appName, timeout) => {
+  .option('-t --timeout <timeout>')
+  .option('-s --signal <signal>')
+  .action((appName, opts) => {
+    const opt = {
+      timeout: opts.timeout,
+      signal: opts.signal
+    }
     console.log(`stopping app "${appName}"`)
     spam.start()
-    return z1.stop(appName, timeout).then(data => {
+    return z1.stop(appName, opt).then(data => {
       spam.stop()
       console.log('stopped')
       console.log('name:', data.app)
@@ -72,10 +74,16 @@ program
 program
   .command('restart <appName> [timeout]')
   .description('restart the app specified by the appName')
-  .action((appName, timeout) => {
+  .option('-t --timeout <timeout>')
+  .option('-s --signal <signal>')
+  .action((appName, opts) => {
+    const opt = {
+      timeout: opts.timeout,
+      signal: opts.signal
+    }
     console.log(`restarting app "${appName}"`)
     spam.start()
-    return z1.restart(appName, timeout).then(data => {
+    return z1.restart(appName, opt).then(data => {
       spam.stop()
       console.log('restarted')
       console.log('name:', data.app)

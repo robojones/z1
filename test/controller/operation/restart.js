@@ -12,7 +12,9 @@ describe('restart (operation)', function () {
   beforeEach(function () {
     this.command = {
       app: pack.name,
-      timeout: 100
+      opt: {
+        timeout: 100
+      }
     }
     this.config = {
       apps: []

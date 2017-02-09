@@ -26,19 +26,21 @@ class Remote extends BetterEvents {
     })
   }
 
-  stop(app, timeout) {
+  stop(app, opt = {}) {
+    opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'stop',
       app: app,
-      timeout: translateInfinity(timeout)
+      opt: opt
     })
   }
 
-  restart(app, timeout) {
+  restart(app, opt = {}) {
+    opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'restart',
       app: app,
-      timeout: translateInfinity(timeout)
+      opt: opt
     })
   }
 

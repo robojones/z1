@@ -15,17 +15,17 @@ module.exports = function stop(config, command) {
 
     let timeout = 1000 * 30
 
-    if(command.timeout) {
-      if(isNaN(+command.timeout)) {
+    if(command.opt.timeout) {
+      if(isNaN(+command.opt.timeout)) {
         timeout = null
       } else {
-        timeout = +command.timeout
+        timeout = +command.opt.timeout
       }
     }
 
     const killed = Worker.workerList.map(worker => {
       if(worker.name === command.app) {
-        if(worker.kill(timeout)) {
+        if(worker.kill(command.opt.signal, timeout)) {
           return worker.once('exit')
         }
       }
@@ -38,7 +38,6 @@ module.exports = function stop(config, command) {
         log.remove(config.apps[i].name)
         config.apps.splice(i, 1)
       }
-
 
       resolve({
         app: command.app,

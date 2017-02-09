@@ -67,7 +67,7 @@ class Worker extends BetterEvents {
     w.on('listening', listening)
   }
 
-  kill(time) {
+  kill(signal = 'SIGTERM', time) {
     this.state = Worker.KILLED
 
     const w = this.w
@@ -80,7 +80,8 @@ class Worker extends BetterEvents {
 
     if(typeof time === 'number') {
       const timeout = setTimeout(() => {
-        w.kill()
+        log(`worker "${this.id}", sig "${signal}", time "${time}"`)
+        w.kill(signal)
       }, time)
       w.once('disconnect', () => {
         clearTimeout(timeout)

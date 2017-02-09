@@ -8,7 +8,10 @@ const startWorkers = require('./../module/startWorkers')
 /*
 command {
   app,
-  timeout
+  opt: {
+    timeout,
+    signal
+  }
 }
 */
 
@@ -21,11 +24,11 @@ module.exports = function restart(config, command) {
 
     let timeout = 1000 * 30
 
-    if(command.timeout) {
-      if(isNaN(+command.timeout)) {
+    if(command.opt.timeout) {
+      if(isNaN(+command.opt.timeout)) {
         timeout = null
       } else {
-        timeout = +command.timeout
+        timeout = +command.opt.timeout
       }
     }
 
@@ -64,7 +67,7 @@ module.exports = function restart(config, command) {
 
       // kill old workers
       const killed = workers.map(worker => {
-        if(worker.kill(timeout)) {
+        if(worker.kill(command.opt.signal, timeout)) {
           return worker.once('exit')
         }
       })

@@ -147,7 +147,7 @@ describe('Worker', function () {
             cb()
           })
 
-          this.worker.kill(timeout)
+          this.worker.kill(undefined, timeout)
         })
       })
     })
