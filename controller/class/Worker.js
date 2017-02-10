@@ -35,6 +35,8 @@ class Worker extends BetterEvents {
     workers[this.id] = this
     workerList.push(this)
 
+    w.on('error', err => Worker.errorHandler(err))
+
     w.once('exit', (code, signal) => {
       // remove from workers
       delete workers[this.id]
@@ -113,6 +115,10 @@ class Worker extends BetterEvents {
 
   static get KILLED() {
     return 2
+  }
+
+  static errorHandler(err) {
+    console.error(err)
   }
 }
 

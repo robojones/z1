@@ -16,8 +16,6 @@ module.exports = function resurrect(config) {
 
     global.isResurrectable = false
 
-    console.log(config.apps)
-
     const q = config.apps.map(app => {
       const originalPackage = require(path.join(app.dir, 'package.json'))
       const pack = Object.assign({}, originalPackage, app.opt)

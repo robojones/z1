@@ -20,7 +20,11 @@ program
   .command('resurrect')
   .description('start the apps that were started before exit')
   .action(() => {
+    console.log('resurrecting')
+    spam.start()
     return z1.resurrect().then(data => {
+      console.log('resurrected')
+      spam.stop()
       console.log('workers started:', data.started)
     }).catch(handle)
   })

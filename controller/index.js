@@ -18,6 +18,7 @@ process.chdir(z1Dir)
 require('./module/log')
 
 const Worker = require('./class/Worker')
+Worker.errorHandler = handle
 const createServer = require('./module/remoteServer')
 
 const config = autoSave('config.json', err => {
