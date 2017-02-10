@@ -72,7 +72,7 @@ program
     }).catch(err => handle)
   })
 program
-  .command('restart <appName> [timeout]')
+  .command('restart <appName>')
   .description('restart the app specified by the appName')
   .option('-t --timeout <timeout>')
   .option('-s --signal <signal>')

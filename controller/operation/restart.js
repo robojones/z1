@@ -61,7 +61,7 @@ module.exports = function restart(config, command) {
     }
 
     // remember old workers
-    const workers = Worker.workerList.filter(worker => worker.dir === app.dir)
+    const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
     startWorkers(app.dir, pack).then(data => {
 
