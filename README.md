@@ -201,10 +201,10 @@ z1 start -name 'custom app' -ports 80 -- hello
 
 This would start an app with the name 'custom app' that is listening on port 80.
 Everything behind the `--` will be passed to the workers.
-In your code you can get the "hello" as args.
+In your code you can get the "hello" as argv.
 
 ```javascript
-process.args[2] === 'hello' // true
+process.argv[2] === 'hello' // true
 ```
 
 ## API
