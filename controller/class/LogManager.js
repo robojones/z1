@@ -40,11 +40,6 @@ class LogManager extends BetterEvents {
 
     const stuff = this.get(id)
 
-    console.log('setup logs for')
-    console.log('id:', id)
-    console.log('dir:', dir)
-    console.log('cwd:', process.cwd())
-
     const connect = () => {
 
       const d = formatDate()
@@ -56,7 +51,6 @@ class LogManager extends BetterEvents {
       const err = fs.createWriteStream(errFile, APPEND)
 
       log.on('end', () => console.log('log', id, 'closed'))
-      log.write('example')
 
       this.collect('error', log)
       this.collect('error', err)
