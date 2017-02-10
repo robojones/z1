@@ -14,9 +14,9 @@ const spam = require('./message')
 const SPACER = '--'
 
 const argv = process.argv.slice()
-const args = []
+let args = []
 if(argv.includes(SPACER)) {
-  args.copyWithin(argv.splice(argv.indexOf(SPACER)))
+  args = argv.splice(argv.indexOf(SPACER) + 1)
 }
 
 program
@@ -81,7 +81,7 @@ program
       console.log('stopped')
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
-    }).catch(err => handle)
+    }).catch(handle)
   })
 program
   .command('restart <appName>')
@@ -152,7 +152,7 @@ program.parse(argv)
 
 function handle(err) {
   if(process.env.NODE_ENV === 'development') {
-    throw err
+    console.error(err)
   } else {
     console.error('[ERROR] - ' + err.message)
   }

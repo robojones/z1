@@ -5,7 +5,8 @@ const cluster = require('cluster')
 const mkdirp = require('mkdirp')
 
 const Worker = require('./../class/Worker')
-const log = require('./log')
+const logs = require('./log')
+global.log('hallo')
 
 const NOEND = {
   end: false
@@ -20,7 +21,7 @@ module.exports = function startWorkers(dir, pack, args = []) {
       throw new Error('the name "z1" is invalid')
     }
 
-    const out = log.get(dir)
+    const out = logs.get(pack.name)
 
     // output path
     let output = null
@@ -48,7 +49,7 @@ module.exports = function startWorkers(dir, pack, args = []) {
           return
         }
 
-        log.setup(pack.name, output)
+        logs.setup(pack.name, output)
 
         resolve()
       })
