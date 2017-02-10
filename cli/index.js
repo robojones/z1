@@ -59,8 +59,8 @@ program
 program
   .command('stop <appName>')
   .description('stop the app specified by the appName')
-  .option('-t --timeout <timeout>')
-  .option('-s --signal <signal>')
+  .option('-t --timeout <timeout>', 'time until the workers get killed')
+  .option('-s --signal <signal>', 'kill signal')
   .action((appName, opts) => {
     const opt = {
       timeout: opts.timeout,
@@ -78,8 +78,8 @@ program
 program
   .command('restart <appName>')
   .description('restart the app specified by the appName')
-  .option('-t --timeout <timeout>')
-  .option('-s --signal <signal>')
+  .option('-t --timeout <timeout>', 'time until the old workers get killed')
+  .option('-s --signal <signal>', 'kill signal for the old workers')
   .action((appName, opts) => {
     const opt = {
       timeout: opts.timeout,
