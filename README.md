@@ -17,8 +17,9 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Stop](#stop)
   - [Exit](#exit)
   - [Resurrect](#resurrect)
+  - [Passing arguments to workers](#passing-arguments-to-workers)
 - [API](#api)
-  - [z1.start](#z1startdir-argv-options)
+  - [z1.start](#z1startdir-args-options)
   - [z1.restart](#z1restartapp-options)
   - [z1.stop](#z1stopapp-options)
   - [z1.list](#z1list)
@@ -190,6 +191,22 @@ z1 resurrect
 
 Note: If you are starting a new app before `z1 resurrect`, the old apps will not be restored.
 
+### Passing arguments to workers
+
+You can start your app with custom arguments.
+
+```
+z1 start -name 'custom app' -ports 80 -- hello
+```
+
+This would start an app with the name 'custom app' that is listening on port 80.
+Everything behind the `--` will be passed to the workers.
+In your code you can get the "hello" as args.
+
+```javascript
+process.args[2] === 'hello' // true
+```
+
 ## API
 
 Besides the CLI, you can also __require__ z1 to control your apps with a Node.js program.
@@ -198,11 +215,11 @@ Besides the CLI, you can also __require__ z1 to control your apps with a Node.js
 const z1 = require('z1')
 ```
 
-### z1.start(dir, argv, options)
+### z1.start(dir, args, options)
 
 __Arguments__
 - __dir__ `<String>` Path to the directory where the `package.json` of the app is located (default: current directory)
-- __argv__ `<Array>` Arguments for the workers
+- __args__ `<Array>` Arguments for the workers
 - __options__ `<Object>` Options that overwrite the ones from the [package.json](#prepare-packagejson)
 
 __Returns__ a `<Promise>` that gets resolved when the app is started. It resolves to an object with the following data:
