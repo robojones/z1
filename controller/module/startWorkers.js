@@ -12,7 +12,7 @@ const NOEND = {
 }
 
 
-module.exports = function startWorkers(dir, pack) {
+module.exports = function startWorkers(dir, pack, args = []) {
   return new Promise((resolve, reject) => {
     verify(pack)
 
@@ -56,7 +56,8 @@ module.exports = function startWorkers(dir, pack) {
 
     // setup master
     cluster.setupMaster({
-      stdio: ['ignore', 'pipe', 'pipe', 'ipc']
+      stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
+      args: args
     })
 
     const oldWd = process.cwd()

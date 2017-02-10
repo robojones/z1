@@ -54,16 +54,16 @@ module.exports = function restart(config, command) {
         throw new Error(`new name "${pack.name}" already in use`)
       }
 
-      config.apps.push({
-        dir: app.dir,
+      // save new app
+      config.apps.push(Object.assign({
         name: pack.name
-      })
+      }, app))
     }
 
     // remember old workers
     const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
-    startWorkers(app.dir, pack).then(data => {
+    startWorkers(app.dir, pack, app.args).then(data => {
 
       // kill old workers
       const killed = workers.map(worker => {

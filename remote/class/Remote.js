@@ -18,10 +18,11 @@ class Remote extends BetterEvents {
     })
   }
 
-  start(dir, opt = {}) {
+  start(dir, args = [], opt = {}) {
     return this.connectAndSend({
       name: 'start',
       dir: path.resolve(dir || ''),
+      args: args,
       opt: opt
     })
   }

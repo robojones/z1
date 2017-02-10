@@ -19,7 +19,6 @@ command: start {
 
 module.exports = function start(config, command) {
   return new Promise((resolve, reject) => {
-
     if(global.isResurrectable) {
       global.isResurrectable = false
       config.apps = []
@@ -36,10 +35,11 @@ module.exports = function start(config, command) {
     config.apps.push({
       dir: command.dir,
       name: pack.name,
-      opt: command.opt,
+      args: command.args,
+      opt: command.opt
     })
 
-    return startWorkers(command.dir, pack).then(resolve).catch(err => {
+    return startWorkers(command.dir, pack, command.args).then(resolve).catch(err => {
       const i = config.apps.findIndex(app => app.name === pack.name)
       if(i !== -1) {
         config.apps.splice(i, 1)

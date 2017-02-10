@@ -2,6 +2,7 @@ const http = require('http')
 
 console.log('pwd', process.env.PWD)
 console.log('cwd', process.cwd())
+console.log('argv', process.argv)
 
 // process.exit(10)
 

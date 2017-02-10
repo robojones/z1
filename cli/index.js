@@ -11,6 +11,14 @@ const z1 = require('./../remote/index')
 const pack = require('./../package.json')
 const spam = require('./message')
 
+const SPACER = '--'
+
+const argv = process.argv.slice()
+const args = []
+if(argv.includes(SPACER)) {
+  args.copyWithin(argv.splice(argv.indexOf(SPACER)))
+}
+
 program
   .version(pack.version)
   .action(function (cmd) {
@@ -48,7 +56,7 @@ program
     }
     console.log('starting app')
     spam.start()
-    return z1.start(dir, opt).then(data => {
+    return z1.start(dir, args, opt).then(data => {
       spam.stop()
       console.log('started')
       console.log('name:', data.app)
@@ -140,9 +148,13 @@ if(process.argv.length === 2) {
   handle(new Error('no command given'))
 }
 
-program.parse(process.argv)
+program.parse(argv)
 
 function handle(err) {
-  console.error('[ERROR] - ' + err.message)
+  if(process.env.NODE_ENV === 'development') {
+    throw err
+  } else {
+    console.error('[ERROR] - ' + err.message)
+  }
   process.exit(1)
 }

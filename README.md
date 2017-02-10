@@ -18,9 +18,9 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Exit](#exit)
   - [Resurrect](#resurrect)
 - [API](#api)
-  - [z1.start](#z1startdir)
-  - [z1.restart](#z1restartapp-timeout)
-  - [z1.stop](#z1stopapp-timeout)
+  - [z1.start](#z1startdir-argv-options)
+  - [z1.restart](#z1restartapp-options)
+  - [z1.stop](#z1stopapp-options)
   - [z1.list](#z1list)
   - [z1.exit](#z1exit)
   - [z1.resurrect](#z1resurrect)
@@ -103,10 +103,10 @@ The restart process will be gapless and no requests will be refused.
 Just type the following command:
 
 ```
-z1 restart homepage 3000
+z1 restart homepage
 ```
 
-The first argument for the `z1 restart` command is the app name that was in the `package.json` when you started the app. The second argument is optional. It is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms). The default value is 30000 (30s). If you set it to "infinity" the old processes might run forever.
+The first argument for the `z1 restart` command is the app name that was in the `package.json` when you started the app.
 
 Output of the example from above:
 
@@ -116,6 +116,14 @@ name: homepage
 workers started: 2
 workers killed: 2
 ```
+
+__options__
+
+```
+--timeout 10000
+```
+
+`--timeout` is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms). The default value is 30000 (30s). If you set it to "infinity" the old processes might run forever.
 
 ### List
 
@@ -156,6 +164,14 @@ stopped
 workers killed: 2
 ```
 
+__options__
+
+```
+--timeout 10000
+```
+
+`--timeout` is a number specifying the maximal time that the workers are allowed to run after they are killed (in ms). The default value is 30000 (30s). If you set it to "infinity" the old processes might run forever.
+
 ### Exit
 
 ```
@@ -182,10 +198,12 @@ Besides the CLI, you can also __require__ z1 to control your apps with a Node.js
 const z1 = require('z1')
 ```
 
-### z1.start([dir])
+### z1.start(dir, argv, options)
 
 __Arguments__
-- __dir__ `<String>` Path to the directory where the `package.json` of the app is located
+- __dir__ `<String>` Path to the directory where the `package.json` of the app is located (default: current directory)
+- __argv__ `<Array>` Arguments for the workers
+- __options__ `<Object>` Options that overwrite the ones from the [package.json](#prepare-packagejson)
 
 __Returns__ a `<Promise>` that gets resolved when the app is started. It resolves to an object with the following data:
 
@@ -201,11 +219,13 @@ __Returns__ a `<Promise>` that gets resolved when the app is started. It resolve
 - __dir__ Absolute path to the directory where the `package.json` is located
 - __started__ Number of workers started for this app
 
-### z1.restart(app[, timeout])
+### z1.restart(app, options)
 
 __Arguments__
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
-- __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
+- __options__ `<Object>`
+  - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
+  - __signal__ `<String>` Kill signal for the old workers
 
 __Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
 
@@ -223,11 +243,13 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
 - __started__ Number of started workers
 - __killed__ Number of killed workers
 
-### z1.stop(app[, timeout])
+### z1.stop(app, options)
 
 __Arguments__
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
-- __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
+- __options__ `<Object>`
+  - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
+  - __signal__ `<String>` Kill signal
 
 __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
 
