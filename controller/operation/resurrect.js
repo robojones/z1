@@ -8,8 +8,6 @@ global.isResurrectable = true
 module.exports = function resurrect(config) {
   return new Promise((resolve, reject) => {
 
-    console.log('resurrecting', global.isResurrectable)
-
     if(!global.isResurrectable) {
       throw new Error('already resurrected')
     }
