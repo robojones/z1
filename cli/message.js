@@ -25,7 +25,7 @@ const messages = [
   'cooking a meal',
   'watching tv',
   'processing tasks',
-  'making smothie',
+  'making smoothie',
   'thinking',
   'calculating 1+1=0',
   'sticking a neadle into my hand',
@@ -36,9 +36,13 @@ const messages = [
   'washing your car',
   'knocking at your door',
   'wrong door - wasn\'t yours.',
+  'getting a loaf',
+  'progress: 98%',
+  'progress: 3%',
+  'jumping jumping jumping'
 ]
 
-let i = Math.round(Math.random() * messages.length)
+let i = Math.round(Math.random() * messages.length - 1)
 let interval = null
 
 module.exports = {
