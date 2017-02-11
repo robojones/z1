@@ -299,7 +299,6 @@ The output would be:
 {
   homepage: {
     dir: '/home/jones/apps/homepage',
-    file: 'index.js',
     pending: 0,
     available: 2,
     killed: 0
