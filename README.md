@@ -53,6 +53,7 @@ you need to add a few things to your
 2. __main__ - the entry point of your app
 3. __ports__ - an array of port numbers that your app uses
 4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. the default value is the number of CPU-cores in your system.
+5. __output__ _(optional)_ - a directory for the log and error files. (Default: `~/.z1/<yourAppName>`)
 
 Example:
 
@@ -196,7 +197,7 @@ Note: If you are starting a new app before `z1 resurrect`, the old apps will not
 You can start your app with custom arguments.
 
 ```
-z1 start -name 'custom app' -ports 80 -- hello
+z1 start --name 'custom app' --ports 80 -- hello
 ```
 
 This would start an app with the name 'custom app' that is listening on port 80.
