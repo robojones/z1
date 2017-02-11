@@ -38,6 +38,7 @@ program
   })
 program
   .command('start [dir]')
+  .usage('[dir] [options] [-- [arguments]]')
   .description('start the app in the dir')
   .option('-n, --name <name>', 'name of your app')
   .option('-p, --ports <ports>', 'ports that your app listens to')
@@ -67,8 +68,8 @@ program
 program
   .command('stop <appName>')
   .description('stop the app specified by the appName')
-  .option('-t --timeout <timeout>', 'time until the workers get killed')
-  .option('-s --signal <signal>', 'kill signal')
+  .option('-t, --timeout <timeout>', 'time until the workers get killed')
+  .option('-s, --signal <signal>', 'kill signal')
   .action((appName, opts) => {
     const opt = {
       timeout: opts.timeout,
@@ -86,8 +87,8 @@ program
 program
   .command('restart <appName>')
   .description('restart the app specified by the appName')
-  .option('-t --timeout <timeout>', 'time until the old workers get killed')
-  .option('-s --signal <signal>', 'kill signal for the old workers')
+  .option('-t, --timeout <timeout>', 'time until the old workers get killed')
+  .option('-s, --signal <signal>', 'kill signal for the old workers')
   .action((appName, opts) => {
     const opt = {
       timeout: opts.timeout,
