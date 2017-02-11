@@ -38,7 +38,7 @@ program
   })
 program
   .command('start [dir]')
-  .usage('[dir] [options] [-- [arguments]]')
+  .usage('[options] [dir] [-- [arguments]]')
   .description('start the app in the dir')
   .option('-n, --name <name>', 'name of your app')
   .option('-p, --ports <ports>', 'ports that your app listens to')
