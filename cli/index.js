@@ -44,7 +44,10 @@ program
   .option('-p, --ports <ports>', 'ports that your app listens to')
   .option('-w, --workers <workers>', 'count of workers (default: number of CPUs)')
   .option('-o, --output <output>', 'directory for the log files of this app')
+  .option('-e, --env <env>', 'environment variables e.g. NODE_ENV=development')
   .action((dir, opts) => {
+
+    // prepare opts
     const opt = {
       name: opts.name,
       workers: opts.workers
@@ -55,9 +58,19 @@ program
     if(opts.output) {
       opt.output = path.resolve(opts.output)
     }
+
+    // parse environment variables
+    const env = {}
+    if(opts.env) {
+      opts.env.split(',').forEach(pair => {
+        const parts = pair.split('=')
+        env[parts[0]] = parts[1]
+      })
+    }
+
     console.log('starting app')
     spam.start()
-    return z1.start(dir, args, opt).then(data => {
+    return z1.start(dir, args, opt, env).then(data => {
       spam.stop()
       console.log('started')
       console.log('name:', data.app)

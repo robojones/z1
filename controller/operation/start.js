@@ -13,7 +13,9 @@ command: start {
     ports
     workers
     output
-  }
+  },
+  args
+  env
 }
 */
 
@@ -36,10 +38,11 @@ module.exports = function start(config, command) {
       dir: command.dir,
       name: pack.name,
       args: command.args,
-      opt: command.opt
+      opt: command.opt,
+      env: command.env
     })
 
-    return startWorkers(command.dir, pack, command.args).then(resolve).catch(err => {
+    return startWorkers(command.dir, pack, command.args, command.env).then(resolve).catch(err => {
       const i = config.apps.findIndex(app => app.name === pack.name)
       if(i !== -1) {
         config.apps.splice(i, 1)

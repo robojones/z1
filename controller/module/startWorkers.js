@@ -13,7 +13,7 @@ const NOEND = {
 }
 
 
-module.exports = function startWorkers(dir, pack, args = []) {
+module.exports = function startWorkers(dir, pack, args = [], env = {}) {
   return new Promise((resolve, reject) => {
     verify(pack)
 
@@ -64,9 +64,9 @@ module.exports = function startWorkers(dir, pack, args = []) {
     const oldWd = process.cwd()
     process.chdir(dir)
 
-    const ENV = {
+    const ENV = Object.assign({
       PWD: dir
-    }
+    }, env)
 
     for(let i = 0; i < workerCount; i++) {
       let worker = new Worker(dir, pack.main, pack.name, pack.ports, ENV)
