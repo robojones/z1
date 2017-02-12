@@ -96,6 +96,7 @@ you can add them to to the `z1 start` command.
 --ports 80,2020,8080
 --workers 4
 --output path/to/logs/
+--env NODE_ENV=development
 ```
 
 ### Restart
