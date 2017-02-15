@@ -65,7 +65,9 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
     process.chdir(dir)
 
     const ENV = Object.assign({
-      PWD: dir
+      PWD: dir,
+      APPNAME: pack.name,
+      PORT: pack.ports[0]
     }, env)
 
     for(let i = 0; i < workerCount; i++) {
