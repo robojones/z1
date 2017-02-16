@@ -1,5 +1,0 @@
-{
-  "name": "test-server",
-  "main": "test-server.js",
-  "ports": [8080]
-}

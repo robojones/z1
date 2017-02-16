@@ -51,7 +51,10 @@ describe('Worker', function () {
       this.dir = pwd
       this.file = path.join('example', 'server.js')
       this.name = 'exampleApp'
-      this.ports = [8080, 8081]
+      this.ports = [8080, 8081, 8082]
+      this.env = {
+        TEST: 'hallo'
+      }
 
       cluster.setupMaster({
         stdio: ['ignore', 'ignore', 'ignore', 'ipc']
@@ -70,35 +73,25 @@ describe('Worker', function () {
       assert(Worker.workerList.includes(this.worker))
     })
 
-    describe('.dir', function () {
-      it('should be the given directory', function () {
-        assert.strictEqual(this.worker.dir, this.dir)
-      })
+    it('should set .dir to the given directory', function () {
+      assert.strictEqual(this.worker.dir, this.dir)
     })
 
-    describe('.file', function () {
-      it('should be the given file(-path)', function () {
-        assert.strictEqual(this.worker.file, this.file)
-      })
+    it('should set .file to the given file(-path)', function () {
+      assert.strictEqual(this.worker.file, this.file)
     })
 
-    describe('.name', function () {
-      it('should be the given name', function () {
-        assert.strictEqual(this.worker.name, this.name)
-      })
+    it('should set .name to the given name', function () {
+      assert.strictEqual(this.worker.name, this.name)
     })
 
-    describe('.ports', function () {
-      it('should be a copy of ports', function () {
-        assert.notStrictEqual(this.worker.ports, this.ports)
-        assert.deepEqual(this.worker.ports, this.ports)
-      })
+    it('should set .ports to a copy of ports', function () {
+      assert.notStrictEqual(this.worker.ports, this.ports)
+      assert.deepEqual(this.worker.ports, this.ports)
     })
 
-    describe('.state', function () {
-      it('should be PENDING (0)', function () {
-        assert.strictEqual(this.worker.state, Worker.PENDING)
-      })
+    it('should set .state to PENDING (0)', function () {
+      assert.strictEqual(this.worker.state, Worker.PENDING)
     })
 
     describe('.id', function () {

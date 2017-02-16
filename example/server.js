@@ -28,3 +28,5 @@ const server2 = http.createServer((req, res) => {
 })
 
 server2.listen(8081)
+
+require('var-server')(8082).listen()
