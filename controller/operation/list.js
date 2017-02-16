@@ -20,6 +20,9 @@ module.exports = function list(config) {
       stats[w.name][states[w.state]]++
     })
 
-    resolve(stats)
+    resolve({
+      isResurrectable: global.isResurrectable,
+      stats: stats
+    })
   })
 }

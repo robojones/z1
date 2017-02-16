@@ -31,8 +31,8 @@ program
     console.log('resurrecting')
     spam.start()
     return z1.resurrect().then(data => {
-      console.log('resurrected')
       spam.stop()
+      console.log('resurrected')
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -123,7 +123,7 @@ program
   .description('overview of all running workers')
   .action(() => {
     return z1.list().then(data => {
-      const props = Object.keys(data)
+      const props = Object.keys(data.stats)
 
       if(!props.length) {
         console.log('no workers running')
@@ -135,7 +135,7 @@ program
 
       console.log(' workers name                 directory')
       for(const prop of props) {
-        let obj = data[prop]
+        let obj = data.stats[prop]
         let p = (stuff + obj.pending).substr(-2)
         let a = (stuff + obj.available).substr(-2)
         let k = (stuff + obj.killed).substr(-2)
@@ -147,6 +147,10 @@ program
       console.log(' |  | killed')
       console.log(' | available')
       console.log('pending')
+
+      if(data.isResurrectable) {
+        console.log('\nThe listed apps are currently not running.\nType "z1 resurrect" to start them.')
+      }
     }).catch(handle)
   })
 program
