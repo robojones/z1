@@ -217,12 +217,13 @@ Besides the CLI, you can also __require__ z1 to control your apps with a Node.js
 const z1 = require('z1')
 ```
 
-### z1.start(dir, args, options)
+### z1.start(dir, args, opt, env)
 
 __Arguments__
 - __dir__ `<String>` Path to the directory where the `package.json` of the app is located (default: current directory)
-- __args__ `<Array>` Arguments for the workers
-- __options__ `<Object>` Options that overwrite the ones from the [package.json](#prepare-packagejson)
+- __args__ `<Array>` _(optional)_ Arguments for the workers
+- __opt__ `<Object>` _(optional)_ Options that overwrite the ones from the [package.json](#prepare-packagejson)
+- __env__ `<Object>` _(optional)_ Key-value-pairs to be added to `process.env` in the workers.
 
 __Returns__ a `<Promise>` that gets resolved when the app is started. It resolves to an object with the following data:
 
@@ -238,11 +239,11 @@ __Returns__ a `<Promise>` that gets resolved when the app is started. It resolve
 - __dir__ Absolute path to the directory where the `package.json` is located
 - __started__ Number of workers started for this app
 
-### z1.restart(app, options)
+### z1.restart(app, opt)
 
 __Arguments__
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
-- __options__ `<Object>`
+- __opt__ `<Object>` _(optional)_
   - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
   - __signal__ `<String>` Kill signal for the old workers
 
@@ -262,11 +263,11 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
 - __started__ Number of started workers
 - __killed__ Number of killed workers
 
-### z1.stop(app, options)
+### z1.stop(app, opt)
 
 __Arguments__
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
-- __options__ `<Object>`
+- __opt__ `<Object>` _(optional)_
   - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
   - __signal__ `<String>` Kill signal
 
