@@ -291,7 +291,7 @@ You can access the data for an app by using the name as key:
 
 ```javascript
 z1.list().then(data => {
-  console.log(data)
+  console.log(data.stats)
 })
 ```
 
