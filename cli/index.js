@@ -85,7 +85,7 @@ program
   .option('-s, --signal <signal>', 'kill signal')
   .action((appName, opts) => {
     const opt = {
-      timeout: opts.timeout,
+      timeout: +opts.timeout,
       signal: opts.signal
     }
     console.log(`stopping app "${appName}"`)
@@ -104,7 +104,7 @@ program
   .option('-s, --signal <signal>', 'kill signal for the old workers')
   .action((appName, opts) => {
     const opt = {
-      timeout: opts.timeout,
+      timeout: +opts.timeout,
       signal: opts.signal
     }
     console.log(`restarting app "${appName}"`)
