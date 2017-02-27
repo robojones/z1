@@ -30,7 +30,6 @@ class Remote extends BetterEvents {
 
   stop(app, opt = {}) {
     opt.timeout = translateInfinity(opt.timeout)
-    console.log(opt.timeout)
     return this.connectAndSend({
       name: 'stop',
       app: app,
@@ -40,7 +39,6 @@ class Remote extends BetterEvents {
 
   restart(app, opt = {}) {
     opt.timeout = translateInfinity(opt.timeout)
-    console.log(opt.timeout)
     return this.connectAndSend({
       name: 'restart',
       app: app,
@@ -166,7 +164,7 @@ class Remote extends BetterEvents {
 }
 
 function translateInfinity(value) {
-  if(!isFinite(value)) {
+  if(value && !isFinite(+value)) {
     return "infinity"
   }
   return value
