@@ -4,6 +4,7 @@ const net = require('net')
 const fs = require('fs')
 const path = require('path')
 const util = require('util')
+const assert = require('assert')
 const program = require('commander')
 const xTime = require('x-time')
 
@@ -79,11 +80,11 @@ program
     }).catch(handle)
   })
 program
-  .command('stop <appName>')
+  .command('stop [appName]')
   .description('stop the app specified by the appName')
   .option('-t, --timeout <timeout>', 'time until the workers get killed')
   .option('-s, --signal <signal>', 'kill signal')
-  .action((appName, opts) => {
+  .action((appName = getAppName(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
@@ -98,11 +99,11 @@ program
     }).catch(handle)
   })
 program
-  .command('restart <appName>')
+  .command('restart [appName]')
   .description('restart the app specified by the appName')
   .option('-t, --timeout <timeout>', 'time until the old workers get killed')
   .option('-s, --signal <signal>', 'kill signal for the old workers')
-  .action((appName, opts) => {
+  .action((appName = getAppName(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
@@ -168,11 +169,26 @@ if(process.argv.length === 2) {
 
 program.parse(argv)
 
+function getAppName() {
+  console.log('no appName given')
+  console.log('searching directory for package.json')
+  try {
+    const file = path.join(process.cwd(), 'package.json')
+    const pack = require(file)
+    assert(pack.name)
+    console.log(`found name "${pack.name}" in package.json`)
+    return pack.name
+  } catch(err) {
+    console.error(`no package.json file found`)
+    handle(new Error('missing argument `appName\''))
+  }
+}
+
 function handle(err) {
   if(process.env.NODE_ENV === 'development') {
     console.error(err)
   } else {
-    console.error('[ERROR] - ' + err.message)
+    console.error(`\n  error: ${err.message}\n`)
   }
   process.exit(1)
 }
