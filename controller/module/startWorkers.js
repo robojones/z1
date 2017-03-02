@@ -92,9 +92,7 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
             const pkg = Object.assign({}, pack, {
               workers: 1
             })
-            function start (cb) {
-              startWorkers(dir, pkg, args, env).catch(handle)
-            }
+            startWorkers(dir, pkg, args, env).catch(handle)
           }
         })
       }))
