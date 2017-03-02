@@ -81,7 +81,23 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
       e.push(worker.once('exit').then(code => {
         throw new Error(`worker of app "${pack.name}" not started (exit code: ${code})`)
       }))
-      q.push(worker.once('available'))
+      q.push(worker.once('available').then(() => {
+
+        // try to worker if exit with code !== 0
+        worker.once('exit', code => {
+          if(code) {
+            log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
+            log(`starting 1 new worker for "${worker.name}"`)
+
+            const pkg = Object.assign({}, pack, {
+              workers: 1
+            })
+            function start (cb) {
+              startWorkers(dir, pkg, args, env).catch(handle)
+            }
+          }
+        })
+      }))
     }
 
     process.chdir(oldWd)
