@@ -9,6 +9,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
 - [Features](#features)
 - [Setup](#setup)
   - [Installation](#installation)
+  - [Automatically resurrect z1](#automatically-resurrect-z1)
   - [Prepare package.json](#prepare-packagejson)
 - [CLI](#cli)
   - [Start](#start)
@@ -41,7 +42,14 @@ Via [NPM](https://npmjs.com)
 sudo npm install z1 -g
 ```
 
-__Note:__ You might want to add `z1 resurrect` to your startup applications. If you do so, the z1 daemon will start automatically after you reboot your system. It will also start all the apps that were running before.
+### Automatically resurrect z1
+
+You might want to run `z1 resurrect` automatically after rebooting your system.
+It will start the z1 daemon and all the apps that were running before.
+
+```
+(crontab -l 2>/dev/null; echo "@reboot z1 resurrect") | crontab -
+```
 
 ### Prepare package.json
 
