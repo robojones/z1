@@ -122,12 +122,24 @@ program
 program
   .command('list')
   .description('overview of all running workers')
-  .action(() => {
+  .option('-m, --minimal', 'minimalistic list (easy to parse)')
+  .action(opt => {
     return z1.list().then(data => {
       const props = Object.keys(data.stats)
 
       if(!props.length) {
         console.log('no workers running')
+        return
+      }
+
+      if(opt.minimal) {
+        for(const prop of props) {
+          let obj = data.stats[prop]
+          let p = obj.pending
+          let a = obj.available
+          let k = obj.killed
+          console.log(`${prop}:pending ${p} available ${a} killed ${k}`)
+        }
         return
       }
 
