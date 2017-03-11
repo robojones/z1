@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha",
-    "postinstall": "install-completion zsh completion/zsh"
+    "postinstall": "install-completion zsh completion/z1-zsh"
   },
   "bin": "cli/index.js",
   "engines": {
