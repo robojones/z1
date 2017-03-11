@@ -21,7 +21,7 @@ _init() {
         '(-w -workers)'{-w,--workers}'[count of workers]' \
         '(-o -output)'{-o,--output}'[directory for the log files]' \
         '(-e -env)'{-e,--env}'[environment variables]' \
-        '::optional arg:_files' \
+        '::optional arg:{_files -/}' \
       && ret=0
       ;;
     (stop)
@@ -62,10 +62,6 @@ _commands() {
     'resurrect:start all apps that were started before exit'
   )
   _describe -t cmds 'z1 commands' cmds
-}
-
-_directories() {
-  _values 'Directories' */
 }
 
 _apps() {
