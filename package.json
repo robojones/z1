@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha",
-    "postinstall": "install-completion zsh completion/z1-zsh"
+    "postinstall": "install-completion zsh completion/_z1-zsh"
   },
   "bin": "cli/index.js",
   "engines": {
@@ -36,10 +36,9 @@
   "dependencies": {
     "better-events": "^1.3.1",
     "commander": "^2.9.0",
-    "install": "^0.8.7",
     "mkdirp": "^0.5.1",
     "save-on-change": "^1.0.7",
-    "shell-completion": "0.0.5",
+    "shell-completion": "git+https://github.com/robojones/shell-completion",
     "var-server": "^1.0.2",
     "x-time": "^1.1.1"
   }
