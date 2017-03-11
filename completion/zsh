@@ -1,0 +1,75 @@
+#compdef z1
+
+_init() {
+  typeset -A opt_args
+  local context state line ret=1
+
+  _arguments -C \
+    '1: :_commands' \
+    '*::arg:->args' \
+    '-V[print version]' \
+    '--version[print version]' \
+  && ret=0
+
+  case $state in
+  (args)
+    case $line[1] in
+    (start)
+      _arguments \
+        '(-n -name)'{-n,--name}'[name of your app]' \
+        '(-p -ports)'{-p,--ports}'[ports that your app listens to]' \
+        '(-w -workers)'{-w,--workers}'[count of workers]' \
+        '(-o -output)'{-o,--output}'[directory for the log files]' \
+        '(-e -env)'{-e,--env}'[environment variables]' \
+        '::optional arg:_files' \
+      && ret=0
+      ;;
+    (stop)
+      _arguments \
+        '(-t --timeout)'{-t,--timeout}'[time until the workers get killed]' \
+        '(-s --signal)'{-s,--signal}'[kill signal]' \
+        '::optional arg:_apps' \
+      && ret=0
+      ;;
+    (restart)
+      _arguments \
+        '(-t --timeout)'{-t,--timeout}'[time until the workers get killed]' \
+        '(-s --signal)'{-s,--signal}'[kill signal]' \
+        '::optional arg:_apps' \
+      && ret=0
+      ;;
+    (list)
+      _arguments \
+        '(-m --minimal)'{-m,--minimal}'[minimalistic list (easy to parse)]' \
+      && ret=0
+      ;;
+    *)
+      _message 'no more arguments'
+      ;;
+    esac
+    ;;
+  esac
+}
+
+_commands() {
+  local cmds;
+  cmds=(
+    'start:start the app in the dir'
+    'stop:stop an app'
+    'restart:restart an app'
+    'list:overview of all running apps'
+    'exit:kill the z1 daemon'
+    'resurrect:start all apps that were started before exit'
+  )
+  _describe -t cmds 'z1 commands' cmds
+}
+
+_directories() {
+  _values 'Directories' */
+}
+
+_apps() {
+  _values 'Running apps' $(z1 list -m)
+}
+
+_init "$@"

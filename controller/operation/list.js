@@ -8,15 +8,14 @@ module.exports = function list(config) {
     const stats = {}
 
     config.apps.forEach(app => {
-      stats[app.name] = {
-        dir: app.dir,
-        pending: 0,
-        available: 0,
-        killed: 0
-      }
+      stats[app.name] = appStats(app.dir)
     })
 
     Worker.workerList.forEach(w => {
+      if(!stats[w.name]) {
+        stats[w.name] = appStats(w.dir)
+      }
+      
       stats[w.name][states[w.state]]++
     })
 
@@ -25,4 +24,13 @@ module.exports = function list(config) {
       stats: stats
     })
   })
+}
+
+function appStats(dir) {
+  return {
+    dir: dir,
+    pending: 0,
+    available: 0,
+    killed: 0
+  }
 }

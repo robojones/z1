@@ -133,13 +133,7 @@ program
       }
 
       if(opt.minimal) {
-        for(const prop of props) {
-          let obj = data.stats[prop]
-          let p = obj.pending
-          let a = obj.available
-          let k = obj.killed
-          console.log(`${prop}:pending ${p} available ${a} killed ${k}`)
-        }
+        console.log(props.join(' '))
         return
       }
 
