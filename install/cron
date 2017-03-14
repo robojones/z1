@@ -1,12 +1,14 @@
 #!/bin/bash
 
 result=$(crontab -l | grep "@reboot z1 resurrect")
+set -e
 
 if [[ -z "$result" ]];
 then
   echo 'Installing cron job'
   (crontab -l 2>/dev/null; echo "@reboot z1 resurrect") | crontab -
-  exit
+  echo 'Installation successful'
+  exit 0
 fi
 
 echo 'Already installed'
