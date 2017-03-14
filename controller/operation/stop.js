@@ -3,6 +3,8 @@ const once = require('better-events').once
 
 const log = require('./../module/log')
 
+const DEFAULT_TIMEOUT = (process.env.NODE_ENV === 'development') ? 0 : 30e3
+
 /*
 command {
   app,
@@ -13,7 +15,7 @@ command {
 module.exports = function stop(config, command) {
   return new Promise((resolve, reject) => {
 
-    let timeout = 1000 * 30
+    let timeout = DEFAULT_TIMEOUT
 
     if(command.opt.timeout) {
       if(isNaN(+command.opt.timeout)) {

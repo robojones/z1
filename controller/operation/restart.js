@@ -5,6 +5,8 @@ const path = require('path')
 const Worker = require('./../class/Worker')
 const startWorkers = require('./../module/startWorkers')
 
+const DEFAULT_TIMEOUT = (process.env.NODE_ENV === 'development') ? 0 : 30e3
+
 /*
 command {
   app,
@@ -22,7 +24,7 @@ module.exports = function restart(config, command) {
       throw new Error('no apps running')
     }
 
-    let timeout = 1000 * 30
+    let timeout = DEFAULT_TIMEOUT
 
     if(command.opt.timeout) {
       if(isNaN(+command.opt.timeout)) {
