@@ -215,6 +215,29 @@ program
     }
   })
 
+  program
+    .command('uninstall <feature>')
+    .description('uninstall features')
+    .action((feature, opts) => {
+
+      const folder = path.join(__dirname, '..', 'uninstall')
+
+      if (features.hasOwnProperty(feature)) {
+        const file = path.join(folder, feature)
+        const uninstaller = spawn(file, [], {
+          cwd: folder,
+          stdio: 'inherit',
+          shell: true
+        })
+        uninstaller.on('error', handle)
+        uninstaller.on('exit', (code) => {
+          process.exit(code)
+        })
+      } else {
+        handle(new Error('feature not found'))
+      }
+    })
+
 if(process.argv.length === 2) {
   handle(new Error('no command given'))
 }

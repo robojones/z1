@@ -43,7 +43,7 @@ _init() {
         '(-m --minimal)'{-m,--minimal}'[minimalistic list (easy to parse)]' \
       && ret=0
       ;;
-    (install)
+    (install|uninstall)
       _arguments \
         '::optional arg:_features' \
       && ret=0
@@ -66,6 +66,7 @@ _commands() {
     'exit:kill the z1 daemon'
     'resurrect:start all apps that were started before exit'
     'install:install additional features'
+    'uninstall:uninstall features'
   )
   _describe -t cmds 'z1 commands' cmds
 }

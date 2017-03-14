@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+echo 'Removing cron job'
+crontab -l | grep -v "@reboot z1 resurrect" | crontab -
+echo 'Done'
