@@ -19,6 +19,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Exit](#exit)
   - [Resurrect](#resurrect)
   - [Passing arguments to workers](#passing-arguments-to-workers)
+  - [Install](#install)
 - [API](#api)
   - [z1.start](#z1startdir-args-opt-env)
   - [z1.restart](#z1restartapp-opt)
@@ -42,10 +43,10 @@ Via [NPM](https://npmjs.com)
 sudo npm install z1 -g
 ```
 
-### Automatically resurrect z1
-
+__Note:__
 You might want to run `z1 resurrect` automatically after rebooting your system.
 It will start the z1 daemon and all the apps that were running before.
+(see: [install command](#install))
 
 ### Prepare package.json
 
@@ -212,6 +213,15 @@ In your code you can get the "hello" as argv.
 ```javascript
 process.argv[2] === 'hello' // true
 ```
+
+### Install
+
+This command allows you to install additional features.
+
+1. __zsh__ - shell completion for zsh
+2. __bash__ - shell completion for bash _(coming soon)_
+3. __cron__ - cron job that resurrects z1 after a reboot
+
 
 ## API
 
