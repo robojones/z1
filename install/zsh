@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Installing completion for zsh"
+echo "Moving completion file to /usr/local/share/zsh/site-functions/_z1"
+cp ./../completion/zsh /usr/local/share/zsh/site-functions/_z1

@@ -7,17 +7,21 @@ const util = require('util')
 const assert = require('assert')
 const program = require('commander')
 const xTime = require('x-time')
+const spawn = require('child_process').spawn
 
 const z1 = require('./../remote/index')
 const pack = require('./../package.json')
 const spam = require('./message')
+const features = require('./features')
 
 const SPACER = '--'
+
 
 const argv = process.argv.slice()
 let args = []
 if(argv.includes(SPACER)) {
-  args = argv.splice(argv.indexOf(SPACER) + 1)
+  args = argv.splice(argv.indexOf(SPACER))
+  args.shift()
 }
 
 program
@@ -167,6 +171,48 @@ program
     return z1.exit().then(data => {
       console.log('daemon stopped')
     }).catch(handle)
+  })
+program
+  .command('install [feature]')
+  .description('install additional features')
+  .option('-m, --minimal', 'minimalistic list (easy to parse)')
+  .action((feature, opts) => {
+    // features:
+    // zsh (completion)
+    // bash (completion)
+    // cron (resurrect)
+
+    const folder = path.join(__dirname, '..', 'install')
+
+    if(opts.minimal) {
+      Object.keys(features).forEach((feature, i, list) => {
+        process.stdout.write(feature)
+        if(list[i+1]) {
+          process.stdout.write(' ')
+        }
+      })
+      process.stdout.write('\n')
+
+    } else if(!feature) {
+      console.log('\nFeatures:\n')
+      Object.keys(features).forEach(feature => {
+        console.log(`${feature} - ${features[feature]}`)
+      })
+      console.log()
+    } else if (features.hasOwnProperty(feature)) {
+      const file = path.join(folder, feature)
+      const installer = spawn(file, [], {
+        cwd: folder,
+        stdio: 'inherit',
+        shell: true
+      })
+      installer.on('error', handle)
+      installer.on('exit', (code) => {
+        process.exit(code)
+      })
+    } else {
+      handle(new Error('feature not found'))
+    }
   })
 
 if(process.argv.length === 2) {

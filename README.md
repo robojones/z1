@@ -47,10 +47,6 @@ sudo npm install z1 -g
 You might want to run `z1 resurrect` automatically after rebooting your system.
 It will start the z1 daemon and all the apps that were running before.
 
-```
-(crontab -l 2>/dev/null; echo "@reboot z1 resurrect") | crontab -
-```
-
 ### Prepare package.json
 
 Before you can cluster your Node.js app,

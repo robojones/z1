@@ -43,6 +43,11 @@ _init() {
         '(-m --minimal)'{-m,--minimal}'[minimalistic list (easy to parse)]' \
       && ret=0
       ;;
+    (install)
+      _arguments \
+        '::optional arg:_features' \
+      && ret=0
+      ;;
     *)
       _message 'no more arguments'
       ;;
@@ -60,12 +65,17 @@ _commands() {
     'list:overview of all running apps'
     'exit:kill the z1 daemon'
     'resurrect:start all apps that were started before exit'
+    'install:install additional features'
   )
   _describe -t cmds 'z1 commands' cmds
 }
 
 _apps() {
   _values 'Running apps' $(z1 list -m)
+}
+
+_features() {
+  _values 'Available features' $(z1 install -m)
 }
 
 _init "$@"
