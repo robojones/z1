@@ -11,6 +11,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Installation](#installation)
   - [Automatically resurrect z1](#automatically-resurrect-z1)
   - [Prepare package.json](#prepare-packagejson)
+  - [Development](#development)
 - [CLI](#cli)
   - [Start](#start)
   - [Restart](#restart)
@@ -70,6 +71,12 @@ Example:
   "workers": 2
 }
 ```
+
+### Development
+
+If you are running z1 locally, you can set the `NODE_ENV` environment variable to `'development'`.
+This will cause z1 to print out its error messages with stack trace.
+The default timeout for __stop__ and __restart__ will be set to 0ms.
 
 ## CLI
 
@@ -178,7 +185,7 @@ __options__
 --timeout 10000
 ```
 
-`--timeout` is a number specifying the maximal time that the workers are allowed to run after they are killed (in ms). The default value is 30000 (30s). If you set it to "infinity" the old processes might run forever.
+`--timeout` is a number specifying the maximal time that the workers are allowed to run after they are killed (in ms). The default value is 30,000ms. If you set it to "infinity" the old processes might run forever.
 
 ### Exit
 
