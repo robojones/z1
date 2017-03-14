@@ -20,7 +20,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Exit](#exit)
   - [Resurrect](#resurrect)
   - [Passing arguments to workers](#passing-arguments-to-workers)
-  - [Install](#install)
+  - [Install and Uninstall](#install-and-uninstall)
 - [API](#api)
   - [z1.start](#z1startdir-args-opt-env)
   - [z1.restart](#z1restartapp-opt)
@@ -221,9 +221,9 @@ In your code you can get the "hello" as argv.
 process.argv[2] === 'hello' // true
 ```
 
-### Install
+### Install and Uninstall
 
-This command allows you to install additional features.
+This command allows you to add and remove additional features.
 
 1. __zsh__ - shell completion for zsh
 2. __bash__ - shell completion for bash _(coming soon)_
