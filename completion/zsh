@@ -16,12 +16,12 @@ _init() {
     case $line[1] in
     (start)
       _arguments \
-        '(-n -name)'{-n,--name}'[name of your app]' \
-        '(-p -ports)'{-p,--ports}'[ports that your app listens to]' \
-        '(-w -workers)'{-w,--workers}'[count of workers]' \
-        '(-o -output)'{-o,--output}'[directory for the log files]' \
-        '(-e -env)'{-e,--env}'[environment variables]' \
-        '::optional arg:{_files -/}' \
+        '(-n --name)'{-n,--name}'[name of your app]' \
+        '(-p --ports)'{-p,--ports}'[ports that your app listens to]' \
+        '(-w --workers)'{-w,--workers}'[count of workers]' \
+        '(-o --output)'{-o,--output}'[directory for the log files]' \
+        '(-e --env)'{-e,--env}'[environment variables]' \
+        '::optional arg:{_path_files -/}' \
       && ret=0
       ;;
     (stop)
