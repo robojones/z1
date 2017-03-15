@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ -f /home/jonathan/Desktop/z1/install/zsh ]];
+if [[ -f /home/jonathan/Desktop/z1/install/zsh ]]
 then
   echo "Existing completion detected."
   rm -f /usr/local/share/zsh/site-functions/_z1

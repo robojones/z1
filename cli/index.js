@@ -130,14 +130,14 @@ program
   .action(opt => {
     return z1.list().then(data => {
       const props = Object.keys(data.stats)
-
-      if(!props.length) {
-        console.log('no workers running')
+      
+      if(opt.minimal) {
+        console.log(props.join(' '))
         return
       }
 
-      if(opt.minimal) {
-        console.log(props.join(' '))
+      if(!props.length) {
+        console.log('no workers running')
         return
       }
 
