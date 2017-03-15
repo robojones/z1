@@ -57,7 +57,7 @@ _init() {
 }
 
 _commands() {
-  local cmds
+  local cmds;
   cmds=(
     'start:start the app in the dir'
     'stop:stop an app'
@@ -73,14 +73,14 @@ _commands() {
 
 _apps() {
   local apps=$(z1 list -m)
-  if [[ -z "$apps" ]]
+  if [[ -n "$apps" ]]
   then
     _values 'Running apps' $apps
   fi
 }
 
 _features() {
-  _values 'Available features'
+  _values 'Available features' $(z1 install -m)
 }
 
 _init "$@"
