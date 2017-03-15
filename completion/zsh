@@ -72,7 +72,7 @@ _commands() {
 }
 
 _apps() {
-  local apps=$(z1 list -m)
+  local apps=($(z1 list -m))
   if [[ -n "$apps" ]]
   then
     _values 'Running apps' $apps
