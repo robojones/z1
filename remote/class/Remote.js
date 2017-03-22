@@ -71,7 +71,7 @@ class Remote extends BetterEvents {
       }
 
       return unPing().catch(err => {
-        if(err.code !== 'ECONNREFUSED') {
+        if(!(err.code === 'ECONNREFUSED' || err.code === 'ENOENT')) {
           throw err
         }
       })
@@ -153,6 +153,9 @@ class Remote extends BetterEvents {
           detached: true
         })
         p.on('error', reject)
+        p.on('exit', code => {
+          reject(new Error('daemon exited with code:', code))
+        })
         p.unref()
 
         ping().then(resolve).then(() => {

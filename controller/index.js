@@ -31,15 +31,7 @@ if(!config.apps) {
   config.apps = []
 }
 
-const operation = {
-  resurrect: require('./operation/resurrect'),
-  start: require('./operation/start'),
-  stop: require('./operation/stop'),
-  restart: require('./operation/restart'),
-  list: require('./operation/list'),
-  ping: require('./operation/ping'),
-  exit: require('./operation/exit')
-}
+let operation = null
 
 const server = createServer('sick.sock', command => {
 
@@ -53,3 +45,13 @@ const server = createServer('sick.sock', command => {
 
   return operation[command.name](config, command)
 })
+
+operation = {
+  resurrect: require('./operation/resurrect'),
+  start: require('./operation/start'),
+  stop: require('./operation/stop'),
+  restart: require('./operation/restart'),
+  list: require('./operation/list'),
+  ping: require('./operation/ping'),
+  exit: require('./operation/exit')(server)
+}

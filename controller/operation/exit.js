@@ -1,8 +1,12 @@
-module.exports = function exit() {
+module.exports = server => {
+  function exit() {
 
-  setTimeout(() => {
-    process.exit(0)
-  }, 500)
+    server.close(() => {
+      process.exit()
+    })
 
-  return Promise.resolve({})
+    return Promise.resolve({})
+  }
+
+  return exit
 }
