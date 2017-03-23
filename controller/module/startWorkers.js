@@ -61,9 +61,6 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
       args: args
     })
 
-    const oldWd = process.cwd()
-    process.chdir(dir)
-
     const ENV = Object.assign({
       PWD: dir,
       APPNAME: pack.name,
@@ -97,8 +94,6 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
         })
       }))
     }
-
-    process.chdir(oldWd)
 
     // when all workers are online before an error
     e.push(Promise.all(q))
