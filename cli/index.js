@@ -14,8 +14,6 @@ const z1 = require('./../remote/index')
 const pack = require('./../package.json')
 const spam = require('./message')
 const features = require('./features')
-const configPath = path.join(process.env.HOME, '.z1', 'config.json')
-const config = require(configPath)
 
 
 const SPACER = '--'
@@ -125,26 +123,6 @@ program
   })
 
 program
-  .command('restart [appName]')
-  .description('restart the app specified by the appName')
-  .option('-t, --timeout <timeout>', 'time until the old workers get killed')
-  .option('-s, --signal <signal>', 'kill signal for the old workers')
-  .action((appName = getAppName(), opts) => {
-    const opt = {
-      timeout: opts.timeout,
-      signal: opts.signal
-    }
-    spam.start()
-    return z1.restart(appName, opt).then(data => {
-      spam.stop()
-      console.log('name:', data.app)
-      console.log('ports:', data.ports.join())
-      console.log('workers started:', data.started)
-      console.log('workers killed:', data.killed)
-    }).catch(handle)
-  })
-
-program
   .command('restart-all')
   .description('restart all apps')
   .option('-t, --timeout <timeout>', 'time until the old workers get killed')
@@ -166,6 +144,15 @@ program
   .command('logs [appName]')
   .description('show the output of an app')
   .action((appName = getAppName()) => {
+    const configPath = path.join(process.env.HOME, '.z1', 'config.json')
+
+    let config = null
+    try {
+      config = require(configPath)
+    } catch(err) {
+      handle(new Error('config.json not found'))
+    }
+
     const app = config.apps.find(e => e.name === appName)
     const output = app.opt.output || path.join(process.env.HOME, '.z1', appName)
     fs.readdir(output, (err, files) => {
