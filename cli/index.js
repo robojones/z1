@@ -134,13 +134,13 @@ program
 
   program
   .command('logs [appName]')
-  .description('logs of a app')
+  .description('show the output of an app')
   .action((appName = getAppName()) => {
     const app = config.apps.find(e => e.name === appName)
     const output = app.opt.output || path.join(process.env.HOME, '.z1', appName)
     fs.readdir(output, (err, files) => {
       files = files.sort().slice(-2)
-      
+
       const stderr = new Tail(path.join(output, files[0]))
       const stdout = new Tail(path.join(output, files[1]))
 

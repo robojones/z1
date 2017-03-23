@@ -38,6 +38,11 @@ _init() {
         '::optional arg:_apps' \
       && ret=0
       ;;
+    (logs)
+      _arguments \
+        '::optional arg:_apps' \
+      && ret=0
+      ;;
     (list)
       _arguments \
         '(-m --minimal)'{-m,--minimal}'[minimalistic list (easy to parse)]' \
@@ -62,6 +67,7 @@ _commands() {
     'start:start the app in the dir'
     'stop:stop an app'
     'restart:restart an app'
+    'logs:show the output of an app'
     'list:overview of all running apps'
     'exit:kill the z1 daemon'
     'resurrect:start all apps that were started before exit'
