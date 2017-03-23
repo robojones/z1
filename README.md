@@ -60,6 +60,7 @@ you need to add a few things to your
 3. __ports__ - an array of port numbers that your app uses
 4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. the default value is the number of CPU-cores in your system.
 5. __output__ _(optional)_ - a directory for the log and error files. (Default: `~/.z1/<yourAppName>`)
+6. __devPorts__ _(optional)_ ports for [development](#development)
 
 Example:
 
@@ -75,8 +76,9 @@ Example:
 ### Development
 
 If you are running z1 locally, you can set the `NODE_ENV` environment variable to `'development'`.
-This will cause z1 to print out its error messages with stack trace.
+This will cause z1 to use the `devPorts` (if specified) instead of the `ports` property from the `package.json`.
 The default timeout for __stop__ and __restart__ will be set to 0ms.
+
 
 ## CLI
 
