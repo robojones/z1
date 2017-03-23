@@ -6,7 +6,6 @@ const mkdirp = require('mkdirp')
 
 const Worker = require('./../class/Worker')
 const logs = require('./log')
-global.log('hallo')
 
 const NOEND = {
   end: false
@@ -20,6 +19,10 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
     if(pack.name === 'z1') {
       throw new Error('the name "z1" is invalid')
     }
+
+    const ports = (process.env.NODE_ENV === 'development')
+      ? pack.devPorts || pack.ports
+      : pack.ports
 
     const out = logs.get(pack.name)
 
@@ -64,11 +67,11 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
     const ENV = Object.assign({
       PWD: dir,
       APPNAME: pack.name,
-      PORT: pack.ports[0]
+      PORT: ports[0]
     }, env)
 
     for(let i = 0; i < workerCount; i++) {
-      let worker = new Worker(dir, pack.main, pack.name, pack.ports, ENV)
+      let worker = new Worker(dir, pack.main, pack.name, ports, ENV)
       let w = worker.w
       w.process.stdout.pipe(out.log, NOEND)
       w.process.stderr.pipe(out.err, NOEND)
@@ -104,7 +107,7 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
         app: pack.name,
         dir: dir,
         started: workerCount,
-        ports: pack.ports
+        ports: ports
       })
     }).catch(err => {
       reject(err)
@@ -119,18 +122,30 @@ function verify(pack) {
     throw new Error('name in package.json must be set')
   }
 
-  // ports
-  if(!Array.isArray(pack.ports)) {
-    throw new Error('ports in package.json must be an array')
-  }
+  verifyPorts('ports', true)
 
-  if(!pack.ports.length) {
-    throw new Error('ports in package.json must contain at least one port')
-  }
+  verifyPorts('devPorts', false)
 
-  const valid = pack.ports.filter(p => typeof p === 'number')
+  function verifyPorts(prop, required) {
 
-  if(valid.length !== pack.ports.length) {
-    throw new Error('ports in package.json must (only) contain numbers')
+    if(Array.isArray(pack[prop])) {
+
+      const valid = pack[prop].filter(p => typeof p === 'number')
+
+      if(valid.length !== pack[prop].length) {
+        if(required) {
+          throw new Error(prop, 'in package.json must (only) contain numbers')
+        } else {
+          delete pack[prop]
+        }
+      }
+
+    } else if (required) {
+
+      throw new Error(prop, 'in package.json must be an array')
+    } else {
+
+      delete pack[prop]
+    }
   }
 }

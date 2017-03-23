@@ -26,7 +26,11 @@ module.exports = function start(config, command) {
       config.apps = []
     }
 
-    const originalPackage = require(path.join(command.dir, 'package.json'))
+    const packPath = require.resolve(path.join(command.dir, 'package.json'))
+    // (re-)load package
+    delete require.cache[packPath]
+    const originalPackage = require(packPath)
+
     const pack = Object.assign({}, originalPackage, command.opt)
 
     // check for duplicate name
@@ -43,10 +47,13 @@ module.exports = function start(config, command) {
     })
 
     return startWorkers(command.dir, pack, command.args, command.env).then(resolve).catch(err => {
+
+      // remove app from config
       const i = config.apps.findIndex(app => app.name === pack.name)
       if(i !== -1) {
         config.apps.splice(i, 1)
       }
+
       reject(err)
     })
   })
