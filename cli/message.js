@@ -51,7 +51,6 @@ module.exports = {
   },
   stop: () => {
     clearInterval(interval)
-    console.log('--------')
   }
 }
 

@@ -38,11 +38,9 @@ program
   .command('resurrect')
   .description('start the apps that were started before exit')
   .action(() => {
-    console.log('resurrecting')
     spam.start()
     return z1.resurrect().then(data => {
       spam.stop()
-      console.log('resurrected')
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -79,11 +77,9 @@ program
       })
     }
 
-    console.log('starting app')
     spam.start()
     return z1.start(dir, args, opt, env).then(data => {
       spam.stop()
-      console.log('started')
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
@@ -100,11 +96,9 @@ program
       timeout: opts.timeout,
       signal: opts.signal
     }
-    console.log(`stopping app "${appName}"`)
     spam.start()
     return z1.stop(appName, opt).then(data => {
       spam.stop()
-      console.log('stopped')
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -120,11 +114,9 @@ program
       timeout: opts.timeout,
       signal: opts.signal
     }
-    console.log(`restarting app "${appName}"`)
     spam.start()
     return z1.restart(appName, opt).then(data => {
       spam.stop()
-      console.log('restarted')
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
@@ -283,13 +275,13 @@ if(process.argv.length === 2) {
 program.parse(argv)
 
 function getAppName() {
-  console.log('no appName given')
-  console.log('searching directory for package.json')
+  log('no appName given')
+  log('searching directory for package.json')
   try {
     const file = path.join(process.cwd(), 'package.json')
     const pack = require(file)
     assert(pack.name)
-    console.log(`found name "${pack.name}" in package.json`)
+    log(`found name "${pack.name}" in package.json`)
     return pack.name
   } catch(err) {
     console.error(`no package.json file found`)
@@ -297,8 +289,14 @@ function getAppName() {
   }
 }
 
+function log(...msg) {
+  if(process.env.DEBUG) {
+    console.log(...msg)
+  }
+}
+
 function handle(err) {
-  if(process.env.NODE_ENV === 'development') {
+  if(process.env.DEBUG) {
     console.error(err)
   } else {
     console.error(`\n  error: ${err.message}\n`)
