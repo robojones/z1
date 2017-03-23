@@ -8,11 +8,15 @@ const assert = require('assert')
 const program = require('commander')
 const xTime = require('x-time')
 const spawn = require('child_process').spawn
+const Tail = require('tail').Tail
 
 const z1 = require('./../remote/index')
 const pack = require('./../package.json')
 const spam = require('./message')
 const features = require('./features')
+const configPath = path.join(process.env.HOME, '.z1', 'config.json')
+const config = require(configPath)
+
 
 const SPACER = '--'
 
@@ -29,6 +33,7 @@ program
   .action(function (cmd) {
     handle(new Error(`command "${cmd}" not found`))
   })
+
 program
   .command('resurrect')
   .description('start the apps that were started before exit')
@@ -41,6 +46,7 @@ program
       console.log('workers started:', data.started)
     }).catch(handle)
   })
+
 program
   .command('start [dir]')
   .usage('[options] [dir] [-- [arguments]]')
@@ -83,6 +89,7 @@ program
       console.log('workers started:', data.started)
     }).catch(handle)
   })
+
 program
   .command('stop [appName]')
   .description('stop the app specified by the appName')
@@ -102,6 +109,7 @@ program
       console.log('workers killed:', data.killed)
     }).catch(handle)
   })
+
 program
   .command('restart [appName]')
   .description('restart the app specified by the appName')
@@ -123,6 +131,34 @@ program
       console.log('workers killed:', data.killed)
     }).catch(handle)
   })
+
+  program
+  .command('logs [appName]')
+  .description('logs of a app')
+  .action((appName = getAppName()) => {
+    const app = config.apps.find(e => e.name === appName)
+    const output = app.opt.output || path.join(process.env.HOME, '.z1', appName)
+    fs.readdir(output, (err, files) => {
+      files = files.sort().slice(-2)
+      
+      const stderr = new Tail(path.join(output, files[0]))
+      const stdout = new Tail(path.join(output, files[1]))
+
+      stderr.on('line', line => {
+        console.log(line)
+      })
+      stdout.on('line', line => {
+        console.log(line)
+      })
+
+      stderr.on('error', handle)
+      stdout.on('error', handle)
+
+      stderr.watch()
+      stdout.watch()
+    })
+  })
+
 program
   .command('list')
   .description('overview of all running workers')
@@ -130,7 +166,7 @@ program
   .action(opt => {
     return z1.list().then(data => {
       const props = Object.keys(data.stats)
-      
+
       if(opt.minimal) {
         console.log(props.join(' '))
         return
@@ -164,6 +200,7 @@ program
       }
     }).catch(handle)
   })
+
 program
   .command('exit')
   .description('kill the z1 daemon')
@@ -172,6 +209,7 @@ program
       console.log('daemon stopped')
     }).catch(handle)
   })
+
 program
   .command('install [feature]')
   .description('install additional features')
