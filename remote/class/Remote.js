@@ -46,6 +46,14 @@ class Remote extends BetterEvents {
     })
   }
 
+  restartAll(opt = {}) {
+    opt.timeout = translateInfinity(opt.timeout)
+    return this.connectAndSend({
+      name: 'restart-all',
+      opt: opt
+    })
+  }
+
   list() {
     return this.connectAndSend({
       name: 'list'

@@ -40,7 +40,7 @@ const server = createServer('sick.sock', command => {
   }
 
   if(!operation.hasOwnProperty(command.name)) {
-    return Promise.reject(new Error(`command "${command.name}" not found`))
+    return Promise.reject(new Error(`invalid operation name "${command.name}"`))
   }
 
   return operation[command.name](config, command)
@@ -51,6 +51,7 @@ operation = {
   start: require('./operation/start'),
   stop: require('./operation/stop'),
   restart: require('./operation/restart'),
+  'restart-all': require('./operation/restart-all'),
   list: require('./operation/list'),
   ping: require('./operation/ping'),
   exit: require('./operation/exit')(server)

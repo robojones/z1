@@ -124,7 +124,45 @@ program
     }).catch(handle)
   })
 
-  program
+program
+  .command('restart [appName]')
+  .description('restart the app specified by the appName')
+  .option('-t, --timeout <timeout>', 'time until the old workers get killed')
+  .option('-s, --signal <signal>', 'kill signal for the old workers')
+  .action((appName = getAppName(), opts) => {
+    const opt = {
+      timeout: opts.timeout,
+      signal: opts.signal
+    }
+    spam.start()
+    return z1.restart(appName, opt).then(data => {
+      spam.stop()
+      console.log('name:', data.app)
+      console.log('ports:', data.ports.join())
+      console.log('workers started:', data.started)
+      console.log('workers killed:', data.killed)
+    }).catch(handle)
+  })
+
+program
+  .command('restart-all')
+  .description('restart all apps')
+  .option('-t, --timeout <timeout>', 'time until the old workers get killed')
+  .option('-s, --signal <signal>', 'kill signal for the old workers')
+  .action(opts => {
+    const opt = {
+      timeout: opts.timeout,
+      signal: opts.signal
+    }
+    spam.start()
+    return z1.restartAll(opt).then(data => {
+      spam.stop()
+      console.log('workers started:', data.started)
+      console.log('workers killed:', data.killed)
+    }).catch(handle)
+  })
+
+program
   .command('logs [appName]')
   .description('show the output of an app')
   .action((appName = getAppName()) => {
