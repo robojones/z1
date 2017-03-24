@@ -24,14 +24,7 @@ _init() {
         '::optional arg:{_path_files -/}' \
       && ret=0
       ;;
-    (stop)
-      _arguments \
-        '(-t --timeout)'{-t,--timeout}'[time until the workers get killed]' \
-        '(-s --signal)'{-s,--signal}'[kill signal]' \
-        '::optional arg:_apps' \
-      && ret=0
-      ;;
-    (restart)
+    (stop|restart)
       _arguments \
         '(-t --timeout)'{-t,--timeout}'[time until the workers get killed]' \
         '(-s --signal)'{-s,--signal}'[kill signal]' \
