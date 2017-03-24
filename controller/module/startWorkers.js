@@ -20,10 +20,7 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
       throw new Error('the name "z1" is invalid')
     }
 
-    const ports = (process.env.NODE_ENV === 'development')
-      ? pack.devPorts || pack.ports
-      : pack.ports
-
+    const ports = pack.ports
     const out = logs.get(pack.name)
 
     // output path
@@ -122,9 +119,8 @@ function verify(pack) {
     throw new Error('name in package.json must be set')
   }
 
-  verifyPorts('ports', true)
-
   verifyPorts('devPorts', false)
+  verifyPorts('ports', true)
 
   function verifyPorts(prop, required) {
 
@@ -140,7 +136,7 @@ function verify(pack) {
         }
       }
 
-    } else if (required) {
+    } else if(pack[prop] || required) {
 
       throw new Error(prop, 'in package.json must be an array')
     } else {

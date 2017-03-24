@@ -33,6 +33,13 @@ module.exports = function start(config, command) {
 
     const pack = Object.assign({}, originalPackage, command.opt)
 
+    // apply devPorts
+    if(!command.opt.ports) {
+      if(process.env.NODE_ENV === 'development' && pack.devPorts) {
+        pack.ports = pack.devPorts
+      }
+    }
+
     // check for duplicate name
     if(config.apps.some(app => app.name === pack.name)) {
       throw new Error(`an app called "${pack.name}" is already running.`)

@@ -48,6 +48,13 @@ module.exports = function restart(config, command) {
     delete require.cache[packPath]
     const pack = Object.assign({}, require(packPath), app.opt)
 
+    // apply devPorts
+    if(!command.opt.ports) {
+      if(process.env.NODE_ENV === 'development' && pack.devPorts) {
+        pack.ports = pack.devPorts
+      }
+    }
+
     // if name changed
     const nameChanged = pack.name !== app.name
     if(nameChanged) {
@@ -57,9 +64,9 @@ module.exports = function restart(config, command) {
       }
 
       // save new app
-      config.apps.push(Object.assign({
+      config.apps.push(Object.assign({}, app, {
         name: pack.name
-      }, app))
+      }))
     }
 
     // remember old workers
