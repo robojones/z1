@@ -61,11 +61,11 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
       args: args
     })
 
-    const ENV = Object.assign({
+    const ENV = Object.assign({}, env, {
       PWD: dir,
       APPNAME: pack.name,
       PORT: ports[0]
-    }, env)
+    })
 
     for(let i = 0; i < workerCount; i++) {
       let worker = new Worker(dir, pack.main, pack.name, ports, ENV)

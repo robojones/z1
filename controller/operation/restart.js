@@ -5,8 +5,6 @@ const path = require('path')
 const Worker = require('./../class/Worker')
 const startWorkers = require('./../module/startWorkers')
 
-const DEFAULT_TIMEOUT = (process.env.NODE_ENV === 'development') ? 0 : 30e3
-
 /*
 command {
   app,
@@ -24,16 +22,6 @@ module.exports = function restart(config, command) {
       throw new Error('no apps running')
     }
 
-    let timeout = DEFAULT_TIMEOUT
-
-    if(command.opt.timeout) {
-      if(isNaN(+command.opt.timeout)) {
-        timeout = null
-      } else {
-        timeout = +command.opt.timeout
-      }
-    }
-
     // find old app
     const i = config.apps.findIndex(app => app.name === command.app)
 
@@ -48,13 +36,6 @@ module.exports = function restart(config, command) {
     delete require.cache[packPath]
     const pack = Object.assign({}, require(packPath), app.opt)
 
-    // apply devPorts
-    if(!command.opt.ports) {
-      if(process.env.NODE_ENV === 'development' && pack.devPorts) {
-        pack.ports = pack.devPorts
-      }
-    }
-
     // if name changed
     const nameChanged = pack.name !== app.name
     if(nameChanged) {
@@ -67,6 +48,24 @@ module.exports = function restart(config, command) {
       config.apps.push(Object.assign({}, app, {
         name: pack.name
       }))
+    }
+
+    // set default timeout
+    let timeout = (app.env.NODE_ENV === 'development') ? 0 : 30e3
+
+    if(command.opt.timeout) {
+      if(isNaN(+command.opt.timeout)) {
+        timeout = null
+      } else {
+        timeout = +command.opt.timeout
+      }
+    }
+
+    // apply devPorts
+    if(!command.opt.ports) {
+      if(app.env.NODE_ENV === 'development' && pack.devPorts) {
+        pack.ports = pack.devPorts
+      }
     }
 
     // remember old workers

@@ -14,6 +14,7 @@ const z1 = require('./../remote/index')
 const pack = require('./../package.json')
 const spam = require('./message')
 const features = require('./features')
+const parser = require('./parser')
 
 
 const SPACER = '--'
@@ -48,32 +49,22 @@ program
   .usage('[options] [dir] [-- [arguments]]')
   .description('start the app in the dir')
   .option('-n, --name <name>', 'name of your app')
-  .option('-p, --ports <ports>', 'ports that your app listens to')
-  .option('-w, --workers <workers>', 'count of workers (default: number of CPUs)')
-  .option('-o, --output <output>', 'directory for the log files of this app')
-  .option('-e, --env <env>', 'environment variables e.g. NODE_ENV=development')
+  .option('-p, --ports <ports>', 'ports that your app listens to', parser.ports)
+  .option('-w, --workers <workers>', 'count of workers (default: number of CPUs)', parseInt)
+  .option('-o, --output <output>', 'directory for the log files of this app', parser.path)
+  .option('-e, --env <env>', 'environment variables e.g. NODE_ENV=development', parser.env)
   .action((dir, opts) => {
 
     // prepare opts
     const opt = {
       name: opts.name,
-      workers: opts.workers
-    }
-    if(opts.ports) {
-      opt.ports = opts.ports.split(',').map(v => +v)
-    }
-    if(opts.output) {
-      opt.output = path.resolve(opts.output)
+      workers: opts.workers,
+      ports: opts.ports,
+      output: opts.output
     }
 
     // parse environment variables
-    const env = {}
-    if(opts.env) {
-      opts.env.split(',').forEach(pair => {
-        const parts = pair.split('=')
-        env[parts[0]] = parts[1]
-      })
-    }
+    const env = Object.assign({}, process.env, opts.env)
 
     spam.start()
     return z1.start(dir, args, opt, env).then(data => {
