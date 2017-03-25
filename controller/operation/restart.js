@@ -23,13 +23,11 @@ module.exports = function restart(config, command) {
     }
 
     // find old app
-    const i = config.apps.findIndex(app => app.name === command.app)
+    const app = config.apps.find(app => app.name === command.app)
 
-    if(i === -1) {
+    if(!app) {
       throw new Error(`app "${command.app}" not found`)
     }
-
-    const app = config.apps[i]
 
     // reload package.json
     packPath = path.join(app.dir, 'package.json')
