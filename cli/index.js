@@ -144,30 +144,56 @@ program
       handle(new Error('config.json not found'))
     }
 
+    let streams = []
+    let oldFiles = []
+
     const app = config.apps.find(e => e.name === appName)
-    if(!app) {
-      handle(new Error(`app "${appName}" not found.`))
+
+    const output = (app && app.opt.output) || path.join(process.env.HOME, '.z1', appName)
+
+    updateLogs()
+    setInterval(updateLogs, 5000)
+
+    function updateLogs() {
+      fs.readdir(output, (err, files) => {
+        if(err) {
+          if(err.code === 'ENOENT') {
+            handle(new Error(`app "${appName}" not found`))
+          } else {
+            handle(err)
+          }
+        }
+
+        files = files.sort().slice(-2)
+
+        if(oldFiles.join() === files.join()) {
+          return
+        }
+
+        // stop old streams
+        streams.forEach(stream => {
+          stream.unwatch()
+        })
+
+        oldFiles = files
+
+        if(!files.length) {
+          return
+        }
+
+        // add new streams
+        streams = files.map(file => {
+          const stream = new Tail(path.join(output, file))
+          stream.on('line', line => {
+            console.log(line)
+          })
+          stream.on('error', handle)
+          stream.watch()
+
+          return stream
+        })
+      })
     }
-    const output = app.opt.output || path.join(process.env.HOME, '.z1', appName)
-    fs.readdir(output, (err, files) => {
-      files = files.sort().slice(-2)
-
-      const stderr = new Tail(path.join(output, files[0]))
-      const stdout = new Tail(path.join(output, files[1]))
-
-      stderr.on('line', line => {
-        console.log(line)
-      })
-      stdout.on('line', line => {
-        console.log(line)
-      })
-
-      stderr.on('error', handle)
-      stdout.on('error', handle)
-
-      stderr.watch()
-      stdout.watch()
-    })
   })
 
 program
