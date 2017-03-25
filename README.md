@@ -13,6 +13,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Prepare package.json](#prepare-packagejson)
   - [Development](#development)
 - [CLI](#cli)
+  - [Environment variables](#environment-variables)
   - [Start](#start)
   - [Restart](#restart)
   - [List](#list)
@@ -82,6 +83,23 @@ The default timeout for __stop__ and __restart__ will be set to 0ms.
 
 ## CLI
 
+### Environment variables
+
+You can set different environment variables for each app.
+The [start](#start) command automatically applies the environment variables of the current CLI to the app.
+
+```
+export EXAMPLE=hello && z1 start path/to/your/app
+```
+
+There are some environment variables that z1 sets automatically:
+
+- __PORT__ - the first port
+- __APPNAME__ - the name of your app
+- __PWD__ - the directory of your app
+
+These variables can not be overwritten.
+
 ### Start
 
 Starting the app:
@@ -110,7 +128,6 @@ you can add them to to the `z1 start` command.
 --ports 80,2020,8080
 --workers 4
 --output path/to/logs/
---env NODE_ENV=development
 ```
 
 ### Restart
