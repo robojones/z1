@@ -3,12 +3,19 @@
 result=$(crontab -l | grep "@reboot z1 resurrect")
 set -e
 
-if [[ -z "$result" ]]
-then
+if [[ -z "$result" ]]; then
   echo 'Installing cron job'
   (crontab -l 2>/dev/null; echo "@reboot z1 resurrect") | crontab -
+fi
+
+
+
+if [[ -n "$(crontab -l | grep "@reboot z1 resurrect")" ]]; then
   echo 'Installation successful'
   exit 0
+else
+  echo 'Installation failed'
+  exit 1
 fi
 
 echo 'Already installed'
