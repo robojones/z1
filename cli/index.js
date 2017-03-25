@@ -145,6 +145,9 @@ program
     }
 
     const app = config.apps.find(e => e.name === appName)
+    if(!app) {
+      handle(new Error(`app "${appName}" not found.`))
+    }
     const output = app.opt.output || path.join(process.env.HOME, '.z1', appName)
     fs.readdir(output, (err, files) => {
       files = files.sort().slice(-2)
