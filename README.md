@@ -20,8 +20,8 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Stop](#stop)
   - [Exit](#exit)
   - [Resurrect](#resurrect)
-  - [Passing arguments to workers](#passing-arguments-to-workers)
   - [Install and Uninstall](#install-and-uninstall)
+  - [Passing arguments to workers](#passing-arguments-to-workers)
 - [API](#api)
   - [z1.start](#z1startdir-args-opt-env)
   - [z1.restart](#z1restartapp-opt)
@@ -48,7 +48,7 @@ sudo npm install z1 -g
 __Note:__
 You might want to run `z1 resurrect` automatically after rebooting your system.
 It will start the z1 daemon and all the apps that were running before.
-(see: [install command](#install))
+(see: [install command](#install-and-uninstall))
 
 ### Prepare package.json
 
@@ -224,6 +224,18 @@ z1 resurrect
 
 Note: If you are starting a new app before `z1 resurrect`, the old apps will not be restored.
 
+### Install and Uninstall
+
+This command allows you to add and remove additional features.
+
+1. __zsh__ - shell completion for zsh
+2. __bash__ - shell completion for bash _(coming soon)_
+3. __cron__ - cron job that resurrects z1 after a reboot
+
+```
+sudo z1 install zsh
+```
+
 ### Passing arguments to workers
 
 You can start your app with custom arguments.
@@ -239,14 +251,6 @@ In your code you can get the "hello" as argv.
 ```javascript
 process.argv[2] === 'hello' // true
 ```
-
-### Install and Uninstall
-
-This command allows you to add and remove additional features.
-
-1. __zsh__ - shell completion for zsh
-2. __bash__ - shell completion for bash _(coming soon)_
-3. __cron__ - cron job that resurrects z1 after a reboot
 
 
 ## API
