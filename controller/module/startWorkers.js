@@ -138,7 +138,7 @@ function verify(pack) {
 
     } else if(pack[prop] || required) {
 
-      throw new Error(prop, 'in package.json must be an array')
+      throw new Error(prop + ' in package.json must be an array')
     } else {
 
       delete pack[prop]
