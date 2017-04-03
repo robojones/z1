@@ -9,6 +9,8 @@ const program = require('commander')
 const xTime = require('x-time')
 const spawn = require('child_process').spawn
 const Tail = require('tail').Tail
+const leftpad = require('leftpad')
+const rightpad = require('rightpad')
 
 const z1 = require('./../remote/index')
 const pack = require('./../package.json')
@@ -215,17 +217,16 @@ program
       }
 
       const max = process.stdout.columns
-      const stuff = '                    '
 
-      console.log(' workers name                 directory')
+      console.log(' workers name                 ports')
       for(const prop of props) {
-        let obj = data.stats[prop]
-        let p = (stuff + obj.pending).substr(-2)
-        let a = (stuff + obj.available).substr(-2)
-        let k = (stuff + obj.killed).substr(-2)
-        let name = (prop + stuff).substr(0, 20)
-        let dir = obj.dir.substr(0, max - 30)
-        console.log(p, a, k, name, dir)
+        const obj = data.stats[prop]
+        const p = leftpad(obj.pending, 2)
+        const a = leftpad(obj.available, 2)
+        const k = leftpad(obj.killed, 2)
+        const name = rightpad(prop, 20)
+        const ports = ports.join()
+        console.log(p, a, k, name, ports)
       }
       console.log(' |  |  |')
       console.log(' |  | killed')
