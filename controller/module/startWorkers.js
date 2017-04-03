@@ -6,6 +6,7 @@ const mkdirp = require('mkdirp')
 
 const Worker = require('./../class/Worker')
 const logs = require('./log')
+const verify = require('./../snippet/verifyPackage')
 
 const NOEND = {
   end: false
@@ -110,38 +111,4 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
       reject(err)
     })
   })
-}
-
-function verify(pack) {
-
-  // name
-  if(!pack.name) {
-    throw new Error('name in package.json must be set')
-  }
-
-  verifyPorts('devPorts', false)
-  verifyPorts('ports', true)
-
-  function verifyPorts(prop, required) {
-
-    if(Array.isArray(pack[prop])) {
-
-      const valid = pack[prop].filter(p => typeof p === 'number')
-
-      if(valid.length !== pack[prop].length) {
-        if(required) {
-          throw new Error(prop, 'in package.json must (only) contain numbers')
-        } else {
-          delete pack[prop]
-        }
-      }
-
-    } else if(pack[prop] || required) {
-
-      throw new Error(prop + ' in package.json must be an array')
-    } else {
-
-      delete pack[prop]
-    }
-  }
 }
