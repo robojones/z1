@@ -40,6 +40,7 @@
     "tail": "^1.2.1",
     "var-server": "^1.0.2",
     "x-time": "^1.1.1",
-    "leftpad": "^0.0.0"
+    "leftpad": "^0.0.0",
+    "rightpad": "^1.0.1"
   }
 }
