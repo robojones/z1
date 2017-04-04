@@ -40,7 +40,7 @@ program
   .description('start the apps that were started before exit')
   .action(() => {
     spam.start()
-    return z1.resurrect().then(data => {
+    z1.resurrect().then(data => {
       spam.stop()
       console.log('workers started:', data.started)
     }).catch(handle)
@@ -69,7 +69,7 @@ program
     const env = Object.assign({}, process.env, opts.env)
 
     spam.start()
-    return z1.start(dir, args, opt, env).then(data => {
+    z1.start(dir, args, opt, env).then(data => {
       spam.stop()
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
@@ -88,7 +88,7 @@ program
       signal: opts.signal
     }
     spam.start()
-    return z1.stop(appName, opt).then(data => {
+    z1.stop(appName, opt).then(data => {
       spam.stop()
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
@@ -106,7 +106,7 @@ program
       signal: opts.signal
     }
     spam.start()
-    return z1.restart(appName, opt).then(data => {
+    z1.restart(appName, opt).then(data => {
       spam.stop()
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
@@ -126,7 +126,7 @@ program
       signal: opts.signal
     }
     spam.start()
-    return z1.restartAll(opt).then(data => {
+    z1.restartAll(opt).then(data => {
       spam.stop()
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
@@ -220,7 +220,7 @@ program
   .description('overview of all running workers')
   .option('-m, --minimal', 'minimalistic list (easy to parse)')
   .action(opt => {
-    return z1.list().then(data => {
+    z1.list().then(data => {
       const props = Object.keys(data.stats)
 
       if(opt.minimal) {
@@ -260,7 +260,7 @@ program
   .command('exit')
   .description('kill the z1 daemon')
   .action(() => {
-    return z1.exit().then(data => {
+    z1.exit().then(data => {
       console.log('daemon stopped')
     }).catch(handle)
   })
