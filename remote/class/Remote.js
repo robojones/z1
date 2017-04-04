@@ -54,6 +54,13 @@ class Remote extends BetterEvents {
     })
   }
 
+  info(app) {
+    return this.connectAndSend({
+      name: 'info',
+      app: app
+    })
+  }
+
   list() {
     return this.connectAndSend({
       name: 'list'
