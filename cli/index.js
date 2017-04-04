@@ -198,6 +198,23 @@ program
     }
   })
 
+
+program
+  .command('info [appName]')
+  .description('show specific infos about an app')
+  .action((appName = getAppName()) => {
+    z1.info(appName).then(stats => {
+      console.log('name:', stats.name)
+      console.log('directory:', stats.dir)
+      console.log('ports:', stats.ports.join())
+      console.log('workers:')
+      console.log('  pending:', stats.pending)
+      console.log('  available:', stats.available)
+      console.log('  killed:', stats.killed)
+      console.log('revive cound:', stats.reviveCount)
+    })
+  })
+
 program
   .command('list')
   .description('overview of all running workers')
@@ -225,7 +242,7 @@ program
         const a = leftpad(obj.available, 2)
         const k = leftpad(obj.killed, 2)
         const name = rightpad(prop, 20)
-        const ports = ports.join()
+        const ports = obj.ports.join()
         console.log(p, a, k, name, ports)
       }
       console.log(' |  |  |')
