@@ -53,7 +53,7 @@ module.exports = function start(config, command) {
       env: command.env
     })
 
-    return startWorkers(command.dir, pack, command.args, command.env).then(resolve).catch(err => {
+    return startWorkers(config, command.dir, pack, command.args, command.env).then(resolve).catch(err => {
 
       // remove app from config
       const i = config.apps.findIndex(app => app.name === pack.name)
