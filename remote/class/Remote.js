@@ -22,9 +22,9 @@ class Remote extends BetterEvents {
     return this.connectAndSend({
       name: 'start',
       dir: path.resolve(dir || ''),
-      args: args,
-      opt: opt,
-      env: env
+      args,
+      opt,
+      env
     })
   }
 
@@ -32,8 +32,8 @@ class Remote extends BetterEvents {
     opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'stop',
-      app: app,
-      opt: opt
+      app,
+      opt
     })
   }
 
@@ -41,8 +41,8 @@ class Remote extends BetterEvents {
     opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'restart',
-      app: app,
-      opt: opt
+      app,
+      opt
     })
   }
 
@@ -50,14 +50,14 @@ class Remote extends BetterEvents {
     opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'restart-all',
-      opt: opt
+      opt
     })
   }
 
   info(app) {
     return this.connectAndSend({
       name: 'info',
-      app: app
+      app
     })
   }
 
@@ -70,7 +70,7 @@ class Remote extends BetterEvents {
   ping() {
     return this.send({
       name: 'ping'
-    }, true)
+    })
   }
 
   exit() {
