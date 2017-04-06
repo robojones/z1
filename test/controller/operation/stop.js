@@ -21,7 +21,10 @@ describe('stop (operation)', function () {
     }
 
     return start(this.config, {
-      dir: local.resolve('example')
+      dir: local.resolve('example'),
+      opt: {},
+      args: [],
+      env: {}
     })
   })
 

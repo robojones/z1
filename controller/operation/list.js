@@ -1,5 +1,5 @@
 const Worker = require('./../class/Worker')
-const mergePorts = require('./../snippet/verifyPorts')
+const mergePorts = require('./../snippet/mergePorts')
 const AppStats = require('./../class/AppStats')
 
 const states = ['pending', 'available', 'killed']

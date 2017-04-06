@@ -4,6 +4,7 @@ const cluster = require('cluster')
 
 const Worker = require('./../class/Worker')
 const startWorkers = require('./../module/startWorkers')
+const verifyPorts = require('./../snippet/verifyPorts')
 
 /*
 command: start {
@@ -33,11 +34,10 @@ module.exports = function start(config, command) {
 
     const pack = Object.assign({}, originalPackage, command.opt)
 
-    // apply devPorts
-    if(!command.opt.ports) {
-      if(command.env === 'development' && pack.devPorts) {
-        pack.ports = pack.devPorts
-      }
+    if(command.env === 'development') {
+      // apply devPorts
+      verifyPorts(pack, 'devPorts')
+      pack.ports = command.opt.ports || pack.devPorts || pack.ports
     }
 
     // check for duplicate name
