@@ -13,7 +13,7 @@ class Worker extends BetterEvents {
     this.dir = dir
     this.file = file
     this.name = name // needed to kill workers without app
-    this.ports = ports.slice()
+    this.ports = ports
     this.state = 0
 
     // change cwd
@@ -46,13 +46,15 @@ class Worker extends BetterEvents {
       this.emit('exit', code, signal)
     })
 
+    const portQueue = ports.slice()
+
     const listening = (address) => {
-      const i = this.ports.indexOf(address.port)
+      const i = portQueue.indexOf(address.port)
       if(i !== -1) {
-        this.ports.splice(i, 1)
+        portQueue.splice(i, 1)
       }
 
-      if(!this.ports.length) {
+      if(!portQueue.length) {
         this.removeListener('listening', listening)
 
         this.emit('available')
@@ -104,21 +106,14 @@ class Worker extends BetterEvents {
     return workerList
   }
 
-  static get PENDING() {
-    return 0
-  }
-
-  static get AVAILABLE() {
-    return 1
-  }
-
-  static get KILLED() {
-    return 2
-  }
-
   static errorHandler(err) {
     console.error(err)
   }
 }
+
+Worker.PENDING = 0
+Worker.AVAILABLE = 1
+Worker.KILLED = 2
+Worker.states = ['PENDING', 'AVAILABLE', 'KILLED']
 
 module.exports = Worker

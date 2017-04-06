@@ -52,6 +52,7 @@ operation = {
   stop: require('./operation/stop'),
   restart: require('./operation/restart'),
   'restart-all': require('./operation/restart-all'),
+  info: require('./operation/info'),
   list: require('./operation/list'),
   ping: require('./operation/ping'),
   exit: require('./operation/exit')(server)

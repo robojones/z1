@@ -13,7 +13,7 @@ const NOEND = {
 }
 
 
-module.exports = function startWorkers(dir, pack, args = [], env = {}) {
+module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
   return new Promise((resolve, reject) => {
     verify(pack)
 
@@ -81,16 +81,23 @@ module.exports = function startWorkers(dir, pack, args = [], env = {}) {
       }))
       q.push(worker.once('available').then(() => {
 
-        // try to worker if exit with code !== 0
         worker.once('exit', code => {
-          if(code) {
+          if(code && !worker.state === Worker.KILLED) {
+            
+            // revive worker
             log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
             log(`starting 1 new worker for "${worker.name}"`)
+
+            if(!config.reviveCount) {
+              config.reviveCount = 0
+            }
+
+            config.reviveCount ++
 
             const pkg = Object.assign({}, pack, {
               workers: 1
             })
-            startWorkers(dir, pkg, args, env).catch(handle)
+            startWorkers(config, dir, pkg, args, env).catch(handle)
           }
         })
       }))

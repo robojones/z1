@@ -17,7 +17,7 @@ module.exports = function resurrect(config) {
     const q = config.apps.map(app => {
       const originalPackage = require(path.join(app.dir, 'package.json'))
       const pack = Object.assign({}, originalPackage, app.opt)
-      return startWorkers(app.dir, pack, app.args, app.env)
+      return startWorkers(config, app.dir, pack, app.args, app.env)
     })
 
     Promise.all(q).then(() => {

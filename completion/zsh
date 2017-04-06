@@ -37,7 +37,7 @@ _init() {
         '(-s --signal)'{-s,--signal}'[kill signal]' \
       && ret=0
       ;;
-    (logs)
+    (logs|info)
       _arguments \
         '::optional arg:_apps' \
       && ret=0
@@ -68,6 +68,7 @@ _commands() {
     'restart:restart an app'
     'restart-all:restart all apps'
     'logs:show the output of an app'
+    'info:detailed information about an app'
     'list:overview of all running apps'
     'exit:kill the z1 daemon'
     'resurrect:start all apps that were started before exit'

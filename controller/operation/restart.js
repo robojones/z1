@@ -69,7 +69,7 @@ module.exports = function restart(config, command) {
     // remember old workers
     const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
-    startWorkers(app.dir, pack, app.args, app.env).then(data => {
+    startWorkers(config, app.dir, pack, app.args, app.env).then(data => {
 
       // kill old workers
       const killed = workers.map(worker => {

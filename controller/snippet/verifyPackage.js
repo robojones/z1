@@ -7,7 +7,6 @@ function verifyPackage(pack) {
     throw new Error('name in package.json must be set')
   }
 
-  verifyPorts(pack, 'devPorts', false)
   verifyPorts(pack, 'ports', true)
 }
 
