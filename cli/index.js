@@ -211,7 +211,7 @@ program
       console.log('  pending:', stats.pending)
       console.log('  available:', stats.available)
       console.log('  killed:', stats.killed)
-      console.log('revive cound:', stats.reviveCount)
+      console.log('revive count:', stats.reviveCount)
     })
   })
 

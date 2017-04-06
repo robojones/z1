@@ -15,9 +15,9 @@ module.exports = function info(config, command) {
 
     // add general information
     stats.name = app.name
-    stats.reviveCount = app.reviveCount
+    stats.reviveCount = app.reviveCount || 0
 
-    const workers = Worker.workerList.forEach(worker => worker.name === app.name)
+    const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
     workers.forEach(worker => {
       // add worker states
