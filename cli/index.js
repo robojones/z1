@@ -238,9 +238,9 @@ program
       console.log('workers  name                 ports')
       for(const prop of props) {
         const obj = data.stats[prop]
-        const p = leftpad(obj.pending, 2)
-        const a = leftpad(obj.available, 2)
-        const k = leftpad(obj.killed, 2)
+        const p = leftpad(obj.pending, 2, ' ')
+        const a = leftpad(obj.available, 2, ' ')
+        const k = leftpad(obj.killed, 2, ' ')
         const name = rightpad(prop, 20)
         const ports = obj.ports.join() || '-'
         console.log(p, a, k, name, ports)
