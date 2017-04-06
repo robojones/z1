@@ -9,7 +9,7 @@ const pwd = process.env.PWD
 
 describe('Worker', function () {
 
-  const Worker = local('controller/class/Worker')
+  const Worker = local('daemon/class/Worker')
 
   it('should be a class (function)', function () {
     assert.strictEqual(typeof Worker, 'function')

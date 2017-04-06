@@ -1,7 +1,7 @@
 const assert = require('assert')
 
 describe('Function: fill(string, space, length)', function () {
-  const fill = local('controller/snippet/fill')
+  const fill = local('daemon/snippet/fill')
 
   it('should be a function', function () {
     assert.strictEqual(typeof fill, 'function')

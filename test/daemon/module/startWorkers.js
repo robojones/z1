@@ -2,7 +2,7 @@ const assert = require('assert')
 const killWorkers = test('snippet/killWorkers')
 const path = require('path')
 
-const Worker = local('controller/class/Worker')
+const Worker = local('daemon/class/Worker')
 
 const cpuCount = require('os').cpus().length
 const exampleServer = path.join(process.env.PWD, 'example')
@@ -11,7 +11,7 @@ const examplePackage = require(path.join(exampleServer, 'package.json'))
 describe('startWorkers', function () {
 
   const config = {}
-  const start = local('controller/module/startWorkers').bind(null, config)
+  const start = local('daemon/module/startWorkers').bind(null, config)
 
   beforeEach(function () {
     this.pack = Object.assign({}, examplePackage)

@@ -4,13 +4,13 @@ const path = require('path')
 const Writable = require('stream').Writable
 const once = require('better-events').once
 
-const Tube = local('controller/class/Tube')
+const Tube = local('daemon/class/Tube')
 
 const exampleDir = path.resolve('testTemp')
 
 describe('LogManager', function () {
 
-  const LogManagerPath = local.resolve('controller/class/LogManager')
+  const LogManagerPath = local.resolve('daemon/class/LogManager')
 
   before(function (cb) {
     fs.mkdir(exampleDir, cb)

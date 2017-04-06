@@ -1,6 +1,6 @@
 const assert = require('assert')
 describe('verifyPorts', function () {
-  const verifyPorts = local('controller/snippet/verifyPorts')
+  const verifyPorts = local('daemon/snippet/verifyPorts')
 
   beforeEach(function () {
     this.pack = {

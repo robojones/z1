@@ -1,11 +1,11 @@
 const assert = require('assert')
 
-const Worker = local('controller/class/Worker')
+const Worker = local('daemon/class/Worker')
 const killWorkers = test('snippet/killWorkers')
 
 describe('start (operation)', function () {
 
-  const start = local('controller/operation/start')
+  const start = local('daemon/operation/start')
   const pack = local('example/package.json')
 
   beforeEach(function () {

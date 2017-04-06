@@ -19,6 +19,6 @@ global.local = file => {
 global.test.resolve = testResolve
 global.local.resolve = localResolve
 
-test('controller/index')
+test('daemon/index')
 test('remote/index')
 test('remote/z1')
