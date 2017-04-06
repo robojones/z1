@@ -81,9 +81,10 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
       }))
       q.push(worker.once('available').then(() => {
 
-        // try to worker if exit with code !== 0
         worker.once('exit', code => {
-          if(code) {
+          if(code && !worker.state === Worker.KILLED) {
+            
+            // revive worker
             log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
             log(`starting 1 new worker for "${worker.name}"`)
 
