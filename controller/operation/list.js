@@ -1,8 +1,7 @@
 const Worker = require('./../class/Worker')
+const states = Worker.states
 const mergePorts = require('./../snippet/mergePorts')
 const AppStats = require('./../class/AppStats')
-
-const states = ['pending', 'available', 'killed']
 
 module.exports = function list(config) {
   return new Promise((resolve, reject) => {
@@ -14,19 +13,20 @@ module.exports = function list(config) {
       stats[app.name] = new AppStats(app.dir)
     })
 
-    Worker.workerList.forEach(w => {
+    Worker.workerList.forEach(worker => {
       // show stopped apps that have running workers
-      if(!stats[w.name]) {
-        stats[w.name] = new AppStats(w.dir)
+      if(!stats[worker.name]) {
+        stats[worker.name] = new AppStats(worker.dir)
       }
 
-      const appStats = stats[w.name]
+      const appStats = stats[worker.name]
 
       // increase state counter
-      appStats[states[w.state]]++
+      const state = states[worker.state].toLowerCase()
+      appStats[state]++
 
       // add ports
-      appStats.ports = mergePorts(appStats.ports, w.ports)
+      appStats.ports = mergePorts(appStats.ports, worker.ports)
     })
 
     resolve({

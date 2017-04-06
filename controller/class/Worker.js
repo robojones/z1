@@ -106,21 +106,14 @@ class Worker extends BetterEvents {
     return workerList
   }
 
-  static get PENDING() {
-    return 0
-  }
-
-  static get AVAILABLE() {
-    return 1
-  }
-
-  static get KILLED() {
-    return 2
-  }
-
   static errorHandler(err) {
     console.error(err)
   }
 }
+
+Worker.PENDING = 0
+Worker.AVAILABLE = 1
+Worker.KILLED = 2
+Worker.states = ['PENDING', 'AVAILABLE', 'KILLED']
 
 module.exports = Worker

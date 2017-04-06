@@ -1,5 +1,6 @@
 const AppStats = require('./../class/AppStats')
 const Worker = require('./../class/Worker')
+const states = Worker.states
 const mergePorts = require('./../snippet/mergePorts')
 
 module.exports = function info(config, command) {
@@ -21,7 +22,8 @@ module.exports = function info(config, command) {
 
     workers.forEach(worker => {
       // add worker states
-      stats[worker.state] ++
+      const state = states[worker.state].toLowerCase()
+      stats[state] ++
       //add ports
       stats.ports = mergePorts(stats.ports, worker.ports)
     })
