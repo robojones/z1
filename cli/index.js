@@ -212,7 +212,7 @@ program
       console.log('  available:', stats.available)
       console.log('  killed:', stats.killed)
       console.log('revive count:', stats.reviveCount)
-    })
+    }).catch(handle)
   })
 
 program
