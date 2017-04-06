@@ -10,7 +10,8 @@ const examplePackage = require(path.join(exampleServer, 'package.json'))
 
 describe('startWorkers', function () {
 
-  const start = local('controller/module/startWorkers')
+  const config = {}
+  const start = local('controller/module/startWorkers').bind(null, config)
 
   beforeEach(function () {
     this.pack = Object.assign({}, examplePackage)

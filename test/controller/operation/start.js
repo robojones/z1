@@ -11,7 +11,10 @@ describe('start (operation)', function () {
   beforeEach(function () {
     this.dir = local.resolve('example')
     this.command = {
-      dir: this.dir
+      dir: this.dir,
+      opt: {},
+      args: [],
+      env: {}
     }
     this.config = {
       apps: []

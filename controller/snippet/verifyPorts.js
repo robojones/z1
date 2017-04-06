@@ -10,7 +10,7 @@ function verifyPorts(pack, prop, required) {
 
     if(valid.length !== pack[prop].length) {
       if(required) {
-        throw new Error(prop, 'in package.json must (only) contain numbers')
+        throw new Error(`invalid ${prop} in package.json`)
       } else {
         delete pack[prop]
       }
