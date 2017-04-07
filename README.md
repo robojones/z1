@@ -183,7 +183,7 @@ pending
 3. __Killed__ workers are not listening for new connections.
 They will finish their outstanding requests before they exit.
 
-### info
+### Info
 
 ```
 z1 info exampleApp
