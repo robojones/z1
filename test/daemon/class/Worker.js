@@ -85,8 +85,7 @@ describe('Worker', function () {
       assert.strictEqual(this.worker.name, this.name)
     })
 
-    it('should set .ports to a copy of ports', function () {
-      assert.notStrictEqual(this.worker.ports, this.ports)
+    it('should set .ports to ports', function () {
       assert.deepEqual(this.worker.ports, this.ports)
     })
 
@@ -153,9 +152,7 @@ describe('Worker', function () {
 
     describe('Event: "available"', function () {
       it('should fire', function () {
-        return this.worker.once('available').then(() => {
-          assert(!this.worker.ports.length)
-        })
+        return this.worker.once('available')
       })
       it('should set .state to AVAILABLE (1)', function () {
         return this.worker.once('available').then(() => {
