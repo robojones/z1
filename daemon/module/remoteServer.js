@@ -54,7 +54,10 @@ module.exports = (filename, run) => {
     })
   })
 
-  server.listen(file)
+  if(!global.test) {
+
+    server.listen(file)
+  }
 
   server.on('error', err => {
     handle(err)
