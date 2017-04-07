@@ -17,6 +17,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Start](#start)
   - [Restart](#restart)
   - [List](#list)
+  - [Info](#info)
   - [Stop](#stop)
   - [Exit](#exit)
   - [Resurrect](#resurrect)
@@ -26,6 +27,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [z1.start](#z1startdir-args-opt-env)
   - [z1.restart](#z1restartapp-opt)
   - [z1.stop](#z1stopapp-opt)
+  - [z1.info](#z1infoapp)
   - [z1.list](#z1list)
   - [z1.exit](#z1exit)
   - [z1.resurrect](#z1resurrect)
@@ -112,7 +114,6 @@ z1 start
 In our example the output would be:
 
 ```
-started
 name: homepage
 workers started: 2
 ```
@@ -145,7 +146,6 @@ The first argument for the `z1 restart` command is the app name that was in the 
 Output of the example from above:
 
 ```
-restarted
 name: homepage
 workers started: 2
 workers killed: 2
@@ -170,8 +170,8 @@ Displays a list of all running apps.
 Example:
 
 ```
- workers name                 directory
- 0  2  0 homepage             /home/jones/apps/homepage
+ workers name                 ports
+ 0  2  0 homepage             80
  |  |  |
  |  | killed
  | available
@@ -182,6 +182,27 @@ pending
 2. __Available__ workers are listening to all the ports specified in the `package.json`
 3. __Killed__ workers are not listening for new connections.
 They will finish their outstanding requests before they exit.
+
+### info
+
+```
+z1 info exampleApp
+```
+
+Shows more detailed information than z1 list.
+
+Example output:
+
+```
+name: exampleApp
+directory: path/to/your/app
+ports: 80
+workers:
+  pending: 0
+  available: 2
+  killed: 0
+revive count: 0
+```
 
 ### Stop
 
@@ -194,7 +215,7 @@ z1 stop homepage
 Example output:
 
 ```
-stopped
+name: homepage
 workers killed: 2
 ```
 
@@ -319,13 +340,33 @@ __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It
 
 ```javascript
 {
-  app: Number,
+  app: String,
   killed: Number
 }
 ```
 
 - __app__ the app name
 - __killed__ Number of killed workers
+
+### z1.info(app)
+
+__Arguments__
+- __app__ `<String>` The name of your app.
+
+__Returns__ a `<Promise>` that gets resolved to an object that contains information about the app.
+
+Example:
+
+```javascript
+{
+  name: 'homepage',
+  reviveCount: 0,
+  ports: [80],
+  pending: 0,
+  available: 2,
+  killed: 0
+}
+```
 
 ### z1.list()
 
@@ -344,7 +385,8 @@ The output would be:
 ```javascript
 {
   homepage: {
-    dir: '/home/jones/apps/homepage',
+    dir: '/home/user/apps/homepage',
+    ports: [80],
     pending: 0,
     available: 2,
     killed: 0
