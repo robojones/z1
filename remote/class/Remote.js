@@ -159,7 +159,7 @@ class Remote extends BetterEvents {
       }
 
       const z1Path = path.join(__dirname, '..', '..')
-      const file = path.join(z1Path, 'daemon', 'index.js')
+      const file = path.join(z1Path, 'daemon', 'main.js')
       const node = process.argv[0]
 
       return new Promise((resolve, reject) => {
