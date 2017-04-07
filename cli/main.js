@@ -331,11 +331,14 @@ program
       }
     })
 
-if(process.argv.length === 2) {
-  handle(new Error('no command given'))
-}
+if(!global.test) {
+  
+  if(process.argv.length === 2) {
+    handle(new Error('no command given'))
+  }
 
-program.parse(argv)
+  program.parse(argv)
+}
 
 function getAppName() {
   log('no appName given')

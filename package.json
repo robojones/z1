@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node_modules/mocha/bin/mocha"
   },
-  "bin": "cli/index.js",
+  "bin": "cli/main.js",
   "engines": {
     "node": ">=6.0.0"
   },
