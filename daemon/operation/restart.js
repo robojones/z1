@@ -4,6 +4,7 @@ const path = require('path')
 
 const Worker = require('./../class/Worker')
 const startWorkers = require('./../module/startWorkers')
+const verifyPorts = require('./../snippet/verifyPorts')
 
 /*
 command {
@@ -61,7 +62,7 @@ module.exports = function restart(config, command) {
     }
 
     // apply devPorts
-    if(command.env.NODE_ENV === 'development') {
+    if(app.env.NODE_ENV === 'development') {
       // apply devPorts
       verifyPorts(pack, 'devPorts')
       pack.ports = command.opt.ports || pack.devPorts || originalPackage.ports
