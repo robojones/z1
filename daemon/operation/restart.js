@@ -61,7 +61,7 @@ module.exports = function restart(config, command) {
     }
 
     // apply devPorts
-    if(command.env === 'development') {
+    if(command.env.NODE_ENV === 'development') {
       // apply devPorts
       verifyPorts(pack, 'devPorts')
       pack.ports = command.opt.ports || pack.devPorts || originalPackage.ports
