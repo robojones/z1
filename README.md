@@ -97,6 +97,7 @@ export EXAMPLE=hello && z1 start path/to/your/app
 There are some environment variables that z1 sets automatically:
 
 - __PORT__ - the first port
+- __PORTS__ - all ports that z1 listens for (separated by commas)
 - __APPNAME__ - the name of your app
 - __PWD__ - the directory of your app
 

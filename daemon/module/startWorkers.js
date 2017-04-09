@@ -65,7 +65,8 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
     const ENV = Object.assign({}, env, {
       PWD: dir,
       APPNAME: pack.name,
-      PORT: ports[0]
+      PORT: ports[0],
+      PORTS: ports.join()
     })
 
     for(let i = 0; i < workerCount; i++) {
@@ -83,7 +84,7 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
 
         worker.once('exit', code => {
           if(code && !worker.state === Worker.KILLED) {
-            
+
             // revive worker
             log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
             log(`starting 1 new worker for "${worker.name}"`)

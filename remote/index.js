@@ -8,12 +8,13 @@ const z1 = new Remote(z1socket)
 
 try {
   const config = require(path.join(process.env.HOME, '.z1', 'config.json'))
-  const conf = config.apps[config.apps.findIndex(app => app.name === process.env.APPNAME)]
-  const pack = require(path.join(conf.dir, 'package.json'))
+  const confApp = config.apps.find(app => app.name === process.env.APPNAME)
+  const pack = require(path.join(confApp.dir, 'package.json'))
 
-  const app = Object.assign({}, pack, conf.opt, {
-    dir: conf.dir
-  })
+  // apply the actual ports
+  pack.ports = process.env.PORTS.split(',').map(p => +p)
+
+  const app = Object.assign({}, pack, confApp.opt)
   z1.app = app
 } catch(err) {}
 

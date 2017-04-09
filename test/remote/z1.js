@@ -1,4 +1,5 @@
 const assert = require('assert')
+const path = require('path')
 const s = require('var-server')(8082)
 
 describe('constants in worker', function () {
@@ -28,8 +29,9 @@ describe('constants in worker', function () {
   })
 
   it('should set z1.app.name', function () {
-    return s.run(`require("${z1Dir}").app.dir`).then(dir => {
-      assert.strictEqual(dir, exampleServer)
+    return s.run(`require("${z1Dir}").app.name`).then(name => {
+      const pack = require(path.join(exampleServer, 'package.json'))
+      assert.strictEqual(name, pack.name)
     })
   })
 })
