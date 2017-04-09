@@ -32,7 +32,8 @@ module.exports = function restart(config, command) {
     // reload package.json
     packPath = path.join(app.dir, 'package.json')
     delete require.cache[packPath]
-    const pack = Object.assign({}, require(packPath), app.opt)
+    const originalPackage = require(packPath)
+    const pack = Object.assign({}, originalPackage, app.opt)
 
     // if name changed
     const nameChanged = pack.name !== app.name
@@ -60,10 +61,10 @@ module.exports = function restart(config, command) {
     }
 
     // apply devPorts
-    if(!command.opt.ports) {
-      if(app.env.NODE_ENV === 'development' && pack.devPorts) {
-        pack.ports = pack.devPorts
-      }
+    if(command.env === 'development') {
+      // apply devPorts
+      verifyPorts(pack, 'devPorts')
+      pack.ports = command.opt.ports || pack.devPorts || originalPackage.ports
     }
 
     // remember old workers

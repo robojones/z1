@@ -16,13 +16,16 @@ function verifyPorts(pack, prop, required) {
       }
     }
 
-  } else if(pack[prop] || required) {
+    // everything ok
+    return
+  }
+
+  if(pack[prop] || required) {
 
     throw new Error(prop + ' in package.json must be an array')
-  } else {
-
-    delete pack[prop]
   }
+
+  delete pack[prop]
 }
 
 module.exports = verifyPorts

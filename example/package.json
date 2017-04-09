@@ -1,6 +1,7 @@
 {
   "name": "exampleApp",
   "ports": [8080, 8081, 8082],
+  "devPorts": [8080],
   "main": "server.js",
   "workers": 2
 }

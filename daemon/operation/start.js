@@ -34,10 +34,10 @@ module.exports = function start(config, command) {
 
     const pack = Object.assign({}, originalPackage, command.opt)
 
-    if(command.env === 'development') {
+    if(command.env.NODE_ENV === 'development') {
       // apply devPorts
       verifyPorts(pack, 'devPorts')
-      pack.ports = command.opt.ports || pack.devPorts || pack.ports
+      pack.ports = command.opt.ports || pack.devPorts || originalPackage.ports
     }
 
     // check for duplicate name
