@@ -4,7 +4,7 @@ const path = require('path')
 
 const Worker = require('./../class/Worker')
 const startWorkers = require('./../module/startWorkers')
-const verifyPorts = require('./../snippet/verifyPorts')
+const getPack = require('./../module/getPack')
 
 /*
 command {
@@ -31,10 +31,7 @@ module.exports = function restart(config, command) {
     }
 
     // reload package.json
-    packPath = path.join(app.dir, 'package.json')
-    delete require.cache[packPath]
-    const originalPackage = require(packPath)
-    const pack = Object.assign({}, originalPackage, app.opt)
+    const pack = getPack(app.dir, app.opt, app.env)
 
     // if name changed
     const nameChanged = pack.name !== app.name
@@ -59,13 +56,6 @@ module.exports = function restart(config, command) {
       } else {
         timeout = +command.opt.timeout
       }
-    }
-
-    // apply devPorts
-    if(app.env.NODE_ENV === 'development') {
-      // apply devPorts
-      verifyPorts(pack, 'devPorts')
-      pack.ports = command.opt.ports || pack.devPorts || originalPackage.ports
     }
 
     // remember old workers

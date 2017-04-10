@@ -4,7 +4,7 @@ const cluster = require('cluster')
 
 const Worker = require('./../class/Worker')
 const startWorkers = require('./../module/startWorkers')
-const verifyPorts = require('./../snippet/verifyPorts')
+const getPack = require('./../module/getPack')
 
 /*
 command: start {
@@ -27,18 +27,8 @@ module.exports = function start(config, command) {
       config.apps = []
     }
 
-    const packPath = require.resolve(path.join(command.dir, 'package.json'))
-    // (re-)load package
-    delete require.cache[packPath]
-    const originalPackage = require(packPath)
-
-    const pack = Object.assign({}, originalPackage, command.opt)
-
-    if(command.env.NODE_ENV === 'development') {
-      // apply devPorts
-      verifyPorts(pack, 'devPorts')
-      pack.ports = command.opt.ports || pack.devPorts || originalPackage.ports
-    }
+    // (re)load package
+    const pack = getPack(command.dir, command.opt, command.env)
 
     // check for duplicate name
     if(config.apps.some(app => app.name === pack.name)) {
