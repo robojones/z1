@@ -275,7 +275,7 @@ program
     // bash (completion)
     // cron (resurrect)
 
-    const folder = path.join(__dirname, '..', 'install')
+    const folder = path.join(__dirname, '..', 'script', 'install')
 
     if(opts.minimal) {
       Object.keys(features).forEach((feature, i, list) => {
@@ -313,7 +313,7 @@ program
     .description('uninstall features')
     .action((feature, opts) => {
 
-      const folder = path.join(__dirname, '..', 'uninstall')
+      const folder = path.join(__dirname, '..', 'script', 'uninstall')
 
       if (features.hasOwnProperty(feature)) {
         const file = path.join(folder, feature)
@@ -332,7 +332,7 @@ program
     })
 
 if(!global.test) {
-  
+
   if(process.argv.length === 2) {
     handle(new Error('no command given'))
   }
