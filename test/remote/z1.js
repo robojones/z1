@@ -23,7 +23,7 @@ describe('constants in worker', function () {
   })
 
   it('should set z1.app', function () {
-    return s.run(`require("${z1Dir}")`).then(app => {
+    return s.run(`require("${z1Dir}").app`).then(app => {
       assert(app)
     })
   })
