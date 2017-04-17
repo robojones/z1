@@ -1,6 +1,5 @@
 const Worker = require('./../class/Worker')
-const once = require('better-events').once
-
+const killWorkers = require('./../module/killWorkers')
 const log = require('./../module/log')
 
 /*
@@ -25,15 +24,10 @@ module.exports = function stop(config, command) {
       }
     }
 
-    const killed = Worker.workerList.map(worker => {
-      if(worker.name === command.app) {
-        if(worker.kill(command.opt.signal, timeout)) {
-          return worker.once('exit')
-        }
-      }
-    }).filter(p => p)
+    const workers = Worker.workerList.filter(worker => worker.name === command.app)
+    const killed = killWorkers(workers, timeout, command.opt.signal)
 
-    Promise.all(killed).then(() => {
+    killed.then(() => {
       let i = config.apps.findIndex(app => app.name === command.app)
 
       if(i !== -1) {
@@ -43,7 +37,7 @@ module.exports = function stop(config, command) {
 
       resolve({
         app: command.app,
-        killed: killed.length
+        killed: workers.length
       })
     }).catch(reject)
   })

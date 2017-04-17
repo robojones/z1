@@ -7,6 +7,7 @@ const mkdirp = require('mkdirp')
 const Worker = require('./../class/Worker')
 const logs = require('./log')
 const verify = require('./../snippet/verifyPackage')
+const killWorkers = require('./killWorkers')
 
 const NOEND = {
   end: false
@@ -14,6 +15,8 @@ const NOEND = {
 
 
 module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
+  const workers = []
+
   return new Promise((resolve, reject) => {
     verify(pack)
 
@@ -70,12 +73,13 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
     })
 
     for(let i = 0; i < workerCount; i++) {
-      let worker = new Worker(dir, pack.main, pack.name, ports, ENV)
-      let w = worker.w
+      const worker = new Worker(dir, pack.main, pack.name, ports, ENV)
+      const w = worker.w
       w.process.stdout.pipe(out.log, NOEND)
       w.process.stderr.pipe(out.err, NOEND)
-
       w.on('error', handle)
+
+      workers.push(worker)
 
       e.push(worker.once('exit').then(code => {
         throw new Error(`worker of app "${pack.name}" not started (exit code: ${code})`)
@@ -116,7 +120,8 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
         ports: ports
       })
     }).catch(err => {
-      reject(err)
+      // if one worker crashes => kill all workers
+      killWorkers(workers, 0).then(() => reject(err))
     })
   })
 }
