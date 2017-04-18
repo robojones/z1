@@ -2,6 +2,7 @@ const autoSave = require('save-on-change')
 const path = require('path')
 const fs = require('fs')
 
+const pack = require('./../package.json')
 const z1Dir = path.join(process.env.HOME, '.z1')
 
 try {
@@ -26,6 +27,8 @@ const config = autoSave('config.json', err => {
     handle(err)
   }
 })
+
+config.version = pack.version
 
 if(!config.apps) {
   config.apps = []

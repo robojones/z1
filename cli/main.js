@@ -13,10 +13,10 @@ const leftpad = require('leftpad')
 const rightpad = require('rightpad')
 
 const z1 = require('./../remote/index')
-const pack = require('./../package.json')
 const spam = require('./message')
 const features = require('./features')
 const parser = require('./parser')
+const version = require('./version')
 
 
 const SPACER = '--'
@@ -30,8 +30,9 @@ if(argv.includes(SPACER)) {
 }
 
 program
-  .version(pack.version)
-  .action(function (cmd) {
+  .version(version)
+  .option('-V <version>', 'version')
+  .action(function (opt) {
     handle(new Error(`command "${cmd}" not found`))
   })
 
