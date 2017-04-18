@@ -32,7 +32,7 @@ if(argv.includes(SPACER)) {
 program
   .version(version.string)
   .option('-V <version>', 'version')
-  .action(function (opt) {
+  .action(function (cmd, opt) {
     handle(new Error(`command "${cmd}" not found`))
   })
 
@@ -349,7 +349,7 @@ program
 if(!global.test) {
 
   if(process.argv.length === 2) {
-    handle(new Error('no command given'))
+    program.outputHelp()
   }
 
   program.parse(argv)
