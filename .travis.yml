@@ -2,4 +2,8 @@ language: node_js
 node_js:
   - "6"
   - "7"
- 
+after_failure
+  - echo "## z1 logs"
+  - cat $HOME/.z1/z1/*
+  - echo "## exampleApp logs"
+  - cat $HOME/.z1/exampleApp/*
