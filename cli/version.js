@@ -9,7 +9,9 @@ try {
   const configPath = path.join(process.env.HOME, '.z1', 'config.json')
   const config = require(configPath)
 
-  module.exports.string += '\n'
-  module.exports.string += `daemon: ${config.version}`
-  module.exports.daemon = config.version
+  if(config.version) {
+    module.exports.string += '\n'
+    module.exports.string += `daemon: ${config.version}`
+    module.exports.daemon = config.version
+  }
 } catch(err) {}
