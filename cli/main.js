@@ -30,7 +30,7 @@ if(argv.includes(SPACER)) {
 }
 
 program
-  .version(version)
+  .version(version.string)
   .option('-V <version>', 'version')
   .action(function (opt) {
     handle(new Error(`command "${cmd}" not found`))
@@ -309,28 +309,42 @@ program
     }
   })
 
-  program
-    .command('uninstall <feature>')
-    .description('uninstall features')
-    .action((feature, opts) => {
+program
+  .command('uninstall <feature>')
+  .description('uninstall features')
+  .action((feature, opts) => {
 
-      const folder = path.join(__dirname, '..', 'script', 'uninstall')
+    const folder = path.join(__dirname, '..', 'script', 'uninstall')
 
-      if (features.hasOwnProperty(feature)) {
-        const file = path.join(folder, feature)
-        const uninstaller = spawn(file, [], {
-          cwd: folder,
-          stdio: 'inherit',
-          shell: true
-        })
-        uninstaller.on('error', handle)
-        uninstaller.on('exit', (code) => {
-          process.exit(code)
-        })
-      } else {
-        handle(new Error('feature not found'))
-      }
-    })
+    if (features.hasOwnProperty(feature)) {
+      const file = path.join(folder, feature)
+      const uninstaller = spawn(file, [], {
+        cwd: folder,
+        stdio: 'inherit',
+        shell: true
+      })
+      uninstaller.on('error', handle)
+      uninstaller.on('exit', (code) => {
+        process.exit(code)
+      })
+    } else {
+      handle(new Error('feature not found'))
+    }
+  })
+
+program
+  .command('upgrade')
+  .description('upgrade the daemon to the newest installed version')
+  .action((opts) => {
+    if(version.cli === version.daemon) {
+      console.log('already up-to-date')
+      return
+    }
+
+    z1.upgrade().then(() => {
+      console.log('upgrade successful')
+    }).catch(handle)
+  })
 
 if(!global.test) {
 

@@ -93,6 +93,12 @@ class Remote extends BetterEvents {
     })
   }
 
+  upgrade() {
+    return this.exit().then(() => {
+      return this.resurrect()
+    })
+  }
+
   send(object) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
