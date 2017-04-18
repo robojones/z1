@@ -72,6 +72,7 @@ _commands() {
     'list:overview of all running apps'
     'exit:kill the z1 daemon'
     'resurrect:start all apps that were started before exit'
+    'upgrade:upgrade daemon to a newly installed version'
     'install:install additional features'
     'uninstall:uninstall features'
   )

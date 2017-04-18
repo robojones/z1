@@ -334,7 +334,7 @@ program
 
 program
   .command('upgrade')
-  .description('upgrade the daemon to the newest installed version')
+  .description('upgrade daemon to a newly installed version')
   .action((opts) => {
     if(version.cli === version.daemon) {
       console.log('already up-to-date')
