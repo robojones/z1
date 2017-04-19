@@ -93,7 +93,7 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
             log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
             log(`starting 1 new worker for "${worker.name}"`)
 
-            const app = config.apps[worker.name]
+            const app = config.apps.find(app => app.name === worker.name)
 
             if(!app) {
               return
