@@ -93,11 +93,17 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
             log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
             log(`starting 1 new worker for "${worker.name}"`)
 
-            if(!config.reviveCount) {
-              config.reviveCount = 0
+            const app = config.apps[worker.name]
+
+            if(!app) {
+              return
             }
 
-            config.reviveCount ++
+            if(!app.reviveCount) {
+              app.reviveCount = 0
+            }
+
+            app.reviveCount ++
 
             const pkg = Object.assign({}, pack, {
               workers: 1
