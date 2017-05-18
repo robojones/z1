@@ -20,7 +20,7 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
   return new Promise((resolve, reject) => {
     verify(pack)
 
-    if(pack.name === 'z1') {
+    if (pack.name === 'z1') {
       throw new Error('the name "z1" is invalid')
     }
 
@@ -29,8 +29,8 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
 
     // output path
     let output = null
-    if(typeof pack.output === 'string') {
-      if(path.isAbsolute(pack.output)) {
+    if (typeof pack.output === 'string') {
+      if (path.isAbsolute(pack.output)) {
         output = pack.output
       } else {
         output = path.join(dir, pack.output)
@@ -48,7 +48,7 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
     // create output dir
     n.push(new Promise((resolve, reject) => {
       mkdirp(output, err => {
-        if(err && err.code !== 'EEXIST') {
+        if (err && err.code !== 'EEXIST') {
           reject(err)
           return
         }
@@ -72,7 +72,7 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
       PORTS: ports.join()
     })
 
-    for(let i = 0; i < workerCount; i++) {
+    for (let i = 0; i < workerCount; i++) {
       const worker = new Worker(dir, pack.main, pack.name, ports, ENV)
       const w = worker.w
       w.process.stdout.pipe(out.log, NOEND)
@@ -87,7 +87,8 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
       q.push(worker.once('available').then(() => {
 
         worker.once('exit', code => {
-          if(code && !worker.state === Worker.KILLED) {
+          log('worker exit', code, worker.state)
+          if (code && worker.state !== Worker.KILLED) {
 
             // revive worker
             log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
@@ -95,23 +96,27 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
 
             const app = config.apps.find(app => app.name === worker.name)
 
-            if(!app) {
+            log('found app', app.name)
+
+            if (!app) {
               return
             }
 
-            if(!app.reviveCount) {
+            if (!app.reviveCount) {
               app.reviveCount = 0
             }
 
-            app.reviveCount ++
+            app.reviveCount += 1
 
             const pkg = Object.assign({}, pack, {
               workers: 1
             })
+
             startWorkers(config, dir, pkg, args, env).catch(handle)
           }
         })
       }))
+      log('listening for exit')
     }
 
     // when all workers are online before an error
