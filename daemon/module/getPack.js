@@ -9,11 +9,13 @@ function getPack(dir, opt, env) {
   const originalPackage = require(packPath)
   const pack = Object.assign({}, originalPackage, opt)
 
-  // apply devPorts
+  // apply dev*
   if(env.NODE_ENV === 'development') {
     // apply devPorts
     verifyPorts(pack, 'devPorts')
     pack.ports = opt.ports || pack.devPorts || originalPackage.ports
+    // apply devWorkers
+    pack.workers = opt.workers || pack.devWorkers || originalPackage.workers
   }
 
   return pack
