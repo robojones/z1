@@ -12,45 +12,50 @@ class Remote extends BetterEvents {
     this.socketFile = socketFile
   }
 
-  resurrect() {
+  resurrect(immediate = false) {
     return this.connectAndSend({
-      name: 'resurrect'
+      name: 'resurrect',
+      immediate
     })
   }
 
-  start(dir, args = [], opt = {}, env = {}) {
+  start(dir, args = [], opt = {}, env = {}, immediate = false) {
     return this.connectAndSend({
       name: 'start',
       dir: path.resolve(dir || ''),
       args,
       opt,
-      env
+      env,
+      immediate
     })
   }
 
-  stop(app, opt = {}) {
+  stop(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'stop',
       app,
-      opt
+      opt,
+      immediate
     })
   }
 
-  restart(app, opt = {}) {
+  restart(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'restart',
       app,
-      opt
+      opt,
+      immediate
     })
   }
 
-  restartAll(opt = {}) {
+  restartAll(opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
     return this.connectAndSend({
       name: 'restart-all',
-      opt
+      opt,
+      immediate
     })
   }
 

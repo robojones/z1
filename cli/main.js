@@ -39,10 +39,12 @@ program
 program
   .command('resurrect')
   .description('start the apps that were started before exit')
-  .action(() => {
+  .option('-i, --immediate', 'exit immediately')
+  .action((opts) => {
     spam.start()
-    z1.resurrect().then(data => {
+    z1.resurrect(opts.immediate).then(data => {
       spam.stop()
+      if(opts.immediate) return;
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -56,6 +58,7 @@ program
   .option('-w, --workers <workers>', 'count of workers (default: number of CPUs)', parseInt)
   .option('-o, --output <output>', 'directory for the log files of this app', parser.path)
   .option('-e, --env <env>', 'environment variables e.g. NODE_ENV=development', parser.env)
+  .option('-i, --immediate', 'exit immediately')
   .action((dir, opts) => {
 
     // prepare opts
@@ -70,8 +73,9 @@ program
     const env = Object.assign({}, process.env, opts.env)
 
     spam.start()
-    z1.start(dir, args, opt, env).then(data => {
+    z1.start(dir, args, opt, env, opts.immediate).then(data => {
       spam.stop()
+      if(opts.immediate) return;
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
@@ -83,14 +87,16 @@ program
   .description('stop the app specified by the appName')
   .option('-t, --timeout <timeout>', 'time until the workers get killed')
   .option('-s, --signal <signal>', 'kill signal')
+  .option('-i, --immediate', 'exit immediately')
   .action((appName = getAppName(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
     }
     spam.start()
-    z1.stop(appName, opt).then(data => {
+    z1.stop(appName, opt, opts.immediate).then(data => {
       spam.stop()
+      if(opts.immediate) return;
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -101,14 +107,16 @@ program
   .description('restart the app specified by the appName')
   .option('-t, --timeout <timeout>', 'time until the old workers get killed')
   .option('-s, --signal <signal>', 'kill signal for the old workers')
+  .option('-i, --immediate', 'exit immediately')
   .action((appName = getAppName(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
     }
     spam.start()
-    z1.restart(appName, opt).then(data => {
+    z1.restart(appName, opt, opts.immediate).then(data => {
       spam.stop()
+      if(opts.immediate) return;
       console.log('name:', data.app)
       console.log('ports:', data.ports.join())
       console.log('workers started:', data.started)
@@ -121,14 +129,16 @@ program
   .description('restart all apps')
   .option('-t, --timeout <timeout>', 'time until the old workers get killed')
   .option('-s, --signal <signal>', 'kill signal for the old workers')
+  .option('-i, --immediate', 'exit immediately')
   .action(opts => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
     }
     spam.start()
-    z1.restartAll(opt).then(data => {
+    z1.restartAll(opt, opts.immediate).then(data => {
       spam.stop()
+      if(opts.immediate) return;
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
     }).catch(handle)

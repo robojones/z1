@@ -18,6 +18,8 @@ process.chdir(z1Dir)
 // setup global log functions
 require('./module/log')
 
+process.on('uncaughtException', handle)
+
 const Worker = require('./class/Worker')
 Worker.errorHandler = handle
 const createServer = require('./module/remoteServer')
@@ -44,6 +46,11 @@ const server = createServer('sick.sock', command => {
 
   if(!operation.hasOwnProperty(command.name)) {
     return Promise.reject(new Error(`invalid operation name "${command.name}"`))
+  }
+
+  if(command.immediate) {
+    operation[command.name](config.command).catch(handle)
+    return Promise.resolve({})
   }
 
   return operation[command.name](config, command)
