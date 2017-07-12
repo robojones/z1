@@ -31,6 +31,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [z1.list](#z1list)
   - [z1.exit](#z1exit)
   - [z1.resurrect](#z1resurrect)
+  - [z1.ready](#z1ready)
 
 ## Features
 The focus of z1 is on simplicity.
@@ -64,6 +65,9 @@ you need to add a few things to your
 4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. the default value is the number of CPU-cores in your system.
 5. __output__ _(optional)_ - a directory for the log and error files. (Default: `~/.z1/<yourAppName>`)
 6. __devPorts__ _(optional)_ ports for [development](#development)
+
+__Important:__
+If you app does not use any ports, you must require z1 in your app and call the [z1.ready() method](#z1ready)
 
 Example:
 
@@ -414,3 +418,18 @@ Example:
 It will be rejected if `z1.resurrect()` or `z1.start()` was called before.
 
 Resurrect will start all apps that were running before the daemon was killed.
+
+### z1.ready()
+
+__Returns__ a `<Promise>` that resolves when the ready signal has been transmitted.
+
+This function __must__ be called if an app does not use any port. It will tell the z1 daemon that your app has been started successfully.
+
+Example:
+```javascript
+const z1 = require('z1')
+
+// ...your program...
+
+z1.ready()
+```
