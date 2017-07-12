@@ -48,7 +48,7 @@ const server = createServer('sick.sock', command => {
   }
 
   if (command.immediate) {
-    operation[command.name](config.command).catch(handle)
+    operation[command.name](config, command).catch(handle)
     return Promise.resolve({})
   }
 
