@@ -67,7 +67,7 @@ you need to add a few things to your
 6. __devPorts__ _(optional)_ ports for [development](#development)
 
 __Important:__
-If you app does not use any ports, you must require z1 in your app and call the [z1.ready() method](#z1ready)
+If you app does not use any ports, you must require z1 in your app and call the [z1.ready](#z1ready) method.
 
 Example:
 
