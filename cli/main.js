@@ -1,12 +1,9 @@
 #! /usr/bin/env node
 
-const net = require('net')
 const fs = require('fs')
 const path = require('path')
-const util = require('util')
 const assert = require('assert')
 const program = require('commander')
-const xTime = require('x-time')
 const spawn = require('child_process').spawn
 const Tail = require('tail').Tail
 const leftpad = require('leftpad')
@@ -18,13 +15,11 @@ const features = require('./features')
 const parser = require('./parser')
 const version = require('./version')
 
-
 const SPACER = '--'
-
 
 const argv = process.argv.slice()
 let args = []
-if(argv.includes(SPACER)) {
+if (argv.includes(SPACER)) {
   args = argv.splice(argv.indexOf(SPACER))
   args.shift()
 }
@@ -32,7 +27,7 @@ if(argv.includes(SPACER)) {
 program
   .version(version.string)
   .option('-V <version>', 'version')
-  .action(function (cmd, opt) {
+  .action(function (cmd) {
     handle(new Error(`command "${cmd}" not found`))
   })
 
@@ -44,7 +39,7 @@ program
     spam.start()
     z1.resurrect(opts.immediate).then(data => {
       spam.stop()
-      if(opts.immediate) return;
+      if (opts.immediate) return
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -60,7 +55,6 @@ program
   .option('-e, --env <env>', 'environment variables e.g. NODE_ENV=development', parser.env)
   .option('-i, --immediate', 'exit immediately')
   .action((dir, opts) => {
-
     // prepare opts
     const opt = {
       name: opts.name,
@@ -75,9 +69,9 @@ program
     spam.start()
     z1.start(dir, args, opt, env, opts.immediate).then(data => {
       spam.stop()
-      if(opts.immediate) return;
+      if (opts.immediate) return
       console.log('name:', data.app)
-      console.log('ports:', data.ports.join())
+      console.log('ports:', data.ports.join() || '-')
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -96,7 +90,7 @@ program
     spam.start()
     z1.stop(appName, opt, opts.immediate).then(data => {
       spam.stop()
-      if(opts.immediate) return;
+      if (opts.immediate) return
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -116,9 +110,9 @@ program
     spam.start()
     z1.restart(appName, opt, opts.immediate).then(data => {
       spam.stop()
-      if(opts.immediate) return;
+      if (opts.immediate) return
       console.log('name:', data.app)
-      console.log('ports:', data.ports.join())
+      console.log('ports:', data.ports.join() || '-')
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -138,7 +132,7 @@ program
     spam.start()
     z1.restartAll(opt, opts.immediate).then(data => {
       spam.stop()
-      if(opts.immediate) return;
+      if (opts.immediate) return
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -153,7 +147,7 @@ program
     let config = null
     try {
       config = require(configPath)
-    } catch(err) {
+    } catch (err) {
       handle(new Error('config.json not found'))
     }
 
@@ -169,8 +163,8 @@ program
 
     function updateLogs() {
       fs.readdir(output, (err, files) => {
-        if(err) {
-          if(err.code === 'ENOENT') {
+        if (err) {
+          if (err.code === 'ENOENT') {
             handle(new Error(`app "${appName}" not found`))
           } else {
             handle(err)
@@ -179,7 +173,7 @@ program
 
         files = files.sort().slice(-2)
 
-        if(oldFiles.join() === files.join()) {
+        if (oldFiles.join() === files.join()) {
           return
         }
 
@@ -190,7 +184,7 @@ program
 
         oldFiles = files
 
-        if(!files.length) {
+        if (!files.length) {
           return
         }
 
@@ -209,7 +203,6 @@ program
     }
   })
 
-
 program
   .command('info [appName]')
   .description('show specific infos about an app')
@@ -217,7 +210,7 @@ program
     z1.info(appName).then(stats => {
       console.log('name:', stats.name)
       console.log('directory:', stats.dir)
-      console.log('ports:', stats.ports.join())
+      console.log('ports:', stats.ports.join() || '-')
       console.log('workers:')
       console.log('  pending:', stats.pending)
       console.log('  available:', stats.available)
@@ -234,20 +227,18 @@ program
     z1.list().then(data => {
       const props = Object.keys(data.stats)
 
-      if(opt.minimal) {
+      if (opt.minimal) {
         console.log(props.join(' '))
         return
       }
 
-      if(!props.length) {
+      if (!props.length) {
         console.log('no workers running')
         return
       }
 
-      const max = process.stdout.columns
-
       console.log('workers  name                 ports')
-      for(const prop of props) {
+      for (const prop of props) {
         const obj = data.stats[prop]
         const p = leftpad(obj.pending, 2, ' ')
         const a = leftpad(obj.available, 2, ' ')
@@ -261,7 +252,7 @@ program
       console.log(' | available')
       console.log('pending')
 
-      if(data.isResurrectable) {
+      if (data.isResurrectable) {
         console.log('\nThe listed apps are currently not running.\nType "z1 resurrect" to start them.')
       }
     }).catch(handle)
@@ -271,7 +262,7 @@ program
   .command('exit')
   .description('kill the z1 daemon')
   .action(() => {
-    z1.exit().then(data => {
+    z1.exit().then(() => {
       console.log('daemon stopped')
     }).catch(handle)
   })
@@ -288,16 +279,15 @@ program
 
     const folder = path.join(__dirname, '..', 'script', 'install')
 
-    if(opts.minimal) {
+    if (opts.minimal) {
       Object.keys(features).forEach((feature, i, list) => {
         process.stdout.write(feature)
-        if(list[i+1]) {
+        if (list[i + 1]) {
           process.stdout.write(' ')
         }
       })
       process.stdout.write('\n')
-
-    } else if(!feature) {
+    } else if (!feature) {
       console.log('\nFeatures:\n')
       Object.keys(features).forEach(feature => {
         console.log(`${feature} - ${features[feature]}`)
@@ -322,8 +312,7 @@ program
 program
   .command('uninstall <feature>')
   .description('uninstall features')
-  .action((feature, opts) => {
-
+  .action(feature => {
     const folder = path.join(__dirname, '..', 'script', 'uninstall')
 
     if (features.hasOwnProperty(feature)) {
@@ -345,8 +334,8 @@ program
 program
   .command('upgrade')
   .description('upgrade daemon to a newly installed version')
-  .action((opts) => {
-    if(version.cli === version.daemon) {
+  .action(() => {
+    if (version.cli === version.daemon) {
       console.log('already up-to-date')
       return
     }
@@ -356,9 +345,8 @@ program
     }).catch(handle)
   })
 
-if(!global.test) {
-
-  if(process.argv.length === 2) {
+if (!global.test) {
+  if (process.argv.length === 2) {
     program.outputHelp()
   }
 
@@ -374,20 +362,20 @@ function getAppName() {
     assert(pack.name)
     log(`found name "${pack.name}" in package.json`)
     return pack.name
-  } catch(err) {
+  } catch (err) {
     console.error(`no package.json file found`)
     handle(new Error('missing argument `appName\''))
   }
 }
 
 function log(...msg) {
-  if(process.env.DEBUG) {
+  if (process.env.DEBUG) {
     console.log(...msg)
   }
 }
 
 function handle(err) {
-  if(process.env.DEBUG) {
+  if (process.env.DEBUG) {
     console.error(err)
   } else {
     console.error(`\n  error: ${err.message}\n`)

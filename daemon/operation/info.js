@@ -4,11 +4,10 @@ const states = Worker.states
 const mergePorts = require('./../snippet/mergePorts')
 
 module.exports = function info(config, command) {
-  return new Promise((resolve, reject) => {
-
+  return new Promise(resolve => {
     const app = config.apps.find(app => app.name === command.app)
 
-    if(!app) {
+    if (!app) {
       throw new Error(`app "${command.app}" not found`)
     }
 
@@ -23,8 +22,8 @@ module.exports = function info(config, command) {
     workers.forEach(worker => {
       // add worker states
       const state = states[worker.state].toLowerCase()
-      stats[state] ++
-      //add ports
+      stats[state]++
+      // add ports
       stats.ports = mergePorts(stats.ports, worker.ports)
     })
 

@@ -1,5 +1,4 @@
 const net = require('net')
-const fs = require('fs')
 const path = require('path')
 const StringDecoder = require('string_decoder').StringDecoder
 const log = require('./log')
@@ -18,7 +17,7 @@ module.exports = (filename, run) => {
     socket.json = (err, data) => {
       const res = {}
 
-      if(err) {
+      if (err) {
         res.error = {
           message: err.message,
           stack: err.stack,
@@ -48,14 +47,13 @@ module.exports = (filename, run) => {
         }).catch(err => {
           socket.json(err)
         })
-      } catch(err) {
+      } catch (err) {
         socket.json(err)
       }
     })
   })
 
-  if(!global.test) {
-
+  if (!global.test) {
     server.listen(file)
   }
 

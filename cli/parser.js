@@ -1,11 +1,11 @@
 const util = require('util')
 const path = require('path')
 
-function ports (string) {
+function ports(string) {
   return string.split(',').map(v => +v)
 }
 
-function env (string) {
+function env(string) {
   const e = {}
 
   string.split(',').forEach(pair => {

@@ -16,9 +16,8 @@ const NOEND = {
 }
 
 class LogManager extends BetterEvents {
-
   get(id) {
-    if(streams[id]) {
+    if (streams[id]) {
       return streams[id]
     }
 
@@ -37,11 +36,9 @@ class LogManager extends BetterEvents {
   }
 
   setup(id, dir) {
-
     const stuff = this.get(id)
 
     const connect = () => {
-
       const d = formatDate()
 
       const logFile = path.resolve(path.join(dir || '', d + '-log.txt'))
@@ -58,7 +55,7 @@ class LogManager extends BetterEvents {
       stuff.log.pipe(log, NOEND)
       stuff.err.pipe(err, NOEND)
 
-      if(stuff.logStream) {
+      if (stuff.logStream) {
         stuff.logStream.end()
         stuff.errStream.end()
       }
@@ -77,7 +74,7 @@ class LogManager extends BetterEvents {
   }
 
   remove(id) {
-    if(streams[id]) {
+    if (streams[id]) {
       const stuff = this.get(id)
 
       stuff.logStream.end()

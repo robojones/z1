@@ -1,5 +1,3 @@
-const assert = require('assert')
-
 describe('log', function () {
   describe('global.handle(error)', function () {
     it('should throw no error', function () {

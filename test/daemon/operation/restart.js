@@ -4,7 +4,6 @@ const Worker = local('daemon/class/Worker')
 const killWorkers = test('snippet/killWorkers')
 
 describe('restart (operation)', function () {
-
   const start = local('daemon/operation/start')
   const restart = local('daemon/operation/restart')
   const pack = local('example/package.json')

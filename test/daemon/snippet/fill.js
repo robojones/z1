@@ -18,7 +18,7 @@ describe('Function: fill(string, space, length)', function () {
   it('should throw a TypeError if space.length === 0', function () {
     try {
       fill('hi', '', 4)
-    } catch(err) {
+    } catch (err) {
       assert(err instanceof TypeError)
     }
   })

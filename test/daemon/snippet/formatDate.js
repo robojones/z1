@@ -4,7 +4,6 @@ const DATE = new Date(1485029551162)
 const ARRAY = ['2017', '01', '21']
 
 describe('Function: formatDate(date[, space])', function () {
-
   const formatDate = local('daemon/snippet/formatDate')
 
   it('should be a function', function () {
@@ -12,7 +11,6 @@ describe('Function: formatDate(date[, space])', function () {
   })
 
   it('should format the Number to yyyy-mm-dd', function () {
-
     assert.strictEqual(formatDate(DATE.getTime()), ARRAY.join('-'))
   })
 

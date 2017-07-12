@@ -12,7 +12,6 @@ module.exports = function restartAll(config, command) {
   })
 
   return Promise.all(q).then(stats => {
-
     return stats.reduce((a, b) => {
       a.started += b.started
       a.killed += b.killed

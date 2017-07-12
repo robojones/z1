@@ -9,7 +9,6 @@ const Tube = local('daemon/class/Tube')
 const exampleDir = path.resolve('testTemp')
 
 describe('LogManager', function () {
-
   const LogManagerPath = local.resolve('daemon/class/LogManager')
 
   before(function (cb) {
@@ -18,26 +17,26 @@ describe('LogManager', function () {
 
   after(function (cb) {
     fs.readdir(exampleDir, (err, files) => {
-      if(err) {
+      if (err) {
         cb(err)
         return
       }
 
-      if(!files.length) {
+      if (!files.length) {
         cb()
         return
       }
 
       files.forEach(file => {
         fs.unlink(path.join(exampleDir, file), err => {
-          if(err) {
+          if (err) {
             cb(err)
             return
           }
 
           files.splice(files.indexOf(file), 1)
 
-          if(!files.length) {
+          if (!files.length) {
             fs.rmdir(exampleDir, cb)
           }
         })
@@ -58,7 +57,6 @@ describe('LogManager', function () {
   })
 
   describe('instance', function () {
-
     beforeEach(function () {
       this.logs = new this.LogManager()
     })
@@ -68,7 +66,6 @@ describe('LogManager', function () {
     })
 
     describe('.get(id)', function () {
-
       it('should be a function', function () {
         assert.strictEqual(typeof this.logs.get, 'function')
       })
@@ -78,13 +75,11 @@ describe('LogManager', function () {
       })
 
       describe('returned object', function () {
-
         it('should be an object', function () {
           assert(typeof this.logs.get('hi'), 'object')
         })
 
         it('should have all props', function () {
-
           const obj = this.logs.get('hi')
 
           assert(obj.hasOwnProperty('log'))
@@ -98,16 +93,12 @@ describe('LogManager', function () {
       })
 
       describe('returned object', function () {
-
         describe('.log', function () {
-
           it('should write into the log file', function (cb) {
-
             const stuff = this.logs.setup('hi', exampleDir)
 
             fs.readdir(exampleDir, (err, files) => {
-
-              if(err) {
+              if (err) {
                 cb(err)
                 return
               }
@@ -128,16 +119,12 @@ describe('LogManager', function () {
           })
         })
 
-
         describe('.err', function () {
-
           it('should write into the error file', function (cb) {
-
             const stuff = this.logs.setup('hi', exampleDir)
 
             fs.readdir(exampleDir, (err, files) => {
-
-              if(err) {
+              if (err) {
                 cb(err)
                 return
               }
@@ -161,19 +148,16 @@ describe('LogManager', function () {
     })
 
     describe('.setup(id, dir)', function () {
-
       it('should be a function', function () {
         assert.strictEqual(typeof this.logs.setup, 'function')
       })
 
       describe('returned object', function () {
-
         it('should be an object', function () {
           assert.strictEqual(typeof this.logs.setup('hi', exampleDir), 'object')
         })
 
         it('should create writeStreams for .log and .err', function () {
-
           const obj = this.logs.setup('hi', exampleDir)
 
           assert(obj.logStream instanceof Writable)
@@ -181,8 +165,6 @@ describe('LogManager', function () {
         })
 
         it('should create two files', function () {
-          const obj = this.logs.setup('hi', exampleDir)
-
           fs.readdir(exampleDir, files => {
             assert(files.length, 'no files created')
           })
@@ -191,9 +173,7 @@ describe('LogManager', function () {
     })
 
     describe('.remove(id)', function () {
-
       it('should delete the old object', function () {
-
         const obj = this.logs.setup('hi', exampleDir)
         this.logs.remove('hi')
 
@@ -201,7 +181,6 @@ describe('LogManager', function () {
       })
 
       it('should close the old streams', function () {
-
         const stuff = this.logs.setup('hi', exampleDir)
 
         const q = []

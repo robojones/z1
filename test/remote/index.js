@@ -1,7 +1,6 @@
 const assert = require('assert')
 
 describe('remote', function () {
-
   const remote = local('remote/index')
   const Remote = local('remote/class/Remote')
   const exampleServer = local.resolve('example')
@@ -19,7 +18,7 @@ describe('remote', function () {
       remote.exit().then(() => {
         return remote.ping().then(() => {
           cb(new Error('how could this ever resolve??'))
-        }).catch(err => {
+        }).catch(() => {
           cb()
         })
       })
@@ -49,7 +48,7 @@ describe('remote', function () {
           timeout: 100
         })
       })
-    }).then(data => {
+    }).then(() => {
       return remote.list().then(list => {
         assert(!Object.keys(list.stats).length, 'there are workers left in the list')
       })

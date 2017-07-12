@@ -5,11 +5,12 @@
   "description": "Node.js cluster manager",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "node_modules/mocha/bin/mocha",
+    "lint": "node_modules/eslint/bin/eslint.js ."
   },
   "bin": "cli/main.js",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,8 @@
   },
   "homepage": "https://github.com/robojones/z1#readme",
   "devDependencies": {
+    "eslint": "^4.2.0",
+    "eslint-config-ultra": "^0.4.5",
     "mocha": "^3.2.0"
   },
   "dependencies": {

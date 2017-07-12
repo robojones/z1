@@ -9,7 +9,6 @@ const exampleServer = path.join(process.env.PWD, 'example')
 const examplePackage = require(path.join(exampleServer, 'package.json'))
 
 describe('startWorkers', function () {
-
   const config = {}
   const start = local('daemon/module/startWorkers').bind(null, config)
 
@@ -40,7 +39,6 @@ describe('startWorkers', function () {
   })
 
   describe('if ports have a wrong value', function () {
-
     it('should throw if ports are not set', function (cb) {
       start(exampleServer, {
         name: 'exampleServer'

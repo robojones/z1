@@ -59,7 +59,7 @@ function spam() {
 }
 
 function message() {
-  if(i === messages.length) {
+  if (i === messages.length) {
     i = 0
   }
   return messages[i++]

@@ -2,7 +2,6 @@ const cluster = require('cluster')
 const BetterEvents = require('better-events')
 const path = require('path')
 
-
 const workers = {}
 const workerList = []
 
@@ -40,35 +39,43 @@ class Worker extends BetterEvents {
     w.once('exit', (code, signal) => {
       // remove from workers
       delete workers[this.id]
-      //it can not happen that the worker is not in the workerList
+      // it can not happen that the worker is not in the workerList
       workerList.splice(workerList.indexOf(this), 1)
 
       this.emit('exit', code, signal)
     })
 
-    const portQueue = ports.slice()
+    if (ports.length) {
+      const portQueue = ports.slice()
 
-    const listening = (address) => {
-      const i = portQueue.indexOf(address.port)
-      if(i !== -1) {
-        portQueue.splice(i, 1)
+      const listening = (address) => {
+        const i = portQueue.indexOf(address.port)
+        if (i !== -1) {
+          portQueue.splice(i, 1)
+        }
+
+        if (!portQueue.length) {
+          this.removeListener('listening', listening)
+
+          this.emit('available')
+        }
       }
 
-      if(!portQueue.length) {
-        this.removeListener('listening', listening)
-
-        this.emit('available')
-      }
+      w.on('listening', listening)
+    } else {
+      w.on('message', message => {
+        if (message === 'ready') {
+          this.emit('available')
+        }
+      })
     }
 
     // states
     this.once('available', () => {
-      if(this.state < Worker.AVAILABLE) {
+      if (this.state < Worker.AVAILABLE) {
         this.state = Worker.AVAILABLE
       }
     })
-
-    w.on('listening', listening)
   }
 
   kill(signal = 'SIGTERM', time) {
@@ -76,13 +83,13 @@ class Worker extends BetterEvents {
 
     const w = this.w
 
-    if(!w) {
+    if (!w) {
       return false
     }
 
     w.disconnect()
 
-    if(typeof time === 'number') {
+    if (typeof time === 'number') {
       const timeout = setTimeout(() => {
         w.kill(signal)
       }, time)

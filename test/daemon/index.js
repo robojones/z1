@@ -5,8 +5,8 @@ const wd = path.join(process.env.HOME, '.z1')
 
 try {
   fs.mkdirSync(wd)
-} catch(err) {
-  if(err.code !== 'EEXIST') {
+} catch (err) {
+  if (err.code !== 'EEXIST') {
     throw err
   }
 }

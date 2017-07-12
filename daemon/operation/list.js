@@ -4,8 +4,7 @@ const mergePorts = require('./../snippet/mergePorts')
 const AppStats = require('./../class/AppStats')
 
 module.exports = function list(config) {
-  return new Promise((resolve, reject) => {
-
+  return new Promise(resolve => {
     const stats = {}
 
     // show every started app (even if no workers are running)
@@ -15,7 +14,7 @@ module.exports = function list(config) {
 
     Worker.workerList.forEach(worker => {
       // show stopped apps that have running workers
-      if(!stats[worker.name]) {
+      if (!stats[worker.name]) {
         stats[worker.name] = new AppStats(worker.dir)
       }
 
@@ -31,7 +30,7 @@ module.exports = function list(config) {
 
     resolve({
       isResurrectable: global.isResurrectable,
-      stats: stats
+      stats
     })
   })
 }

@@ -7,8 +7,8 @@ const z1Dir = path.join(process.env.HOME, '.z1')
 
 try {
   fs.mkdirSync(z1Dir)
-} catch(err) {
-  if(err.code !== 'EEXIST') {
+} catch (err) {
+  if (err.code !== 'EEXIST') {
     throw err
   }
 }
@@ -25,30 +25,29 @@ Worker.errorHandler = handle
 const createServer = require('./module/remoteServer')
 
 const config = autoSave('config.json', err => {
-  if(err) {
+  if (err) {
     handle(err)
   }
 })
 
 config.version = pack.version
 
-if(!config.apps) {
+if (!config.apps) {
   config.apps = []
 }
 
 let operation = null
 
 const server = createServer('sick.sock', command => {
-
-  if(process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development') {
     log('run command', command)
   }
 
-  if(!operation.hasOwnProperty(command.name)) {
+  if (!operation.hasOwnProperty(command.name)) {
     return Promise.reject(new Error(`invalid operation name "${command.name}"`))
   }
 
-  if(command.immediate) {
+  if (command.immediate) {
     operation[command.name](config.command).catch(handle)
     return Promise.resolve({})
   }

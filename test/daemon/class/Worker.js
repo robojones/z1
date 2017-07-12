@@ -8,7 +8,6 @@ const killWorkers = test('snippet/killWorkers')
 const pwd = process.env.PWD
 
 describe('Worker', function () {
-
   const Worker = local('daemon/class/Worker')
 
   it('should be a class (function)', function () {
@@ -46,7 +45,6 @@ describe('Worker', function () {
   })
 
   describe('instance', function () {
-
     beforeEach(function () {
       this.dir = pwd
       this.file = path.join('example', 'server.js')
@@ -104,7 +102,6 @@ describe('Worker', function () {
     })
 
     describe('.kill([timeout])', function () {
-
       beforeEach(function () {
         return this.worker.once('available')
       })
@@ -125,12 +122,12 @@ describe('Worker', function () {
           port: 8081
         }
 
-        const req = http.get(options, res => {
+        const req = http.get(options, () => {
           req.on('error', () => {})
 
           const start = process.hrtime()
 
-          this.worker.on('exit', (code, sig) => {
+          this.worker.on('exit', () => {
             const d = process.hrtime(start)
             const duration = d[0] * 1e3 + d[1] * 1e-6
 

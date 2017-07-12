@@ -7,9 +7,9 @@ console.log('argv', process.argv)
 // process.exit(10)
 
 process.on('message', msg => {
-  if(msg === 'exit') {
+  if (msg === 'exit') {
     process.exit(0)
-  } else if(msg === 'crash') {
+  } else if (msg === 'crash') {
     process.exit(1)
   }
 })

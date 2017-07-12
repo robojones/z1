@@ -1,7 +1,3 @@
-const once = require('better-events').once
-const assert = require('assert')
-const path = require('path')
-
 const Worker = require('./../class/Worker')
 const startWorkers = require('./../module/startWorkers')
 const getPack = require('./../module/getPack')
@@ -18,15 +14,14 @@ command {
 
 module.exports = function restart(config, command) {
   return new Promise((resolve, reject) => {
-
-    if(global.isResurrectable) {
+    if (global.isResurrectable) {
       throw new Error('no apps running')
     }
 
     // find old app
     const app = config.apps.find(app => app.name === command.app)
 
-    if(!app) {
+    if (!app) {
       throw new Error(`app "${command.app}" not found`)
     }
 
@@ -35,9 +30,9 @@ module.exports = function restart(config, command) {
 
     // if name changed
     const nameChanged = pack.name !== app.name
-    if(nameChanged) {
+    if (nameChanged) {
       // check name
-      if(config.apps.some(app => app.name === pack.name)) {
+      if (config.apps.some(app => app.name === pack.name)) {
         throw new Error(`new name "${pack.name}" already in use`)
       }
 
@@ -50,8 +45,8 @@ module.exports = function restart(config, command) {
     // set default timeout
     let timeout = (app.env.NODE_ENV === 'development') ? 0 : 30e3
 
-    if(command.opt.timeout) {
-      if(isNaN(+command.opt.timeout)) {
+    if (command.opt.timeout) {
+      if (isNaN(+command.opt.timeout)) {
         timeout = null
       } else {
         timeout = +command.opt.timeout
@@ -62,17 +57,15 @@ module.exports = function restart(config, command) {
     const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
     startWorkers(config, app.dir, pack, app.args, app.env).then(data => {
-
       // kill old workers
       const killed = workers.map(worker => {
-        if(worker.kill(command.opt.signal, timeout)) {
+        if (worker.kill(command.opt.signal, timeout)) {
           return worker.once('exit')
         }
       })
 
       return Promise.all(killed).then(() => {
-
-        if(nameChanged) {
+        if (nameChanged) {
           // remove old version
           const oldIndex = config.apps.findIndex(app => app.name === command.app)
           config.apps.splice(oldIndex, 1)

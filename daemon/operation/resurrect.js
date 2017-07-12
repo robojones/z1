@@ -1,5 +1,3 @@
-const path = require('path')
-
 const startWorkers = require('./../module/startWorkers')
 const Worker = require('./../class/Worker')
 const getPack = require('./../module/getPack')
@@ -8,8 +6,7 @@ global.isResurrectable = true
 
 module.exports = function resurrect(config) {
   return new Promise((resolve, reject) => {
-
-    if(!global.isResurrectable) {
+    if (!global.isResurrectable) {
       throw new Error('already resurrected')
     }
 

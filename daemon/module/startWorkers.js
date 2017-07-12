@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 const cpuCount = require('os').cpus().length
 const cluster = require('cluster')
@@ -6,20 +5,16 @@ const mkdirp = require('mkdirp')
 
 const Worker = require('./../class/Worker')
 const logs = require('./log')
-const verify = require('./../snippet/verifyPackage')
 const killWorkers = require('./killWorkers')
 
 const NOEND = {
   end: false
 }
 
-
 module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
   const workers = []
 
   return new Promise((resolve, reject) => {
-    verify(pack)
-
     if (pack.name === 'z1') {
       throw new Error('the name "z1" is invalid')
     }
@@ -62,7 +57,7 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
     // setup master
     cluster.setupMaster({
       stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
-      args: args
+      args
     })
 
     const ENV = Object.assign({}, env, {
@@ -85,11 +80,9 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
         throw new Error(`worker of app "${pack.name}" not started (exit code: ${code})`)
       }))
       q.push(worker.once('available').then(() => {
-
         worker.once('exit', code => {
           log('worker exit', code, worker.state)
           if (code && worker.state !== Worker.KILLED) {
-
             // revive worker
             log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
             log(`starting 1 new worker for "${worker.name}"`)
@@ -126,9 +119,9 @@ module.exports = function startWorkers(config, dir, pack, args = [], env = {}) {
     Promise.all(n).then(() => {
       resolve({
         app: pack.name,
-        dir: dir,
+        dir,
         started: workerCount,
-        ports: ports
+        ports
       })
     }).catch(err => {
       // if one worker crashes => kill all workers

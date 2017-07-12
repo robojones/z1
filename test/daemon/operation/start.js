@@ -4,7 +4,6 @@ const Worker = local('daemon/class/Worker')
 const killWorkers = test('snippet/killWorkers')
 
 describe('start (operation)', function () {
-
   const start = local('daemon/operation/start')
   const pack = local('example/package.json')
 
@@ -28,7 +27,6 @@ describe('start (operation)', function () {
   })
 
   describe('with valid arguments', function () {
-
     beforeEach(function () {
       return start(this.config, this.command)
     })
@@ -53,7 +51,7 @@ describe('start (operation)', function () {
       it('should not remove the app from apps', function () {
         return start(this.config, this.command).then(() => {
           throw new Error('no error was thrown')
-        }).catch(err => {
+        }).catch(() => {
           assert(this.config.apps.some(worker => worker.dir === this.dir))
         })
       })

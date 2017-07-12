@@ -1,6 +1,5 @@
 module.exports = server => {
   function exit() {
-
     server.close(() => {
       process.exit()
     })

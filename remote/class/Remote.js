@@ -12,6 +12,19 @@ class Remote extends BetterEvents {
     this.socketFile = socketFile
   }
 
+  get ready() {
+    if (process.send) {
+      return () => {
+        return new Promise((resolve, reject) => {
+          process.send('ready', (err, result) => {
+            if (err) return reject(err)
+            resolve(result)
+          })
+        })
+      }
+    }
+  }
+
   resurrect(immediate = false) {
     return this.connectAndSend({
       name: 'resurrect',
@@ -91,7 +104,7 @@ class Remote extends BetterEvents {
       }
 
       return unPing().catch(err => {
-        if(!(err.code === 'ECONNREFUSED' || err.code === 'ENOENT')) {
+        if (!(err.code === 'ECONNREFUSED' || err.code === 'ENOENT')) {
           throw err
         }
       })
@@ -121,21 +134,20 @@ class Remote extends BetterEvents {
 
           try {
             let obj = JSON.parse(message.join(''))
-            if(obj.error) {
+            if (obj.error) {
               const err = new Error(obj.error.message)
               err.stack = obj.error.stack
-              if(obj.error.code) {
+              if (obj.error.code) {
                 err.code = obj.error.code
               }
               reject(err)
             } else {
               resolve(obj.data)
             }
-          } catch(err) {
+          } catch (err) {
             reject(err)
           }
         })
-
       })
 
       socket.on('error', err => {
@@ -151,8 +163,7 @@ class Remote extends BetterEvents {
   }
 
   connect() {
-    return this.ping().catch(err => {
-
+    return this.ping().catch(() => {
       const ping = () => {
         return this.ping().catch(() => {
           return xTime(100).then(() => {
@@ -163,8 +174,8 @@ class Remote extends BetterEvents {
 
       try {
         fs.unlinkSync(this.socketFile)
-      } catch(err) {
-        if(err.code !== 'ENOENT') {
+      } catch (err) {
+        if (err.code !== 'ENOENT') {
           throw err
         }
       }
@@ -193,8 +204,8 @@ class Remote extends BetterEvents {
 }
 
 function translateInfinity(value) {
-  if(value && !isFinite(+value)) {
-    return "infinity"
+  if (value && !isFinite(+value)) {
+    return 'infinity'
   }
   return value
 }

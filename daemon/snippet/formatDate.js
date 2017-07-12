@@ -1,7 +1,7 @@
 const fill = require('./fill')
 
 function format(time = Date.now(), space) {
-  //time in ms
+  // time in ms
   const date = new Date(time)
 
   const y = date.getUTCFullYear()

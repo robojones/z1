@@ -8,7 +8,6 @@ describe('Tube', function () {
   })
 
   describe('instance', function () {
-
     beforeEach(function () {
       this.tube = new Tube()
     })
