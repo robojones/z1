@@ -33,12 +33,13 @@ class Remote extends BetterEvents {
   }
 
   start(dir, args = [], opt = {}, env = {}, immediate = false) {
+    const envi = Object.assign({}, process.env, env)
     return this.connectAndSend({
       name: 'start',
       dir: path.resolve(dir || ''),
       args,
       opt,
-      env,
+      env: envi,
       immediate
     })
   }

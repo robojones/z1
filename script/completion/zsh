@@ -20,7 +20,6 @@ _init() {
         '(-p --ports)'{-p,--ports}'[ports that your app listens to]' \
         '(-w --workers)'{-w,--workers}'[count of workers]' \
         '(-o --output)'{-o,--output}'[directory for the log files]' \
-        '(-e --env)'{-e,--env}'[environment variables]' \
         '(-i --immediate)'{-i,--immediate}'[exit immediately]' \
         '::optional arg:{_path_files -/}' \
       && ret=0

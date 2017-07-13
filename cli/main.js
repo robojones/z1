@@ -52,7 +52,6 @@ program
   .option('-p, --ports <ports>', 'ports that your app listens to', parser.ports)
   .option('-w, --workers <workers>', 'count of workers (default: number of CPUs)', parseInt)
   .option('-o, --output <output>', 'directory for the log files of this app', parser.path)
-  .option('-e, --env <env>', 'environment variables e.g. NODE_ENV=development', parser.env)
   .option('-i, --immediate', 'exit immediately')
   .action((dir, opts) => {
     // prepare opts
@@ -63,8 +62,7 @@ program
       output: opts.output
     }
 
-    // parse environment variables
-    const env = Object.assign({}, process.env, opts.env)
+    const env = {}
 
     spam.start()
     z1.start(dir, args, opt, env, opts.immediate).then(data => {
