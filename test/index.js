@@ -1,7 +1,5 @@
 const path = require('path')
 
-global.test = true
-
 const testResolve = file => {
   return path.join(__dirname, file)
 }

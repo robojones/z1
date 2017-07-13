@@ -31,27 +31,26 @@ describe('remote', function () {
     })
   })
 
-  describe('start-restart-stop cycle', function () {
-    return remote.start(exampleServer).then(data => {
-      return remote.list().then(list => {
-        assert(list.stats[data.app], 'app not in the list')
-        assert.strictEqual(list.stats[data.app].available, data.started, 'wrong number of workers')
-        return remote.restart(data.app, {
-          timeout: 100
-        })
-      })
-    }).then(data => {
-      return remote.list().then(list => {
-        assert(list.stats[data.app], 'app not in the list')
-        assert.strictEqual(list.stats[data.app].available, data.started, 'wrong number of workers')
-        return remote.stop(data.app, {
-          timeout: 100
-        })
-      })
-    }).then(() => {
-      return remote.list().then(list => {
-        assert(!Object.keys(list.stats).length, 'there are workers left in the list')
-      })
-    }).catch(err => console.log(err))
+  describe('start-restart-stop cycle', async function () {
+    let data = await remote.start(exampleServer)
+    let list = await remote.list()
+
+    assert(list.stats[data.app], 'app not in the list')
+    assert.strictEqual(list.stats[data.app].available, data.started, 'wrong number of workers')
+
+    data = await remote.restart(data.app, {
+      timeout: 100
+    })
+    list = await remote.list()
+
+    assert(list.stats[data.app], 'app not in the list')
+    assert.strictEqual(list.stats[data.app].available, data.started, 'wrong number of workers')
+
+    await remote.stop(data.app, {
+      timeout: 100
+    })
+    list = await remote.list()
+
+    assert(!Object.keys(list.stats).length, 'there are workers left in the list')
   })
 })
