@@ -1,6 +1,7 @@
 # z1
 
-__z1__ is a Node.js cluster management program.
+__z1__ is a Node.js cluster management program. It works on Linux Debian, Ubuntu, and other Debian based distributions.
+
 When using Node.js on a __web server__, one will somehow come to the point where he wants to start __multiple processes__ for one app.
 The main goal of z1 is to __simplify__ the creation and management of clusters.
 
