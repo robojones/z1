@@ -25,7 +25,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Install and Uninstall](#install-and-uninstall)
   - [Passing arguments to workers](#passing-arguments-to-workers)
 - [API](#api)
-  - [z1.start](#z1startdir-args-opt-env)
+  - [z1.start](#z1startdir-args-opt-env-immediate)
   - [z1.restart](#z1restartapp-opt)
   - [z1.stop](#z1stopapp-opt)
   - [z1.info](#z1infoapp)
@@ -63,9 +63,9 @@ you need to add a few things to your
 1. __name__ - your app name
 2. __main__ - the entry point of your app
 3. __ports__ - an array of port numbers that your app uses
-4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. the default value is the number of CPU-cores in your system.
+4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. The default value is the number of CPU-cores in your system.
 5. __output__ _(optional)_ - a directory for the log and error files. (Default: `~/.z1/<yourAppName>`)
-6. __devPorts__ _(optional)_ ports for [development](#development)
+6. __devPorts__ _(optional)_ - ports for [development](#development)
 
 __Important:__
 If you app does not use any ports, you must require z1 in your app and call the [z1.ready](#z1ready) method.
@@ -184,9 +184,9 @@ Example:
 pending
 ```
 
-1. __Pending__ processes are currently starting.
-2. __Available__ workers are listening to all the ports specified in the `package.json`
-3. __Killed__ workers are not listening for new connections.
+1. __Pending__ - processes are currently starting.
+2. __Available__ - workers are listening to all the ports specified in the `package.json`
+3. __Killed__ - workers are not listening for new connections.
 They will finish their outstanding requests before they exit.
 
 ### Info
@@ -288,15 +288,18 @@ Besides the CLI, you can also __require__ z1 to control your apps with a Node.js
 const z1 = require('z1')
 ```
 
-### z1.start(dir, args, opt, env)
+### z1.start(dir, args, opt, env, immediate)
 
 __Arguments__
-- __dir__ `<String>` Path to the directory where the `package.json` of the app is located (default: current directory)
-- __args__ `<Array>` _(optional)_ Arguments for the workers
-- __opt__ `<Object>` _(optional)_ Options that overwrite the ones from the [package.json](#prepare-packagejson)
-- __env__ `<Object>` _(optional)_ Key-value-pairs to be added to `process.env` in the workers.
+- __dir__ `<String>` - Path to the directory where the `package.json` of the app is located (Default: current directory)
+- __args__ `<Array>` _(optional)_ - Arguments for the workers
+- __opt__ `<Object>` _(optional)_ - Options that overwrite the ones from the [package.json](#prepare-packagejson)
+- __env__ `<Object>` _(optional)_ - Key-value-pairs to be added to `process.env` in the workers.
+- __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
-__Returns__ a `<Promise>` that gets resolved when the app is started. It resolves to an object with the following data:
+__Returns__ a `<Promise>` that gets resolved when the app is started. If you set __immediate__ to `true`, the promise gets resolved immediately after your command was transmitted to the daemon.
+
+By default It resolves to an object with the following data:
 
 ```javascript
 {
@@ -306,17 +309,17 @@ __Returns__ a `<Promise>` that gets resolved when the app is started. It resolve
 }
 ```
 
-- __app__ The name of the app specified in the `package.json`. You will need this in order to restart/stop the app.
-- __dir__ Absolute path to the directory where the `package.json` is located
-- __started__ Number of workers started for this app
+- __app__ - The name of the app specified in the `package.json`. You will need this in order to restart/stop the app.
+- __dir__ - Absolute path to the directory where the `package.json` is located
+- __started__ - Number of workers started for this app
 
 ### z1.restart(app, opt)
 
 __Arguments__
-- __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
-- __opt__ `<Object>` _(optional)_
-  - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
-  - __signal__ `<String>` Kill signal for the old workers
+- __app__ `<String>` - The name specified in the `package.json` of the app you want to restart.
+- __opt__ `<Object>` - _(optional)_
+  - __timeout__ `<Number>` - Maximum time until the old workers get killed (default: 30000ms).
+  - __signal__ `<String>` - Kill signal for the old workers
 
 __Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
 
@@ -329,10 +332,10 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
 }
 ```
 
-- __app__ the app name
-- __dir__ directory of the app
-- __started__ Number of started workers
-- __killed__ Number of killed workers
+- __app__ - the app name
+- __dir__ - directory of the app
+- __started__ - Number of started workers
+- __killed__ - Number of killed workers
 
 ### z1.stop(app, opt)
 
@@ -351,8 +354,8 @@ __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It
 }
 ```
 
-- __app__ the app name
-- __killed__ Number of killed workers
+- __app__ - the app name
+- __killed__ - Number of killed workers
 
 ### z1.info(app)
 
