@@ -21,6 +21,7 @@ _init() {
         '(-w --workers)'{-w,--workers}'[count of workers]' \
         '(-o --output)'{-o,--output}'[directory for the log files]' \
         '(-e --env)'{-e,--env}'[environment variables]' \
+        '(-i --immediate)'{-i,--immediate}'[exit immediately]' \
         '::optional arg:{_path_files -/}' \
       && ret=0
       ;;
@@ -28,6 +29,7 @@ _init() {
       _arguments \
         '(-t --timeout)'{-t,--timeout}'[time until the workers get killed]' \
         '(-s --signal)'{-s,--signal}'[kill signal]' \
+        '(-i --immediate)'{-i,--immediate}'[exit immediately]' \
         '::optional arg:_apps' \
       && ret=0
       ;;
@@ -35,6 +37,7 @@ _init() {
       _arguments \
         '(-t --timeout)'{-t,--timeout}'[time until the workers get killed]' \
         '(-s --signal)'{-s,--signal}'[kill signal]' \
+        '(-i --immediate)'{-i,--immediate}'[exit immediately]' \
       && ret=0
       ;;
     (logs|info)
@@ -80,10 +83,10 @@ _commands() {
 }
 
 _apps() {
-  local apps=($(z1 list -m))
+  local apps="$(z1 list -m)"
   if [[ -n "$apps" ]]
   then
-    _values 'Running apps' $apps
+    _values 'Running apps' $(echo $apps)
   fi
 }
 
