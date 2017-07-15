@@ -26,12 +26,12 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [Passing arguments to workers](#passing-arguments-to-workers)
 - [API](#api)
   - [z1.start](#z1startdir-args-opt-env-immediate)
-  - [z1.restart](#z1restartapp-opt)
-  - [z1.stop](#z1stopapp-opt)
+  - [z1.restart](#z1restartapp-opt-immediate)
+  - [z1.stop](#z1stopapp-opt-immediate)
   - [z1.info](#z1infoapp)
   - [z1.list](#z1list)
   - [z1.exit](#z1exit)
-  - [z1.resurrect](#z1resurrect)
+  - [z1.resurrect](#z1resurrectimmediate)
   - [z1.ready](#z1ready)
 
 ## Features
@@ -96,13 +96,13 @@ You can set different environment variables for each app.
 The [start](#start) command automatically applies the environment variables of the current CLI to the app.
 
 ```
-export EXAMPLE=hello && z1 start path/to/your/app
+EXAMPLE=hello z1 start path/to/your/app
 ```
 
 There are some environment variables that z1 sets automatically:
 
 - __PORT__ - the first port
-- __PORTS__ - all ports that z1 listens for (separated by commas)
+- __PORTS__ - all ports that your app uses (separated by commas)
 - __APPNAME__ - the name of your app
 - __PWD__ - the directory of your app
 
@@ -192,7 +192,7 @@ They will finish their outstanding requests before they exit.
 ### Info
 
 ```
-z1 info exampleApp
+z1 info homepage
 ```
 
 Shows more detailed information than z1 list.
@@ -200,7 +200,7 @@ Shows more detailed information than z1 list.
 Example output:
 
 ```
-name: exampleApp
+name: homepage
 directory: path/to/your/app
 ports: 80
 workers:
@@ -313,13 +313,14 @@ By default It resolves to an object with the following data:
 - __dir__ - Absolute path to the directory where the `package.json` is located
 - __started__ - Number of workers started for this app
 
-### z1.restart(app, opt)
+### z1.restart(app, opt, immediate)
 
 __Arguments__
 - __app__ `<String>` - The name specified in the `package.json` of the app you want to restart.
 - __opt__ `<Object>` - _(optional)_
   - __timeout__ `<Number>` - Maximum time until the old workers get killed (default: 30000ms).
   - __signal__ `<String>` - Kill signal for the old workers
+- __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
 __Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
 
@@ -337,13 +338,14 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
 - __started__ - Number of started workers
 - __killed__ - Number of killed workers
 
-### z1.stop(app, opt)
+### z1.stop(app, opt, immediate)
 
 __Arguments__
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
 - __opt__ `<Object>` _(optional)_
   - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
   - __signal__ `<String>` Kill signal
+- __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
 __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
 
@@ -407,7 +409,8 @@ The output would be:
 
 __Returns__ a `<Promise>` that resolves to an empty object. It gets resolves after the z1 daemon has exited.
 
-### z1.resurrect()
+### z1.resurrect(immediate)
+- __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
 __Returns__ a `<Promise>` that resolves to an object.
 
