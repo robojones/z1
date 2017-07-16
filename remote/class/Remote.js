@@ -15,11 +15,13 @@ class Remote extends BetterEvents {
     this.socketFile = socketFile
   }
 
-  async ready(...args) {
-    return await sendMessage(...args)
+  get ready() {
+    return sendMessage
   }
 
   async resurrect(immediate = false) {
+    this._impossibleInZ1()
+
     return await this._connectAndSend({
       name: 'resurrect',
       immediate
@@ -89,8 +91,16 @@ class Remote extends BetterEvents {
   }
 
   async upgrade() {
+    this._impossibleInZ1()
+
     await this.exit()
     await this.resurrect()
+  }
+
+  _impossibleInZ1() {
+    if (process.env.APPNAME && this.ready) {
+      throw new Error('It is impossible to use this operation within apps that are managed with z1')
+    }
   }
 
   async _ping() {
