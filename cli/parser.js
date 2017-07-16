@@ -1,4 +1,3 @@
-const util = require('util')
 const path = require('path')
 
 function ports(string) {

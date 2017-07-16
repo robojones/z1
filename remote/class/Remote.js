@@ -4,7 +4,10 @@ const net = require('net')
 const fs = require('fs')
 const cp = require('child_process')
 const path = require('path')
+const util = require('util')
 const StringDecoder = require('string_decoder').StringDecoder
+
+const sendMessage = (process.send) ? util.promisify(process.send) : null
 
 class Remote extends BetterEvents {
   constructor(socketFile) {
@@ -12,29 +15,20 @@ class Remote extends BetterEvents {
     this.socketFile = socketFile
   }
 
-  get ready() {
-    if (process.send) {
-      return () => {
-        return new Promise((resolve, reject) => {
-          process.send('ready', (err, result) => {
-            if (err) return reject(err)
-            resolve(result)
-          })
-        })
-      }
-    }
+  async ready(...args) {
+    return await sendMessage(...args)
   }
 
-  resurrect(immediate = false) {
-    return this.connectAndSend({
+  async resurrect(immediate = false) {
+    return await this._connectAndSend({
       name: 'resurrect',
       immediate
     })
   }
 
-  start(dir, args = [], opt = {}, env = {}, immediate = false) {
+  async start(dir, args = [], opt = {}, env = {}, immediate = false) {
     const envi = Object.assign({}, process.env, env)
-    return this.connectAndSend({
+    return await this._connectAndSend({
       name: 'start',
       dir: path.resolve(dir || ''),
       args,
@@ -44,9 +38,9 @@ class Remote extends BetterEvents {
     })
   }
 
-  stop(app, opt = {}, immediate = false) {
+  async stop(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
-    return this.connectAndSend({
+    return await this._connectAndSend({
       name: 'stop',
       app,
       opt,
@@ -54,9 +48,9 @@ class Remote extends BetterEvents {
     })
   }
 
-  restart(app, opt = {}, immediate = false) {
+  async restart(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
-    return this.connectAndSend({
+    return await this._connectAndSend({
       name: 'restart',
       app,
       opt,
@@ -64,62 +58,78 @@ class Remote extends BetterEvents {
     })
   }
 
-  restartAll(opt = {}, immediate = false) {
+  async restartAll(opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
-    return this.connectAndSend({
+    return await this._connectAndSend({
       name: 'restart-all',
       opt,
       immediate
     })
   }
 
-  info(app) {
-    return this.connectAndSend({
+  async info(app) {
+    return await this._connectAndSend({
       name: 'info',
       app
     })
   }
 
-  list() {
-    return this.connectAndSend({
+  async list() {
+    return await this._connectAndSend({
       name: 'list'
     })
   }
 
-  ping() {
-    return this.send({
+  async exit() {
+    await this._connectAndSend({
+      name: 'exit'
+    })
+
+    await this._waitForDisconnect()
+  }
+
+  async upgrade() {
+    await this.exit()
+    await this.resurrect()
+  }
+
+  async _ping() {
+    return await this._send({
       name: 'ping'
     })
   }
 
-  exit() {
-    return this.connectAndSend({
-      name: 'exit'
-    }).then(() => {
-      const unPing = () => {
-        return this.ping().then(() => {
-          return xTime(100).then(() => {
-            return unPing()
-          })
-        })
-      }
-
-      return unPing().catch(err => {
-        if (!(err.code === 'ECONNREFUSED' || err.code === 'ENOENT')) {
-          throw err
+  async _waitForDisconnect() {
+    while (1) {
+      try {
+        await this._ping()
+        await xTime(100)
+      } catch (err) {
+        if (err.code === 'ECONNREFUSED' || err.code === 'ENOENT') {
+          break
         }
-      })
-    })
+        throw err
+      }
+    }
   }
 
-  upgrade() {
-    return this.exit().then(() => {
-      return this.resurrect()
-    })
+  async _waitForConnection() {
+    while (1) {
+      try {
+        await this._ping()
+        return
+      } catch (err) {
+        if (err.code === 'ECONNREFUSED' || err.code === 'ENOENT') {
+          await xTime(100)
+          continue
+        }
+        throw err
+      }
+    }
   }
 
-  send(object) {
-    return new Promise((resolve, reject) => {
+  async _send(object) {
+    const result = new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
         socket.end(JSON.stringify(object))
 
@@ -151,56 +161,59 @@ class Remote extends BetterEvents {
         })
       })
 
-      socket.on('error', err => {
-        reject(err)
-      })
+      socket.on('error', reject)
     })
+
+    return await result
   }
 
-  connectAndSend(object) {
-    return this.connect().then(() => {
-      return this.send(object)
-    })
+  async _connectAndSend(object) {
+    await this._connect()
+    return await this._send(object)
   }
 
-  connect() {
-    return this.ping().catch(() => {
-      const ping = () => {
-        return this.ping().catch(() => {
-          return xTime(100).then(() => {
-            return ping()
-          })
-        })
+  async _connect() {
+    try {
+      await this._ping()
+      return
+    } catch (err) {
+      if (err.code !== 'ECONNREFUSED' && err.code !== 'ENOENT') {
+        throw err
       }
+    }
 
-      try {
-        fs.unlinkSync(this.socketFile)
-      } catch (err) {
-        if (err.code !== 'ENOENT') {
-          throw err
-        }
+    try {
+      fs.unlinkSync(this.socketFile)
+    } catch (err) {
+      if (err.code !== 'ENOENT') {
+        throw err
       }
+    }
 
+    await this._startDaemon()
+  }
+
+  async _startDaemon() {
+    const start = new Promise((resolve, reject) => {
       const z1Path = path.join(__dirname, '..', '..')
       const file = path.join(z1Path, 'daemon', 'main.js')
       const node = process.argv[0]
 
-      return new Promise((resolve, reject) => {
-        const p = cp.spawn(node, [file], {
-          stdio: 'ignore',
-          detached: true
-        })
-        p.on('error', reject)
-        p.on('exit', code => {
-          reject(new Error('daemon exited with code:', code))
-        })
-        p.unref()
-
-        ping().then(resolve).then(() => {
-          this.emit('daemon')
-        })
+      const p = cp.spawn(node, [file], {
+        stdio: 'ignore',
+        detached: true
       })
+
+      p.once('error', reject)
+
+      p.once('exit', code => {
+        reject(new Error('daemon exited with code:', code))
+      })
+
+      p.unref()
     })
+
+    await Promise.race([start, this._waitForConnection()])
   }
 }
 
