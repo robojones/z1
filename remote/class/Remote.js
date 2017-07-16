@@ -22,7 +22,7 @@ class Remote extends BetterEvents {
   async resurrect(immediate = false) {
     this._impossibleInZ1()
 
-    return await this._connectAndSend({
+    return this._connectAndSend({
       name: 'resurrect',
       immediate
     })
@@ -30,7 +30,7 @@ class Remote extends BetterEvents {
 
   async start(dir, args = [], opt = {}, env = {}, immediate = false) {
     const envi = Object.assign({}, process.env, env)
-    return await this._connectAndSend({
+    return this._connectAndSend({
       name: 'start',
       dir: path.resolve(dir || ''),
       args,
@@ -42,7 +42,7 @@ class Remote extends BetterEvents {
 
   async stop(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
-    return await this._connectAndSend({
+    return this._connectAndSend({
       name: 'stop',
       app,
       opt,
@@ -52,7 +52,7 @@ class Remote extends BetterEvents {
 
   async restart(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
-    return await this._connectAndSend({
+    return this._connectAndSend({
       name: 'restart',
       app,
       opt,
@@ -62,7 +62,7 @@ class Remote extends BetterEvents {
 
   async restartAll(opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
-    return await this._connectAndSend({
+    return this._connectAndSend({
       name: 'restart-all',
       opt,
       immediate
@@ -70,14 +70,14 @@ class Remote extends BetterEvents {
   }
 
   async info(app) {
-    return await this._connectAndSend({
+    return this._connectAndSend({
       name: 'info',
       app
     })
   }
 
   async list() {
-    return await this._connectAndSend({
+    return this._connectAndSend({
       name: 'list'
     })
   }
@@ -104,7 +104,7 @@ class Remote extends BetterEvents {
   }
 
   async _ping() {
-    return await this._send({
+    return this._send({
       name: 'ping'
     })
   }
@@ -139,7 +139,7 @@ class Remote extends BetterEvents {
   }
 
   async _send(object) {
-    const result = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
         socket.end(JSON.stringify(object))
 
@@ -173,13 +173,11 @@ class Remote extends BetterEvents {
 
       socket.on('error', reject)
     })
-
-    return await result
   }
 
   async _connectAndSend(object) {
     await this._connect()
-    return await this._send(object)
+    return this._send(object)
   }
 
   async _connect() {
