@@ -21,9 +21,9 @@ describe('verifyPorts', function () {
     assert(this.pack.right)
   })
 
-  it('should set the port to [] if it is undefined', function () {
+  it('should set the port to null if it is undefined', function () {
     verifyPorts(this.pack, 'none')
 
-    assert(Array.isArray(this.pack.none) && !this.pack.none.length)
+    assert(this.pack.none === null)
   })
 })

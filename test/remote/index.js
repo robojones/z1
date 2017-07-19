@@ -9,25 +9,28 @@ describe('remote', function () {
     assert(remote instanceof Remote)
   })
 
-  afterEach(function () {
-    return remote.exit().then(() => log('should be killed'))
+  afterEach(async function () {
+    await remote.exit()
   })
 
   describe('.ping & .connect', function () {
-    it('should be rejected if the daemon is not started', function (cb) {
-      remote.exit().then(() => {
-        return remote.ping().then(() => {
-          cb(new Error('how could this ever resolve??'))
-        }).catch(() => {
-          cb()
-        })
-      })
+    it('should be rejected if the daemon is not started', async function () {
+      await remote.exit()
+      try {
+        await remote._ping()
+      } catch (err) {
+        if (err.code !== 'ENOENT') {
+          throw err
+        }
+        return
+      }
+
+      throw new Error('ping resolved where it could never resolve')
     })
 
-    it('should be resolved, when the daemon ist started', function () {
-      return remote.connect().then(() => {
-        return remote.ping()
-      })
+    it('should be resolved, when the daemon ist started', async function () {
+      await remote._connect()
+      await remote._ping()
     })
   })
 

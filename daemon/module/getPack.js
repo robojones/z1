@@ -19,9 +19,14 @@ function getPack(dir, opt, env) {
   if (env.NODE_ENV === 'development') {
     // apply devPorts
     verifyPorts(pack, 'devPorts')
-    pack.ports = opt.ports || pack.devPorts || originalPackage.ports
+    pack.ports = pack.devPorts || originalPackage.ports || []
     // apply devWorkers
     pack.workers = opt.workers || pack.devWorkers || originalPackage.workers
+  }
+
+  if (opt.ports) {
+    verifyPorts(opt, 'ports', 'options')
+    pack.ports = opt.ports
   }
 
   return pack

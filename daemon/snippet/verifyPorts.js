@@ -1,6 +1,6 @@
 const mergePorts = require('./mergePorts')
 
-function verifyPorts(pack, prop) {
+function verifyPorts(pack, prop, origin = 'package.json') {
   const ports = pack[prop]
 
   if (Array.isArray(ports)) {
@@ -12,7 +12,7 @@ function verifyPorts(pack, prop) {
       const valid = mergePorts(numeralPorts)
 
       if (valid.length !== pack[prop].length) {
-        throw new Error(`invalid ${prop} in package.json`)
+        throw new Error(`invalid ${prop} in ${origin}`)
       }
 
       // everything ok
@@ -24,7 +24,7 @@ function verifyPorts(pack, prop) {
   }
 
   // undefined or empty array
-  pack[prop] = []
+  pack[prop] = null
 }
 
 module.exports = verifyPorts
