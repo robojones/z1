@@ -1,6 +1,6 @@
 {
   "name": "z1",
-  "version": "3.12.2",
+  "version": "3.12.3",
   "preferGlobal": true,
   "description": "Node.js cluster manager",
   "main": "index.js",
