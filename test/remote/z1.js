@@ -6,6 +6,7 @@ describe('constants in worker', function () {
   const exampleServer = local.resolve('example')
 
   beforeEach(function () {
+    this.timeout(5000)
     return z1.start(exampleServer)
   })
 
