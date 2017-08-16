@@ -91,7 +91,9 @@ class Worker extends BetterEvents {
 
     if (typeof time === 'number') {
       const timeout = setTimeout(() => {
-        w.kill(signal)
+        if (w.isConnected()) {
+          w.kill(signal)
+        }
       }, time)
       w.once('exit', () => {
         clearTimeout(timeout)
