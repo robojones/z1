@@ -41,7 +41,7 @@ _init() {
       ;;
     (info)
       _arguments \
-        '--name[output the appName]' \
+        '--name[output the appname]' \
         '--dir[output the directory of the app]' \
         '--ports[output the ports that the app uses]' \
         '--pending[output the number of pending workers]' \

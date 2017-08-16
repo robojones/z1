@@ -75,18 +75,18 @@ program
   })
 
 program
-  .command('stop [appName]')
-  .description('stop the app specified by the appName')
+  .command('stop [appname]')
+  .description('stop the app specified by the appname')
   .option('-t, --timeout <timeout>', 'time until the workers get killed')
   .option('-s, --signal <signal>', 'kill signal')
   .option('-i, --immediate', 'exit immediately')
-  .action((appName = getAppName(), opts) => {
+  .action((appname = getAppName(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
     }
     spam.start()
-    z1.stop(appName, opt, opts.immediate).then(data => {
+    z1.stop(appname, opt, opts.immediate).then(data => {
       spam.stop()
       if (opts.immediate) return
       console.log('name:', data.app)
@@ -95,18 +95,18 @@ program
   })
 
 program
-  .command('restart [appName]')
-  .description('restart the app specified by the appName')
+  .command('restart [appname]')
+  .description('restart the app specified by the appname')
   .option('-t, --timeout <timeout>', 'time until the old workers get killed')
   .option('-s, --signal <signal>', 'kill signal for the old workers')
   .option('-i, --immediate', 'exit immediately')
-  .action((appName = getAppName(), opts) => {
+  .action((appname = getAppName(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
     }
     spam.start()
-    z1.restart(appName, opt, opts.immediate).then(data => {
+    z1.restart(appname, opt, opts.immediate).then(data => {
       spam.stop()
       if (opts.immediate) return
       console.log('name:', data.app)
@@ -137,9 +137,9 @@ program
   })
 
 program
-  .command('logs [appName]')
+  .command('logs [appname]')
   .description('show the output of an app')
-  .action((appName = getAppName()) => {
+  .action((appname = getAppName()) => {
     const configPath = path.join(process.env.HOME, '.z1', 'config.json')
 
     let config = null
@@ -152,9 +152,9 @@ program
     let streams = []
     let oldFiles = []
 
-    const app = config.apps.find(e => e.name === appName)
+    const app = config.apps.find(e => e.name === appname)
 
-    const output = (app && app.opt.output) || path.join(process.env.HOME, '.z1', appName)
+    const output = (app && app.opt.output) || path.join(process.env.HOME, '.z1', appname)
 
     updateLogs()
     setInterval(updateLogs, 5000)
@@ -163,7 +163,7 @@ program
       fs.readdir(output, (err, files) => {
         if (err) {
           if (err.code === 'ENOENT') {
-            handle(new Error(`app "${appName}" not found`))
+            handle(new Error(`app "${appname}" not found`))
           } else {
             handle(err)
           }
@@ -202,17 +202,17 @@ program
   })
 
 program
-  .command('info [appName]')
+  .command('info [appname]')
   .description('show specific infos about an app')
-  .option('--name', 'output the appName')
+  .option('--name', 'output the appname')
   .option('--dir', 'output the directory of the app')
   .option('--ports', 'output the ports that the app uses')
   .option('--pending', 'output the number of pending workers')
   .option('--available', 'output the number of available workers')
   .option('--killed', 'output the number of killed workers')
   .option('--revive-count', 'output how often the app has been revived')
-  .action((appName = getAppName(), opts) => {
-    z1.info(appName).then(stats => {
+  .action((appname = getAppName(), opts) => {
+    z1.info(appname).then(stats => {
       const props = ['name', 'dir', 'ports', 'pending', 'available', 'killed', 'reviveCount']
       const prop = props.find(prop => opts.hasOwnProperty(prop))
       if (prop) {
@@ -366,7 +366,7 @@ if (!global.test) {
 }
 
 function getAppName() {
-  log('no appName given')
+  log('no appname given')
   log('searching directory for package.json')
   try {
     const file = path.join(process.cwd(), 'package.json')
@@ -376,7 +376,7 @@ function getAppName() {
     return pack.name
   } catch (err) {
     console.error(`no package.json file found`)
-    handle(new Error('missing argument `appName\''))
+    handle(new Error('missing argument `appname\''))
   }
 }
 
