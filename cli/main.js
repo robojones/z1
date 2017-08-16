@@ -204,8 +204,27 @@ program
 program
   .command('info [appName]')
   .description('show specific infos about an app')
-  .action((appName = getAppName()) => {
+  .option('--name', 'output the appName')
+  .option('--dir', 'output the directory of the app')
+  .option('--ports', 'output the ports that the app uses')
+  .option('--pending', 'output the number of pending workers')
+  .option('--available', 'output the number of available workers')
+  .option('--killed', 'output the number of killed workers')
+  .option('--revive-count', 'output how often the app has been revived')
+  .action((appName = getAppName(), opts) => {
     z1.info(appName).then(stats => {
+      const props = ['name', 'dir', 'ports', 'pending', 'available', 'killed', 'reviveCount']
+      const prop = props.find(prop => opts.hasOwnProperty(prop))
+      if (prop) {
+        const value = stats[prop]
+        if (Array.isArray(value)) {
+          console.log(value.join() || '-')
+        } else {
+          console.log(value)
+        }
+        process.exit(0)
+      }
+
       console.log('name:', stats.name)
       console.log('directory:', stats.dir)
       console.log('ports:', stats.ports.join() || '-')
@@ -270,11 +289,6 @@ program
   .description('install additional features')
   .option('-m, --minimal', 'minimalistic list (easy to parse)')
   .action((feature, opts) => {
-    // features:
-    // zsh (completion)
-    // bash (completion)
-    // cron (resurrect)
-
     const folder = path.join(__dirname, '..', 'script', 'install')
 
     if (opts.minimal) {
