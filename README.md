@@ -124,7 +124,7 @@ name: homepage
 workers started: 2
 ```
 
-__options__
+__Options__
 
 If you want to start your app with different settings
 than the ones specified in the `package.json`,
@@ -157,7 +157,7 @@ workers started: 2
 workers killed: 2
 ```
 
-__options__
+__Options__
 
 ```
 --timeout 10000
@@ -210,6 +210,16 @@ workers:
 revive count: 0
 ```
 
+__Options:__
+
+- `--name` - output the appname
+- `--dir` - output the directory of the app
+- `--ports` - output the ports that the app uses
+- `--pending` - output the number of pending workers
+- `--available` - output the number of available workers
+- `--killed` - output the number of killed workers
+- `--revive-count` - output how often the app has been revived
+
 ### Stop
 
 To stop an app just type:
@@ -225,7 +235,7 @@ name: homepage
 workers killed: 2
 ```
 
-__options__
+__Options__
 
 ```
 --timeout 10000
