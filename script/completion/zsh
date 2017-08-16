@@ -39,7 +39,19 @@ _init() {
         '(-i --immediate)'{-i,--immediate}'[exit immediately]' \
       && ret=0
       ;;
-    (logs|info)
+    (info)
+      _arguments \
+        '--name[output the appName]' \
+        '--dir[output the directory of the app]' \
+        '--ports[output the ports that the app uses]' \
+        '--pending[output the number of pending workers]' \
+        '--available[output the number of available workers]' \
+        '--killed[output the number of killed workers]' \
+        '--revive-count[output how often the app has been revived]' \
+        '::optional arg:_apps' \
+      && ret=0
+      ;;
+    (logs)
       _arguments \
         '::optional arg:_apps' \
       && ret=0
