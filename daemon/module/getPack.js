@@ -13,22 +13,25 @@ function getPack(dir, opt, env) {
     throw new Error('name in package.json must be set')
   }
 
-  verifyPorts(pack, 'ports')
-
-  // apply dev*
-  if (env.NODE_ENV === 'development') {
-    // apply devPorts
-    verifyPorts(pack, 'devPorts')
-    pack.ports = pack.devPorts || originalPackage.ports || []
-    // apply devWorkers
-    pack.workers = opt.workers || pack.devWorkers || originalPackage.workers
-  }
-
   if (opt.ports) {
     verifyPorts(opt, 'ports', 'options')
     pack.ports = opt.ports
   }
 
+  verifyPorts(pack, 'ports')
+
+  // set default value for ports
+  pack.ports = pack.ports || []
+
+  // apply dev*
+  if (env.NODE_ENV === 'development') {
+    // apply devPorts
+    verifyPorts(pack, 'devPorts')
+    pack.ports = pack.devPorts || pack.ports
+    // apply devWorkers
+    pack.workers = opt.workers || pack.devWorkers || originalPackage.workers
+  }
+  log(pack.ports)
   return pack
 }
 
