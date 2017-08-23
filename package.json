@@ -1,6 +1,6 @@
 {
   "name": "z1",
-  "version": "3.13.1",
+  "version": "3.13.2",
   "preferGlobal": true,
   "description": "Node.js cluster manager",
   "main": "index.js",
@@ -43,6 +43,7 @@
     "mkdirp": "^0.5.1",
     "rightpad": "^1.0.1",
     "save-on-change": "^1.0.7",
+    "smart-promisify": "^1.0.2",
     "tail": "^1.2.1",
     "var-server": "^1.0.2",
     "x-time": "^1.1.1"

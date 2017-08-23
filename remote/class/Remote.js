@@ -3,7 +3,7 @@ const net = require('net')
 const fs = require('fs')
 const cp = require('child_process')
 const path = require('path')
-const util = require('util')
+const promisify = require('smart-promisify')
 const StringDecoder = require('string_decoder').StringDecoder
 
 /**
@@ -24,7 +24,8 @@ class Remote {
       throw new Error('Can not send the "ready" signal to z1 because process.send() is not defined.')
     }
 
-    const send = util.promisify(process.send)
+    console.log('ready signal sent')
+    const send = promisify(process.send, process)
     await send('ready')
   }
 

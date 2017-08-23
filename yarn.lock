@@ -835,6 +835,10 @@ slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
 
+smart-promisify@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/smart-promisify/-/smart-promisify-1.0.2.tgz#99888aee4e3d5ad304056e4add3f8e9744ee26af"
+
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
