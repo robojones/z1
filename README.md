@@ -1,5 +1,7 @@
 # z1
 
+[![Build Status](https://travis-ci.org/robojones/z1.svg?branch=master)](https://travis-ci.org/robojones/z1)
+
 __z1__ is a Node.js cluster management program. It works on Linux Debian, Ubuntu, and other Debian based distributions.
 
 When using Node.js on a __web server__, one will somehow come to the point where he wants to start __multiple processes__ for one app.
