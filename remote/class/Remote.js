@@ -35,7 +35,7 @@ class Remote {
   }
 
   /**
-   * @typedef {Object} resurrectResult
+   * @typedef resurrectResult
    * @property {number} started - Number of started workers.
    */
 
@@ -54,7 +54,7 @@ class Remote {
   }
 
   /**
-   * @typedef {Object} appOptions
+   * @typedef appOptions
    * @property {string} [name] - The name of the app.
    * @property {number[]} [ports] - The prots that yoru app listens to.
    * @property {number} [workers] - The number of workers to start for your app. (default: number of CPUs)
@@ -62,7 +62,7 @@ class Remote {
    */
 
   /**
-   * @typedef {Object} startResult
+   * @typedef startResult
    * @property {string} app - The name of the app.
    * @property {string} dir - The directory of the app.
    * @property {number} started - The number of started workers.
@@ -91,13 +91,13 @@ class Remote {
   }
 
   /**
-   * @typedef {Object} killOptions
+   * @typedef killOptions
    * @property {string} [signal] - The kill signal for the workers.
    * @property {number} [timeout] - The time (in ms) until the workers get force-killed.
    */
 
   /**
-   * @typedef {Object} stopResult
+   * @typedef stopResult
    * @property {string} app - The name of the app.
    * @property {number} killed - The number of killed workers.
    */
@@ -120,7 +120,7 @@ class Remote {
   }
 
   /**
-   * @typedef {Object} restartResult
+   * @typedef restartResult
    * @property {string} app - The name of the app.
    * @property {string} dir - The directory of the app.
    * @property {number} started - The number of started workers.
@@ -146,7 +146,7 @@ class Remote {
   }
 
   /**
-   * @typedef {Object} restartAllResult
+   * @typedef restartAllResult
    * @property {number} started - The number of started workers.
    * @property {number} killed - The number of killed workers
    */
@@ -167,7 +167,7 @@ class Remote {
   }
 
   /**
-   * @typedef {Object} infoResult
+   * @typedef infoResult
    * @property {string} name - The name of the app.
    * @property {string} dir - Directory of the app.
    * @property {number[]} ports - Ports that the app uses.
@@ -190,7 +190,7 @@ class Remote {
   }
 
   /**
-   * @typedef {Object} listAppStats
+   * @typedef listAppStats
    * @property {string} dir - Directory of the app.
    * @property {number[]} ports - Ports that the app uses.
    * @property {number} pending - Number of pending workers.
@@ -199,7 +199,7 @@ class Remote {
    */
 
   /**
-   * @typedef {Object} listResult
+   * @typedef listResult
    * @property {boolean} isResurrectable - Is true if the resurrect command can be used.
    * @property {{string: listAppStats}} stats - Statistics for each app.
    */
