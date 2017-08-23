@@ -7,18 +7,38 @@ const path = require('path')
 const util = require('util')
 const StringDecoder = require('string_decoder').StringDecoder
 
-const sendMessage = (process.send) ? util.promisify(process.send) : null
-
-class Remote extends BetterEvents {
+/**
+ * A class representing a set of commands to control z1.
+ * @class
+ */
+class Remote {
   constructor(socketFile) {
-    super()
     this.socketFile = socketFile
   }
 
-  get ready() {
-    return sendMessage
+  /**
+   * Sends the "ready" signal to the z1 daemon.
+   * @returns {Promise.<void>}
+   */
+  async ready() {
+    if (typeof process.send !== 'function') {
+      throw new Error('Can not send the "ready" signal to z1 because process.send() is not defined.')
+    }
+
+    const send = util.promisify(process.send)
+    await send('ready')
   }
 
+  /**
+   * @typedef {Object} resurrectResult
+   * @property {number} started - Number of started workers.
+   */
+
+  /**
+   * Start the apps that were started before exit.
+   * @param {boolean} immediate -- Resolve the returned promise immediately after the command has been transmitted.
+   * @param {Promise.<resurrectResult>}
+   */
   async resurrect(immediate = false) {
     this._impossibleInZ1()
 
@@ -28,6 +48,31 @@ class Remote extends BetterEvents {
     })
   }
 
+  /**
+   * @typedef {Object} appOptions
+   * @property {string} [name] - The name of the app.
+   * @property {number[]} [ports] - The prots that yoru app listens to.
+   * @property {number} [workers] - The number of workers to start for your app. (default: number of CPUs)
+   * @property {string} [output] - A directory for the log files. (default: ~/.z1/<appname>)
+   */
+
+  /**
+   * @typedef {Object} startResult
+   * @property {string} app - The name of the app.
+   * @property {string} dir - The directory of the app.
+   * @property {number} started - The number of started workers.
+   * @property {number[]} ports - The ports that your app listens to.
+   */
+
+  /**
+   * Start the app in the given directory.
+   * @param {string} dir - Directory of the app.
+   * @param {string[]} [args] - Arguments for the app.
+   * @param {appOptions} [opt] - Options that overwrite the ones from the package.json.
+   * @param {{string: string}} [env] - Environment variables for the app.
+   * @param {boolean} [immediate] - Resolve the returned promise immediately after the command has been transmitted.
+   * @returns {Promise.<startResult>}
+   */
   async start(dir, args = [], opt = {}, env = {}, immediate = false) {
     const envi = Object.assign({}, process.env, env)
     return this._connectAndSend({
@@ -40,6 +85,25 @@ class Remote extends BetterEvents {
     })
   }
 
+  /**
+   * @typedef {Object} killOptions
+   * @property {string} [signal] - The kill signal for the workers.
+   * @property {number} [timeout] - The time (in ms) until the workers get force-killed.
+   */
+
+  /**
+   * @typedef {Object} stopResult
+   * @property {string} app - The name of the app.
+   * @property {number} killed - The number of killed workers.
+   */
+
+  /**
+   * Stop all workers of an app.
+   * @param {string} app - The name of th app.
+   * @param {killOptions} [opt] - Options for the command. 
+   * @param {boolean} [immediateResolve] - Resolve the returned promise immediately after the command has been transmitted.
+   * @returns {Promise.<stopResult>}
+   */
   async stop(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
     return this._connectAndSend({
@@ -50,6 +114,22 @@ class Remote extends BetterEvents {
     })
   }
 
+  /**
+   * @typedef {Object} restartResult
+   * @property {string} app - The name of the app.
+   * @property {string} dir - The directory of the app.
+   * @property {number} started - The number of started workers.
+   * @property {number} killed - The number of killed workers
+   * @property {number[]} ports - The ports that your app listens to.
+   */
+
+  /**
+   * Restart an app.
+   * @param {string} app - The name of the app.
+   * @param {killOptions} [opt] - Options for the command.
+   * @param {boolean} [immediate] - Resolve the returned promise immediately after the command has been transmitted.
+   * @returns {Promise.<restartResult>}
+   */
   async restart(app, opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
     return this._connectAndSend({
@@ -60,6 +140,18 @@ class Remote extends BetterEvents {
     })
   }
 
+  /**
+   * @typedef {Object} restartAllResult
+   * @property {number} started - The number of started workers.
+   * @property {number} killed - The number of killed workers
+   */
+
+  /**
+   * Restart all apps.
+   * @param {killOptions} [opt] - Options for the command.
+   * @param {boolean} [immediate] - Resolve the returned promise immediately after the command has been transmitted.
+   * @returns {Promise.<restartAllResult>}
+   */
   async restartAll(opt = {}, immediate = false) {
     opt.timeout = translateInfinity(opt.timeout)
     return this._connectAndSend({
@@ -69,6 +161,22 @@ class Remote extends BetterEvents {
     })
   }
 
+  /**
+   * @typedef {Object} infoResult
+   * @property {string} name - The name of the app.
+   * @property {string} dir - Directory of the app.
+   * @property {number[]} ports - Ports that the app uses.
+   * @property {number} pending - Number of pending workers.
+   * @property {number} available - Number of available workers.
+   * @property {number} killed - Number of killed workers.
+   * @property {number} reviveCount - Shows how often the app has been revived.
+   */
+
+  /**
+   * Get detailed information about an app.
+   * @param {string} app - The name of the app.
+   * @returns {Promise.<infoResult>}
+   */
   async info(app) {
     return this._connectAndSend({
       name: 'info',
@@ -76,12 +184,35 @@ class Remote extends BetterEvents {
     })
   }
 
+  /**
+   * @typedef {Object} listAppStats
+   * @property {string} dir - Directory of the app.
+   * @property {number[]} ports - Ports that the app uses.
+   * @property {number} pending - Number of pending workers.
+   * @property {number} available - Number of available workers.
+   * @property {number} killed - Number of killed workers.
+   */
+
+  /**
+   * @typedef {Object} listResult
+   * @property {boolean} isResurrectable - Is true if the resurrect command can be used.
+   * @property {{string: listAppStats}} stats - Statistics for each app.
+   */
+
+  /**
+   * Get a list of all running apps.
+   * @returns {Promise.<listResult>}
+   */
   async list() {
     return this._connectAndSend({
       name: 'list'
     })
   }
 
+  /** 
+   * Stop the z1 daemon.
+   * @returns {Promise.<void>}
+   */
   async exit() {
     await this._connectAndSend({
       name: 'exit'
@@ -90,6 +221,10 @@ class Remote extends BetterEvents {
     await this._waitForDisconnect()
   }
 
+  /**
+   * Upgrade the z1 daemon to a new version.
+   * @returns {Promise.<void>}
+   */
   async upgrade() {
     this._impossibleInZ1()
 
@@ -97,18 +232,30 @@ class Remote extends BetterEvents {
     await this.resurrect()
   }
 
+  /**
+   * Throws an error if called within a subprocess/worker of z1.
+   * @returns {void}
+   */
   _impossibleInZ1() {
     if (process.env.APPNAME && this.ready) {
       throw new Error('It is impossible to use this operation within apps that are managed with z1')
     }
   }
 
+  /**
+   * Returns a promise that resolves when the ping command was successful.
+   * @returns {Promise.<*>}
+   */
   async _ping() {
     return this._send({
       name: 'ping'
     })
   }
 
+  /**
+   * Returns a promise that resolves when the daemon is not available anymore.
+   * @returns {Promise.<void>}
+   */
   async _waitForDisconnect() {
     while (1) {
       try {
@@ -123,6 +270,10 @@ class Remote extends BetterEvents {
     }
   }
 
+  /**
+   * Returns a promise that resolves as soon as the daemon is available.
+   * @returns {Promise.<void>}
+   */
   async _waitForConnection() {
     while (1) {
       try {
@@ -138,6 +289,11 @@ class Remote extends BetterEvents {
     }
   }
 
+  /**
+   * Sends a command to the server.
+   * @param {Object} object - An object representing the command.
+   * @returns {Promise.<*>} - The result of the command.
+   */
   async _send(object) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
@@ -175,11 +331,20 @@ class Remote extends BetterEvents {
     })
   }
 
+  /**
+   * Sends a command to the daemon. It starts the daemon if it is not running.
+   * @param {Object} object - An object representing the command.
+   * @returns {Promise.<*>} - The result of the command.
+   */
   async _connectAndSend(object) {
     await this._connect()
     return this._send(object)
   }
 
+  /**
+   * Tries to connect to the daemon. It starts the daemon if it is not running.
+   * @returns {Promise.<void>}
+   */
   async _connect() {
     try {
       await this._ping()
@@ -201,6 +366,10 @@ class Remote extends BetterEvents {
     await this._startDaemon()
   }
 
+  /**
+   * Start the daemon.
+   * @returns {Promise.<void>} - Returns a promise that resolves after the daemon is started.
+   */
   async _startDaemon() {
     const start = new Promise((resolve, reject) => {
       const z1Path = path.join(__dirname, '..', '..')
@@ -225,6 +394,11 @@ class Remote extends BetterEvents {
   }
 }
 
+/**
+ * If the value equals infinity then "infinity" (string) is returned.
+ * @param {string|number} value 
+ * @returns {string|number}
+ */
 function translateInfinity(value) {
   if (value && !isFinite(+value)) {
     return 'infinity'

@@ -62,13 +62,13 @@ class Worker extends BetterEvents {
       }
 
       w.on('listening', listening)
-    } else {
-      w.on('message', message => {
-        if (message === 'ready') {
-          this.emit('available')
-        }
-      })
     }
+
+    w.on('message', message => {
+      if (message === 'ready') {
+        this.emit('available')
+      }
+    })
 
     // states
     this.once('available', () => {
