@@ -1,4 +1,3 @@
-const BetterEvents = require('better-events')
 const xTime = require('x-time')
 const net = require('net')
 const fs = require('fs')
