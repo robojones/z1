@@ -11,7 +11,12 @@ const StringDecoder = require('string_decoder').StringDecoder
  * @class
  */
 class Remote {
+  /**
+   * Create a new Remote instance.
+   * @param {string} socketFile - Path to the socket file of the z1 daemon.
+   */
   constructor(socketFile) {
+    /** @type {string} */
     this.socketFile = socketFile
   }
 
