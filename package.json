@@ -32,20 +32,20 @@
   },
   "homepage": "https://github.com/robojones/z1#readme",
   "devDependencies": {
-    "eslint": "^4.2.0",
+    "eslint": "^4.5.0",
     "eslint-config-ultra": "^0.4.5",
-    "mocha": "^3.2.0"
+    "mocha": "^3.5.0"
   },
   "dependencies": {
-    "better-events": "^1.3.1",
+    "better-events": "^1.3.7",
     "commander": "^2.11.0",
-    "leftpad": "^0.0.0",
+    "leftpad": "^0.0.1",
     "mkdirp": "^0.5.1",
     "rightpad": "^1.0.1",
     "save-on-change": "^1.0.7",
     "smart-promisify": "^1.0.2",
-    "tail": "^1.2.1",
+    "tail": "^1.2.2",
     "var-server": "^1.0.2",
-    "x-time": "^1.1.1"
+    "x-time": "^1.1.7"
   }
 }
