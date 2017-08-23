@@ -1,2 +1,0 @@
-require('./log')
-require('./startWorkers')
