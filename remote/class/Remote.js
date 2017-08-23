@@ -222,7 +222,7 @@ class Remote {
   }
 
   /**
-   * Upgrade the z1 daemon to a new version.
+   * Upgrade the z1 daemon to a new version. Do not call this in a child process of z1!
    * @returns {Promise.<void>}
    */
   async upgrade() {
