@@ -41,8 +41,8 @@ class Remote {
 
   /**
    * Start the apps that were started before exit.
-   * @param {boolean} immediate -- Resolve the returned promise immediately after the command has been transmitted.
-   * @param {Promise.<resurrectResult>}
+   * @param {boolean} [immediate] -- Resolve the returned promise immediately after the command has been transmitted.
+   * @returns {Promise.<resurrectResult>}
    */
   async resurrect(immediate = false) {
     this._impossibleInZ1()
