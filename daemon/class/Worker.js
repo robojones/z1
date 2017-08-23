@@ -1,11 +1,26 @@
 const cluster = require('cluster')
-const BetterEvents = require('better-events')
+const { BetterEvents } = require('better-events')
 const path = require('path')
 
+/** @type {{string: Worker}} */
 const workers = {}
+/** @type {Worker[]} */
 const workerList = []
 
+/**
+ * Class representing a worker process.
+ * @class
+ * @extends BetterEvents
+ */
 class Worker extends BetterEvents {
+  /**
+   * Create a new Worker instance.
+   * @param {string} dir - Directory of the worker.
+   * @param {string} file - Main file of the worker.
+   * @param {string} name - Name of the app.
+   * @param {number[]} ports - Ports that the worker listens to.
+   * @param {{string: string}} env - Environment variables for the worker.
+   */
   constructor(dir, file, name, ports, env) {
     super()
 
@@ -13,7 +28,7 @@ class Worker extends BetterEvents {
     this.file = file
     this.name = name // needed to kill workers without app
     this.ports = ports
-    this.state = 0
+    this.state = Worker.PENDING
 
     // change cwd
     const owd = process.cwd()
@@ -45,6 +60,13 @@ class Worker extends BetterEvents {
       this.emit('exit', code, signal)
     })
 
+    const available = () => {
+      if (this.state < Worker.AVAILABLE) {
+        this.state = Worker.AVAILABLE
+        this.emit('available')
+      }
+    }
+
     if (ports.length) {
       const portQueue = ports.slice()
 
@@ -56,8 +78,7 @@ class Worker extends BetterEvents {
 
         if (!portQueue.length) {
           this.removeListener('listening', listening)
-
-          this.emit('available')
+          available()
         }
       }
 
@@ -66,24 +87,23 @@ class Worker extends BetterEvents {
 
     w.on('message', message => {
       if (message === 'ready') {
-        this.emit('available')
-      }
-    })
-
-    // states
-    this.once('available', () => {
-      if (this.state < Worker.AVAILABLE) {
-        this.state = Worker.AVAILABLE
+        available()
       }
     })
   }
 
+  /**
+   * Kill the worker process.
+   * @param {string} [signal] - Kill signal (Default: SIGTERM).
+   * @param {*} time - Time until force-kill.
+   * @returns {boolean} - Returns true if the worker process is still connected.
+   */
   kill(signal = 'SIGTERM', time) {
     this.state = Worker.KILLED
 
     const w = this.w
 
-    if (!w) {
+    if (!w || !w.isConnected()) {
       return false
     }
 
