@@ -244,10 +244,10 @@ class Remote {
 
   /**
    * Returns a promise that resolves when the ping command was successful.
-   * @returns {Promise.<*>}
+   * @returns {Promise.<void>}
    */
   async _ping() {
-    return this._send({
+    await this._send({
       name: 'ping'
     })
   }
