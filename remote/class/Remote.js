@@ -375,16 +375,22 @@ class Remote {
    * Start the daemon.
    * @returns {Promise.<void>} - Returns a promise that resolves after the daemon is started.
    */
-  async _startDaemon() {
+  async _startDaemon(options) {
     const start = new Promise((resolve, reject) => {
       const z1Path = path.join(__dirname, '..', '..')
       const file = path.join(z1Path, 'daemon', 'main.js')
-      const node = process.argv[0]
+      let node = process.argv[0]
 
-      const p = cp.spawn(node, [file], {
+      if (process.env.NODE_ENV === 'test') {
+        node = 'istanbul cover _mocha'
+      }
+
+      const spawnOptions = Object.assign({
         stdio: 'ignore',
         detached: true
-      })
+      }, options)
+
+      const p = cp.spawn(node, [file], spawnOptions)
 
       p.once('error', reject)
 
