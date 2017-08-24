@@ -1,6 +1,5 @@
 {
-  "name": "basic",
-  "ports": [8080],
+  "name": "ready",
   "main": "server.js",
   "workers": 2
 }
