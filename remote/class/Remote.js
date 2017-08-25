@@ -381,10 +381,6 @@ class Remote {
       const file = path.join(z1Path, 'daemon', 'main.js')
       let node = process.argv[0]
 
-      if (process.env.NODE_ENV === 'test') {
-        node = 'istanbul cover _mocha'
-      }
-
       const spawnOptions = Object.assign({
         stdio: 'ignore',
         detached: true
