@@ -34,7 +34,7 @@
   "devDependencies": {
     "eslint": "^4.5.0",
     "eslint-config-ultra": "^0.4.5",
-    "istanbul": "^0.4.5",
+    "istanbul": "v1.1.0-alpha.1",
     "mocha": "^3.5.0"
   },
   "dependencies": {
