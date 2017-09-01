@@ -4,6 +4,7 @@ const fs = require('fs')
 const cp = require('child_process')
 const path = require('path')
 const promisify = require('smart-promisify')
+const { once } = require('better-events')
 const StringDecoder = require('string_decoder').StringDecoder
 
 /**
@@ -376,28 +377,26 @@ class Remote {
    * @returns {Promise.<void>} - Returns a promise that resolves after the daemon is started.
    */
   async _startDaemon(options) {
-    const start = new Promise((resolve, reject) => {
-      const z1Path = path.join(__dirname, '..', '..')
-      const file = path.join(z1Path, 'daemon', 'main.js')
-      let node = process.argv[0]
+    const z1Path = path.join(__dirname, '..', '..')
+    const file = path.join(z1Path, 'daemon', 'main.js')
+    let node = process.argv[0]
 
-      const spawnOptions = Object.assign({
-        stdio: 'ignore',
-        detached: true
-      }, options)
+    const spawnOptions = Object.assign({
+      stdio: 'ignore',
+      detached: true
+    }, options)
 
-      const p = cp.spawn(node, [file], spawnOptions)
+    const p = cp.spawn(node, [file], spawnOptions)
 
-      p.once('error', reject)
+    const error = once(p, 'error')
 
-      p.once('exit', code => {
-        reject(new Error('daemon exited with code:', code))
-      })
-
-      p.unref()
+    const exit = once(p, 'exit').then(code => {
+      throw new Error('daemon exited with code:', code)
     })
 
-    await Promise.race([start, this._waitForConnection()])
+    p.unref()
+
+    await Promise.race([error, exit, this._waitForConnection()])
   }
 }
 
