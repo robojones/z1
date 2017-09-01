@@ -5,7 +5,7 @@
   "description": "Node.js cluster manager",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha",
+    "test": "z1 exit && rm ~/.z1/sick.sock && istanbul cover ./daemon/main.js --dir ./coverage/daemon & istanbul cover _mocha --dir ./coverage/mocha",
     "lint": "node_modules/eslint/bin/eslint.js ."
   },
   "bin": "cli/main.js",
@@ -34,20 +34,21 @@
   "devDependencies": {
     "eslint": "^4.5.0",
     "eslint-config-ultra": "^0.4.5",
-    "istanbul": "v1.1.0-alpha.1",
+    "istanbul": "1.1.0-alpha.1",
     "mocha": "^3.5.0"
   },
   "dependencies": {
-    "better-events": "^1.3.7",
+    "better-events": "^3.0.4",
+    "command-test": "^1.0.0",
     "commander": "^2.11.0",
     "leftpad": "^0.0.1",
     "mkdirp": "^0.5.1",
     "mz": "^2.6.0",
     "rightpad": "^1.0.1",
     "save-on-change": "^1.0.7",
-    "smart-promisify": "^1.0.2",
+    "smart-promisify": "^1.0.4",
     "tail": "^1.2.2",
     "var-server": "^1.0.2",
-    "x-time": "^1.1.7"
+    "x-time": "^1.1.8"
   }
 }
