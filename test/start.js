@@ -1,14 +1,13 @@
 const xTime = require('x-time')
 const verifyApp = require('./lib/verifyApp')
 const z1 = require('..')
+const {
+  works,
+  fails
+} = require('./lib/command')
 
 describe('z1 start', function () {
-  const {
-    works,
-    fails
-  } = require('command-test')
-
-  this.timeout(10000)
+  this.timeout(15000)
 
   beforeEach(function () {
     this.apps = []
