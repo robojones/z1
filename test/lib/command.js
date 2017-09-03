@@ -31,7 +31,6 @@ function modify(cmd) {
  */
 function works(cmd) {
   cmd = modify(cmd)
-  console.log(cmd)
   return command.works(cmd)
 }
 
@@ -41,7 +40,6 @@ function works(cmd) {
  */
 function fails(cmd) {
   cmd = modify(cmd)
-  console.log(cmd)
   return command.fails(cmd)
 }
 
