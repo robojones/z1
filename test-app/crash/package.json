@@ -1,0 +1,5 @@
+{
+  "name": "crash",
+  "main": "server.js",
+  "workers": 1
+}
