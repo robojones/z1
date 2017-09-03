@@ -5,5 +5,9 @@ before_install:
   - npm link
 after_success:
   - istanbul report
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < coverage/lcov.info
+  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+  - npm publish
 after_failure:
   - cat ~/.z1/z1/*
