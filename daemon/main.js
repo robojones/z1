@@ -1,6 +1,6 @@
-const autoSave = require('save-on-change')
 const path = require('path')
 const fs = require('fs')
+const getConfig = require('./module/getConfig')
 
 const pack = require('./../package.json')
 const z1Dir = path.join(process.env.HOME, '.z1')
@@ -24,17 +24,7 @@ const Worker = require('./class/Worker')
 Worker.errorHandler = handle
 const remoteServer = require('./module/remoteServer')
 
-const config = autoSave('config.json', err => {
-  if (err) {
-    handle(err)
-  }
-})
-
-config.version = pack.version
-
-if (!config.apps) {
-  config.apps = []
-}
+const config = getConfig(pack.version)
 
 let operation = null
 

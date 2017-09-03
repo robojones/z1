@@ -41,7 +41,7 @@ class LogManager extends BetterEvents {
    */
   get(id) {
     if (!this.streams[id]) {
-      const s = this.streams[id] = {
+      this.streams[id] = {
         log: new stream.PassThrough(),
         err: new stream.PassThrough(),
         logStream: null,

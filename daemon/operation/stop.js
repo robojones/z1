@@ -32,6 +32,7 @@ module.exports = function stop(config, command) {
       if (i !== -1) {
         log.remove(config.apps[i].name)
         config.apps.splice(i, 1)
+        config.save()
       }
 
       resolve({

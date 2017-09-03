@@ -43,6 +43,7 @@ async function start(config, command) {
     opt: command.opt,
     env: command.env
   })
+  config.save()
 
   try {
     return await startWorkers(config, command.dir, pack, command.args, command.env)
@@ -51,6 +52,7 @@ async function start(config, command) {
     const i = config.apps.findIndex(app => app.name === pack.name)
     if (i !== -1) {
       config.apps.splice(i, 1)
+      config.save()
     }
 
     throw err

@@ -1150,10 +1150,6 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
-save-on-change@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/save-on-change/-/save-on-change-1.0.7.tgz#c5293e2ab89d456f83a809b66a480d7205513a64"
-
 semver@^5.3.0:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.4.1.tgz#e059c09d8571f0540823733433505d3a2f00b18e"

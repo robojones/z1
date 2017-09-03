@@ -40,6 +40,8 @@ module.exports = function restart(config, command) {
       config.apps.push(Object.assign({}, app, {
         name: pack.name
       }))
+
+      config.save()
     }
 
     // set default timeout
@@ -69,6 +71,7 @@ module.exports = function restart(config, command) {
           // remove old version
           const oldIndex = config.apps.findIndex(app => app.name === command.app)
           config.apps.splice(oldIndex, 1)
+          config.save()
         }
 
         data.killed = killed.length

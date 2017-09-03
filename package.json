@@ -44,7 +44,6 @@
     "leftpad": "^0.0.1",
     "mkdirp-promise": "^5.0.1",
     "rightpad": "^1.0.1",
-    "save-on-change": "^1.0.7",
     "smart-promisify": "^1.0.4",
     "tail": "^1.2.2",
     "x-time": "^1.1.8"
