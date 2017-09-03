@@ -1,13 +1,10 @@
 const BetterEvents = require('better-events')
-const fs = require('fs')
 const path = require('path')
+const fs = require('fs')
 
-const Tube = require('./Tube')
+const stream = require('stream')
 const formatDate = require('./../snippet/formatDate')
 
-const streams = {}
-
-const DAY = 1000 * 60 * 60 * 24
 const APPEND = {
   flags: 'a'
 }
@@ -15,66 +12,101 @@ const NOEND = {
   end: false
 }
 
+/**
+ * @typedef streams
+ * @property {stream.PassThrough} log
+ * @property {stream.PassThrough} err
+ * @property {stream.Writable} logStream
+ * @property {stream.Writable} errStream
+ * @property {*} timeout
+ */
+
+/**
+ * Class representing a log manager.
+ */
 class LogManager extends BetterEvents {
+  /**
+   * Create a new LogManager instance.
+   */
+  constructor() {
+    super()
+
+    this.streams = {}
+  }
+
+  /**
+   * Get the streams for an app.
+   * @property {string} - The id of the app.
+   * @returns {streams} 
+   */
   get(id) {
-    if (streams[id]) {
-      return streams[id]
-    }
-
-    const s = streams[id] = {
-      log: new Tube(),
-      err: new Tube(),
-      logStream: null,
-      errStream: null,
-      interval: null
-    }
-
-    this.collect('error', s.log)
-    this.collect('error', s.err)
-
-    return s
-  }
-
-  setup(id, dir) {
-    const stuff = this.get(id)
-
-    const connect = () => {
-      const d = formatDate()
-
-      const logFile = path.resolve(path.join(dir || '', d + '-log.txt'))
-      const errFile = path.resolve(path.join(dir || '', d + '-error.txt'))
-
-      const log = fs.createWriteStream(logFile, APPEND)
-      const err = fs.createWriteStream(errFile, APPEND)
-
-      log.on('end', () => console.log('log', id, 'closed'))
-
-      this.collect('error', log)
-      this.collect('error', err)
-
-      stuff.log.pipe(log, NOEND)
-      stuff.err.pipe(err, NOEND)
-
-      if (stuff.logStream) {
-        stuff.logStream.end()
-        stuff.errStream.end()
+    if (!this.streams[id]) {
+      const s = this.streams[id] = {
+        log: new stream.PassThrough(),
+        err: new stream.PassThrough(),
+        logStream: null,
+        errStream: null,
+        timeout: null
       }
-
-      stuff.logStream = log
-      stuff.errStream = err
     }
 
-    clearInterval(stuff.interval)
-
-    connect()
-
-    stuff.interval = setInterval(connect, DAY)
-
-    return stuff
+    return this.streams[id]
   }
 
+  /**
+   * Sets up the streams for the logs.
+   * @param {string} id - The id of the app. 
+   * @param {string} dir - The directory for the logs.
+   * @param {Date} date - The current date.
+   */
+  setup(id, dir = '') {
+    const streams = this.get(id)
+
+    // End old streams and cancel old log rotation.
+    clearTimeout(streams.timeout)
+
+    if (streams.logStream) {
+      streams.logStream.end()
+      streams.errStream.end()
+    }
+
+    const dateString = formatDate(new Date())
+
+    // Paths to the files.
+    const logFile = path.resolve(dir, dateString + '-log.txt')
+    const errFile = path.resolve(dir, dateString + '-error.txt')
+
+    // WriteStreams for the files.
+    streams.logStream = fs.createWriteStream(logFile, APPEND)
+    streams.errStream = fs.createWriteStream(errFile, APPEND)
+
+    // TODO: Handle errors (try to reopen the streams)
+
+    // Pipe the PassThrough streams into the WriteStreams.
+    streams.log.pipe(streams.logStream, NOEND)
+    streams.err.pipe(streams.errStream, NOEND)
+
+    const nextDay = new Date()
+    nextDay.setUTCDate(nextDay.getDate() + 1)
+    nextDay.setUTCHours(0)
+    nextDay.setUTCMinutes(0)
+    nextDay.setUTCSeconds(0)
+    nextDay.setUTCMilliseconds(0)
+
+    streams.timeout = setTimeout(() => {
+      this.setup(id, dir)
+    }, nextDay - Date.now())
+
+    return streams
+  }
+
+  /**
+   * Removes the streams for a app. Returns true if the id was found and removed.
+   * @param {string} id - The id of the app.
+   * @returns {boolean}
+   */
   remove(id) {
-    if (streams[id]) {
+    if (this.streams[id]) {
       const stuff = this.get(id)
 
       stuff.logStream.end()
@@ -83,9 +115,9 @@ class LogManager extends BetterEvents {
       stuff.log.end()
       stuff.err.end()
 
-      clearInterval(stuff.interval)
+      clearTimeout(stuff.timeout)
 
-      delete streams[id]
+      delete this.streams[id]
 
       return true
     }
