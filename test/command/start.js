@@ -7,24 +7,21 @@ const {
 } = require('../lib/command')
 
 describe('start', function () {
-  this.timeout(15000)
-
-  beforeEach(function () {
-    this.apps = []
-  })
-
-  afterEach(async function () {
-    for (let i = 0; i < this.apps.length; i += 1) {
-      await z1.stop(this.apps[i])
-    }
-  })
-
   it('should start the basic app with all options', async function () {
     this.apps.push('huhn')
     await works('z1 start test-app/basic --name huhn --ports 5050 --workers 1 --output ~/asdf')
 
     await verifyApp('huhn', {
       ports: [5050],
+      available: 1
+    })
+  })
+
+  it('should pass the arguments behind "--" to the app', async function () {
+    this.apps.push('argv')
+    await works('z1 start test-app/argv -- 8080')
+    await verifyApp('argv', {
+      ports: [8080],
       available: 1
     })
   })

@@ -1,0 +1,6 @@
+{
+  "name": "argv",
+  "ports": [8080],
+  "main": "server.js",
+  "workers": 1
+}
