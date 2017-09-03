@@ -40,7 +40,7 @@ let operation = null
 
 const server = createServer('sick.sock', command => {
   if (process.env.NODE_ENV === 'development') {
-    log('run command', command)
+    log('daemon: run command', command.name)
   }
 
   if (!operation.hasOwnProperty(command.name)) {
@@ -66,3 +66,5 @@ operation = {
   ping: require('./operation/ping'),
   exit: require('./operation/exit')(server)
 }
+
+console.log('daemon: daemon started')
