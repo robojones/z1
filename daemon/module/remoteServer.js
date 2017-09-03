@@ -7,7 +7,7 @@ const OPT = {
   allowHalfOpen: true
 }
 
-module.exports = (filename, run) => {
+function remoteServer(filename, run) {
   const file = path.resolve(filename)
 
   const server = net.createServer(OPT, socket => {
@@ -59,11 +59,12 @@ module.exports = (filename, run) => {
 
   server.on('error', err => {
     handle(err)
-    log.get('z1').err.once('close', () => {
-      process.exit(1)
-    })
-    log.remove('z1')
+
+    // try to restart server
+    remoteServer(filename, run)
   })
 
-  return server
+  remoteServer.server = server
 }
+
+module.exports = remoteServer

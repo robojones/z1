@@ -1,6 +1,8 @@
-module.exports = server => {
+const remoteServer = require('../module/remoteServer')
+
+module.exports = () => {
   function exit() {
-    server.close(() => {
+    remoteServer.server.close(() => {
       process.exit()
     })
 

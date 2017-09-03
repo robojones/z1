@@ -22,7 +22,7 @@ process.on('uncaughtException', handle)
 
 const Worker = require('./class/Worker')
 Worker.errorHandler = handle
-const createServer = require('./module/remoteServer')
+const remoteServer = require('./module/remoteServer')
 
 const config = autoSave('config.json', err => {
   if (err) {
@@ -38,7 +38,7 @@ if (!config.apps) {
 
 let operation = null
 
-const server = createServer('sick.sock', command => {
+remoteServer('sick.sock', command => {
   if (process.env.NODE_ENV === 'development') {
     log('daemon: run command', command.name)
   }
@@ -64,7 +64,7 @@ operation = {
   info: require('./operation/info'),
   list: require('./operation/list'),
   ping: require('./operation/ping'),
-  exit: require('./operation/exit')(server)
+  exit: require('./operation/exit')()
 }
 
 console.log('daemon: daemon started')
