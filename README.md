@@ -68,6 +68,7 @@ you need to add a few things to your
 4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. The default value is the number of CPU-cores in your system.
 5. __output__ _(optional)_ - a directory for the log and error files. (Default: `~/.z1/<yourAppname>`)
 6. __devPorts__ _(optional)_ - ports for [development](#development)
+7. __devWorkers__ _(optional)_ - workers for [development](#development)
 
 __Important:__
 If you app does not use any ports, you must require z1 in your app and call the [z1.ready](#z1ready) method.
@@ -86,7 +87,7 @@ Example:
 ### Development
 
 If you are running z1 locally, you can set the `NODE_ENV` environment variable to `'development'`.
-This will cause z1 to use the `devPorts` (if specified) instead of the `ports` property from the `package.json`.
+This will cause z1 to use the `devPorts` and `devWorkers` (if specified) instead of the `ports` and `workers` properties from the `package.json`.
 The default timeout for __stop__ and __restart__ will be set to 0ms.
 
 
