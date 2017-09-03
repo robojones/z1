@@ -81,4 +81,13 @@ describe('start', function () {
   it('should not accept "z1" as appname', async function () {
     await fails('z1 start test-app/z1')
   })
+
+  it('should exit immediately if --immediate is set', async function () {
+    this.apps.push('basic')
+    await works('z1 start test-app/basic --immediate')
+
+    verifyApp('basic', {
+      pending: 2
+    })
+  })
 })
