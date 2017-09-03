@@ -1,51 +1,60 @@
 const startWorkers = require('./../module/startWorkers')
 const getPack = require('./../module/getPack')
 
-/*
-command: start {
-  dir // absolute path to dir
-  opt: {
-    name
-    ports
-    workers
-    output
-  },
-  args
-  env
-}
-*/
+/**
+ * @typedef startOptions
+ * @property {string} name - The name of the app.
+ * @property {number[]} ports - An array of ports that the app uses.
+ * @property {number} workers - The number of workers to spawn.
+ * @property {string} output - The directory for the logs.
+ */
 
-module.exports = function start(config, command) {
-  return new Promise((resolve, reject) => {
-    if (global.isResurrectable) {
-      global.isResurrectable = false
-      config.apps = []
-    }
+/**
+ * @typedef startCommandObject
+ * @property {string} dir - The absolute path to the directory of the app.
+ * @property {startOptions} opt - Options that overwrite the ones from the package.json.
+ * @property {string[]} args - Arguments for the worker processes.
+ * @property {{string: string}} env - Environment variables for the worker process.
+ */
 
-    // (re)load package
-    const pack = getPack(command.dir, command.opt, command.env)
+/**
+ * Start the app specified in the command object.
+ * @param {config} config - The z1-config-object.
+ * @param {startCommandObject} command - An object containing the details of the command.
+ */
+async function start(config, command) {
+  if (global.isResurrectable) {
+    global.isResurrectable = false
+    config.apps = []
+  }
 
-    // check for duplicate name
-    if (config.apps.some(app => app.name === pack.name)) {
-      throw new Error(`an app called "${pack.name}" is already running.`)
-    }
+  // (re)load package
+  const pack = getPack(command.dir, command.opt, command.env)
 
-    config.apps.push({
-      dir: command.dir,
-      name: pack.name,
-      args: command.args,
-      opt: command.opt,
-      env: command.env
-    })
+  // check for duplicate name
+  if (config.apps.some(app => app.name === pack.name)) {
+    throw new Error(`an app called "${pack.name}" is already running.`)
+  }
 
-    return startWorkers(config, command.dir, pack, command.args, command.env).then(resolve).catch(err => {
-      // remove app from config
-      const i = config.apps.findIndex(app => app.name === pack.name)
-      if (i !== -1) {
-        config.apps.splice(i, 1)
-      }
-
-      reject(err)
-    })
+  config.apps.push({
+    dir: command.dir,
+    name: pack.name,
+    args: command.args,
+    opt: command.opt,
+    env: command.env
   })
+
+  try {
+    return await startWorkers(config, command.dir, pack, command.args, command.env)
+  } catch (err) {
+    // remove app from config
+    const i = config.apps.findIndex(app => app.name === pack.name)
+    if (i !== -1) {
+      config.apps.splice(i, 1)
+    }
+
+    throw err
+  }
 }
+
+module.exports = start

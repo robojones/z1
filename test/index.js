@@ -43,6 +43,6 @@ describe('z1', function () {
 
     require('./command/stop')
     require('./command/invalid')
-    // require('./command/start')
+    require('./command/start')
   })
 })
