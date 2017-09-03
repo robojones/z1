@@ -26,3 +26,22 @@ after(async function () {
 
   await once(daemon, 'exit')
 })
+
+describe('z1', function () {
+  describe('command', function () {
+    this.timeout(15000)
+
+    beforeEach(function () {
+      this.apps = []
+    })
+
+    afterEach(async function () {
+      for (let i = 0; i < this.apps.length; i += 1) {
+        await z1.stop(this.apps[i])
+      }
+    })
+
+    require('./command/invalid')
+    require('./command/start')
+  })
+})
