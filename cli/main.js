@@ -9,11 +9,11 @@ const Tail = require('tail').Tail
 const leftpad = require('leftpad')
 const rightpad = require('rightpad')
 
-const z1 = require('../remote/index')
-const spam = require('./message')
-const features = require('./features')
-const parser = require('./parser')
-const version = require('./version')
+const z1 = require('..')
+const features = require('./lib/features')
+const spam = require('./lib/message')
+const parser = require('./lib/parser')
+const version = require('./lib/version')
 
 const SPACER = '--'
 
