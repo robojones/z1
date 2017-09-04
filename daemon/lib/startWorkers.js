@@ -43,7 +43,6 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
 
   const exitPromises = []
   const availablePromises = []
-  const n = []
 
   // setup logs
   await mkdirp(output)
