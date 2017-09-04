@@ -1,4 +1,3 @@
-const util = require('util')
 const OrigConnection = require('../../../lib/class/Connection')
 const logify = require('../logify')
 
@@ -39,6 +38,10 @@ class Connection extends OrigConnection {
    * @param {*} msg - The message to log.
    */
   log(...msg) {
+    if (this.isDestroyed) {
+      return
+    }
+
     const data = {
       type: 'log',
       log: logify(...msg)
