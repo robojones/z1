@@ -3,3 +3,5 @@ function z1Logs(z1) {
     process.stdout.write(log)
   })
 }
+
+module.exports = z1Logs
