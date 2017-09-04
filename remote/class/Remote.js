@@ -8,7 +8,7 @@ const {
   once,
   BetterEvents
 } = require('better-events')
-const Connection = require('./Connection')
+const Connection = require('../../lib/class/Connection')
 
 /**
  * A class representing a set of commands to control z1.
@@ -318,6 +318,13 @@ class Remote extends BetterEvents {
           resolve(message.result)
         } else if (message.type === 'log') {
           this.emit('log', message.log, message)
+        } else if (message.type === 'error') {
+          // reassemble the error
+          const error = new Error(message.error.message)
+          error.stack = message.error.stack
+          error.code = message.error.code
+
+          reject(error)
         }
       })
 
