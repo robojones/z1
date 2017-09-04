@@ -1,61 +1,12 @@
-const { BetterEvents } = require('better-events')
 const util = require('util')
-const { StringDecoder } = require('string_decoder')
+const OrigConnection = require('../../../lib/class/Connection')
+const logify = require('../logify')
 
 /**
  * Class representing a CLI connection.
  * @class
  */
-class Connection extends BetterEvents {
-  /**
-   * Create a new CLI connection.
-   * @param {*} socket 
-   */
-  constructor(socket) {
-    super()
-
-    this.socket = socket
-    this._message = ''
-
-    const decoder = new StringDecoder()
-
-    socket.on('data', async chunk => {
-      this._message += decoder.write(chunk)
-
-      this._parse()
-    })
-
-    socket.once('end', async () => {
-      this._message += decoder.end()
-      this._parse()
-    })
-  }
-
-  /**
-   * Parses this._message and emits the "message" event if one was received.
-   */
-  _parse() {
-    const i = this._message.indexOf('\n')
-    console.log(`message: "${this._message}"`)
-    console.log('index: ', i)
-    if (i === -1) {
-      return
-    }
-
-    const msg = this._message.substr(0, i)
-    this._message = this._message.substr(i + 1)
-
-    try {
-      const obj = JSON.parse(msg)
-      console.log('obj:', obj)
-      this.emit('message', obj)
-    } catch (error) {
-      this.emit('error', error)
-    }
-
-    this._parse()
-  }
-
+class Connection extends OrigConnection {
   /**
    * Send a json response and close the socket.
    * @param {Error} error - An error if one occured.
@@ -88,11 +39,9 @@ class Connection extends BetterEvents {
    * @param {*} msg - The message to log.
    */
   log(...msg) {
-    const log = msg.map(part => util.inspect(part))
-
     const data = {
       type: 'log',
-      log: log.join(' ')
+      log: logify(...msg)
     }
 
     this.socket.write(JSON.stringify(data) + '\n')
