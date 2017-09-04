@@ -249,7 +249,6 @@ program
   .option('-m, --minimal', 'minimalistic list (easy to parse)')
   .action(opt => {
     z1.list().then(data => {
-      console.log(data)
       const props = Object.keys(data.stats)
 
       if (opt.minimal) {
