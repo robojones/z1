@@ -1,6 +1,13 @@
 # z1
 
 [![Build Status](https://travis-ci.org/robojones/z1.svg?branch=master)](https://travis-ci.org/robojones/z1)
+[![Test Coverage](https://codeclimate.com/github/robojones/z1/badges/coverage.svg)](https://codeclimate.com/github/robojones/z1/coverage)
+
+[![bitHound Code](https://www.bithound.io/github/robojones/z1/badges/code.svg)](https://www.bithound.io/github/robojones/z1)
+[![bitHound Overall Score](https://www.bithound.io/github/robojones/z1/badges/score.svg)](https://www.bithound.io/github/robojones/z1)
+[![bitHound Dependencies](https://www.bithound.io/github/robojones/z1/badges/dependencies.svg)](https://www.bithound.io/github/robojones/z1/master/dependencies/npm)
+[![bitHound Dev Dependencies](https://www.bithound.io/github/robojones/z1/badges/devDependencies.svg)](https://www.bithound.io/github/robojones/z1/master/dependencies/npm)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 __z1__ is a Node.js cluster management program. It works on Linux Debian, Ubuntu, and other Debian based distributions.
 
