@@ -4,19 +4,23 @@ const fs = require('fs')
 const cp = require('child_process')
 const path = require('path')
 const promisify = require('smart-promisify')
-const { once } = require('better-events')
-const StringDecoder = require('string_decoder').StringDecoder
+const {
+  once,
+  BetterEvents
+} = require('better-events')
+const Connection = require('../../lib/class/Connection')
 
 /**
  * A class representing a set of commands to control z1.
  * @class
  */
-class Remote {
+class Remote extends BetterEvents {
   /**
    * Create a new Remote instance.
    * @param {string} socketFile - Path to the socket file of the z1 daemon.
    */
   constructor(socketFile) {
+    super()
     /** @type {string} */
     this.socketFile = socketFile
   }
@@ -303,37 +307,29 @@ class Remote {
   async _send(object) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
-        socket.end(JSON.stringify(object))
-
-        const decoder = new StringDecoder()
-        const message = []
-
-        socket.once('data', chunk => {
-          message.push(decoder.write(chunk))
-        })
-
-        socket.once('end', () => {
-          message.push(decoder.end())
-
-          try {
-            let obj = JSON.parse(message.join(''))
-            if (obj.error) {
-              const err = new Error(obj.error.message)
-              err.stack = obj.error.stack
-              if (obj.error.code) {
-                err.code = obj.error.code
-              }
-              reject(err)
-            } else {
-              resolve(obj.data)
-            }
-          } catch (err) {
-            reject(err)
-          }
-        })
+        object.type = 'command'
+        socket.write(JSON.stringify(object) + '\n')
       })
 
-      socket.on('error', reject)
+      const connection = new Connection(socket)
+
+      connection.on('message', message => {
+        if (message.type === 'result') {
+          resolve(message.result)
+        } else if (message.type === 'log') {
+          this.emit('log', message.log, message)
+        } else if (message.type === 'error') {
+          // reassemble the error
+          const error = new Error(message.error.message)
+          error.stack = message.error.stack
+          error.code = message.error.code
+
+          reject(error)
+        }
+      })
+
+      connection.once('error', reject)
+      socket.once('error', reject)
     })
   }
 

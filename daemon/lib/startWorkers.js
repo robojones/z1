@@ -11,8 +11,9 @@ const NOEND = {
   end: false
 }
 
-module.exports = async function startWorkers(config, dir, pack, args = [], env = {}) {
+module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, command) {
   const workers = []
+  const logString = chunk => command.log(chunk + '')
 
   if (pack.name === 'z1') {
     throw new Error('the name "z1" is invalid')
@@ -62,6 +63,8 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     const w = worker.w
     w.process.stdout.pipe(out.log, NOEND)
     w.process.stderr.pipe(out.err, NOEND)
+    w.process.stdout.on('data', logString)
+    w.process.stderr.on('data', logString)
     w.on('error', handle)
 
     workers.push(worker)
@@ -72,6 +75,11 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     availablePromises.push(worker.once('available'))
 
     worker.once('available').then(async () => {
+      // don't send logs to cli anymore
+      w.process.stdout.removeListener('data', logString)
+      w.process.stderr.removeListener('data', logString)
+
+      // wait to resurrect the worker
       const code = await worker.once('exit')
       if (code) {
         log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)

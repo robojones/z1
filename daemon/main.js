@@ -28,7 +28,7 @@ const config = getConfig(pack.version)
 
 let operation = null
 
-remoteServer('sick.sock', command => {
+remoteServer('sick.sock', (command, connection) => {
   if (process.env.NODE_ENV === 'development') {
     log('daemon: run command', command.name)
   }
@@ -38,11 +38,11 @@ remoteServer('sick.sock', command => {
   }
 
   if (command.immediate) {
-    operation[command.name](config, command).catch(handle)
+    operation[command.name](config, command, connection).catch(handle)
     return Promise.resolve({})
   }
 
-  return operation[command.name](config, command)
+  return operation[command.name](config, command, connection)
 })
 
 operation = {

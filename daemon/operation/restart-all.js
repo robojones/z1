@@ -1,6 +1,6 @@
 const restart = require('./restart')
 
-module.exports = function restartAll(config, command) {
+module.exports = function restartAll(config, command, connection) {
   const q = []
 
   config.apps.forEach(app => {
@@ -8,7 +8,7 @@ module.exports = function restartAll(config, command) {
       app: app.name
     })
 
-    q.push(restart(config, cmd))
+    q.push(restart(config, cmd, connection))
   })
 
   return Promise.all(q).then(stats => {

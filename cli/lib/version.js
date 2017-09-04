@@ -1,6 +1,6 @@
 const path = require('path')
 
-const pack = require('../package.json')
+const pack = require('../../package.json')
 
 module.exports.string = `cli: ${pack.version}`
 module.exports.cli = pack.version

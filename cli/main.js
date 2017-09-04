@@ -9,11 +9,16 @@ const Tail = require('tail').Tail
 const leftpad = require('leftpad')
 const rightpad = require('rightpad')
 
-const z1 = require('../remote/index')
-const spam = require('./message')
-const features = require('./features')
-const parser = require('./parser')
-const version = require('./version')
+const z1 = require('..')
+const features = require('./lib/features')
+const spam = require('./lib/message')
+const parser = require('./lib/parser')
+const version = require('./lib/version')
+const z1Logs = require('./lib/z1-logs')
+const {
+  log,
+  handle
+} = require('./lib/logs')
 
 const SPACER = '--'
 
@@ -23,6 +28,8 @@ if (argv.includes(SPACER)) {
   args = argv.splice(argv.indexOf(SPACER))
   args.shift()
 }
+
+z1Logs(z1)
 
 program
   .version(version.string)
@@ -380,17 +387,3 @@ function getAppName() {
   }
 }
 
-function log(...msg) {
-  if (process.env.DEBUG) {
-    console.log(...msg)
-  }
-}
-
-function handle(err) {
-  if (process.env.DEBUG) {
-    console.error(err)
-  } else {
-    console.error(`\n  error: ${err.message}\n`)
-  }
-  process.exit(1)
-}

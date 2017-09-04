@@ -12,7 +12,7 @@ command {
 }
 */
 
-module.exports = function restart(config, command) {
+module.exports = function restart(config, command, connection) {
   return new Promise((resolve, reject) => {
     if (global.isResurrectable) {
       throw new Error('no apps running')
@@ -58,7 +58,7 @@ module.exports = function restart(config, command) {
     // remember old workers
     const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
-    startWorkers(config, app.dir, pack, app.args, app.env).then(data => {
+    startWorkers(config, app.dir, pack, app.args, app.env, connection).then(data => {
       // kill old workers
       const killed = workers.map(worker => {
         if (worker.kill(command.opt.signal, timeout)) {

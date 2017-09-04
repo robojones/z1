@@ -1,6 +1,6 @@
 const net = require('net')
 const path = require('path')
-const StringDecoder = require('string_decoder').StringDecoder
+const Connection = require('./class/Connection')
 
 const OPT = {
   allowHalfOpen: true
@@ -15,44 +15,24 @@ function remoteServer(filename, run) {
   const file = path.resolve(filename)
 
   const server = net.createServer(OPT, socket => {
-    const decoder = new StringDecoder()
-    const message = []
-
-    socket.json = (err, data) => {
-      const res = {}
-
-      if (err) {
-        res.error = {
-          message: err.message,
-          stack: err.stack,
-          code: err.code
-        }
-      } else {
-        res.data = data
-      }
-
-      socket.end(JSON.stringify(res))
-    }
-
     socket.on('error', handle)
 
-    socket.once('data', chunk => {
-      message.push(decoder.write(chunk))
+    const connection = new Connection(socket)
+
+    connection.on('error', error => {
+      connection.json(error)
     })
 
-    socket.once('end', () => {
-      message.push(decoder.end())
+    connection.on('message', async (data) => {
+      if (data.type !== 'command') {
+        return
+      }
 
       try {
-        let obj = JSON.parse(message.join(''))
-
-        run(obj).then(data => {
-          socket.json(null, data)
-        }).catch(err => {
-          socket.json(err)
-        })
+        const result = await run(data, connection)
+        connection.json(null, result)
       } catch (err) {
-        socket.json(err)
+        connection.json(err)
       }
     })
   })
@@ -70,5 +50,7 @@ function remoteServer(filename, run) {
 
   remoteServer.server = server
 }
+
+remoteServer.Connection = Connection
 
 module.exports = remoteServer
