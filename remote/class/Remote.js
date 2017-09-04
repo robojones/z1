@@ -303,29 +303,29 @@ class Remote {
   async _send(object) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
-        socket.end(JSON.stringify(object))
+        socket.write(JSON.stringify(object) + '\n')
 
         const decoder = new StringDecoder()
-        const message = []
+        let message = ''
 
         socket.once('data', chunk => {
-          message.push(decoder.write(chunk))
+          message += decoder.write(chunk)
         })
 
         socket.once('end', () => {
-          message.push(decoder.end())
+          message += decoder.end()
 
           try {
-            let obj = JSON.parse(message.join(''))
-            if (obj.error) {
+            let obj = JSON.parse(message)
+            if (obj.type === 'error') {
               const err = new Error(obj.error.message)
               err.stack = obj.error.stack
               if (obj.error.code) {
                 err.code = obj.error.code
               }
               reject(err)
-            } else {
-              resolve(obj.data)
+            } else if (obj.type === 'result') {
+              resolve(obj.result)
             }
           } catch (err) {
             reject(err)
