@@ -22,7 +22,7 @@ const getPack = require('../lib/getPack')
  * @param {config} config - The z1-config-object.
  * @param {startCommandObject} command - An object containing the details of the command.
  */
-async function start(config, command) {
+async function start(config, command, connection) {
   if (global.isResurrectable) {
     global.isResurrectable = false
     config.apps = []
@@ -46,7 +46,7 @@ async function start(config, command) {
   config.save()
 
   try {
-    return await startWorkers(config, command.dir, pack, command.args, command.env)
+    return await startWorkers(config, command.dir, pack, command.args, command.env, connection)
   } catch (err) {
     // remove app from config
     const i = config.apps.findIndex(app => app.name === pack.name)
