@@ -29,7 +29,7 @@ function remoteServer(filename, run) {
       }
 
       try {
-        const result = await run(data, socket)
+        const result = await run(data, connection)
         socket.json(null, result)
       } catch (err) {
         socket.json(err)
@@ -50,5 +50,7 @@ function remoteServer(filename, run) {
 
   remoteServer.server = server
 }
+
+remoteServer.Connection = Connection
 
 module.exports = remoteServer
