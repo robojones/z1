@@ -1,5 +1,6 @@
 const util = require('util')
 const fs = require('fs')
+const logify = require('./logify')
 
 const LogManager = require('./class/LogManager')
 
@@ -22,13 +23,7 @@ global.handle = err => {
 
 global.log = (...stuff) => {
   console.log(...stuff)
-  z1Logs.log.write(stuff.map(item => {
-    if (typeof item === 'object' || typeof item === 'undefined') {
-      return util.inspect(item)
-    } else {
-      return item
-    }
-  }).join(' '))
+  z1Logs.log.write(logify(...stuff))
 
   z1Logs.log.write('\n')
 }
