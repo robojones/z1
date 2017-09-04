@@ -57,7 +57,7 @@ class Connection extends BetterEvents {
   /**
    * Send a json response and close the socket.
    * @param {Error} error - An error if one occured.
-   * @param {*} result - The result of the command.
+   * @param {*} [result] - The result of the command.
    */
   json(error, result) {
     let res
@@ -81,6 +81,10 @@ class Connection extends BetterEvents {
     this.socket.end(JSON.stringify(res) + '\n')
   }
 
+  /**
+   * Send a log to the CLI.
+   * @param {*} msg - The message to log.
+   */
   log(...msg) {
     const log = msg.map(part => util.inspect(part))
 

@@ -24,6 +24,10 @@ function remoteServer(filename, run) {
     })
 
     connection.on('message', async (data) => {
+      if (data.type !== 'command') {
+        return
+      }
+
       try {
         const result = await run(data, socket)
         socket.json(null, result)
