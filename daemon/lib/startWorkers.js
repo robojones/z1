@@ -75,6 +75,11 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     availablePromises.push(worker.once('available'))
 
     worker.once('available').then(async () => {
+      // don't send logs to cli anymore
+      w.process.stdout.removeListener('data', logString)
+      w.process.stderr.removeListener('data', logString)
+
+      // wait to resurrect the worker
       const code = await worker.once('exit')
       if (code) {
         log(`worker ${worker.id} of "${worker.name}" crashed. (code: ${code})`)
