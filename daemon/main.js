@@ -42,7 +42,7 @@ remoteServer('sick.sock', (command, connection) => {
     return Promise.resolve({})
   }
 
-  return operation[command.name](config, command)
+  return operation[command.name](config, command, connection)
 })
 
 operation = {
