@@ -13,7 +13,12 @@ const NOEND = {
 
 module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, command) {
   const workers = []
-  const logString = chunk => command.log(chunk + '')
+  const logString = chunk => {
+    if (!command || !command.log) {
+      return
+    }
+    command.log(chunk + '')
+  }
 
   if (pack.name === 'z1') {
     throw new Error('the name "z1" is invalid')
