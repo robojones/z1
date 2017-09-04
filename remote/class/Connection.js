@@ -1,14 +1,13 @@
 const { BetterEvents } = require('better-events')
-const util = require('util')
 const { StringDecoder } = require('string_decoder')
 
 /**
- * Class representing a CLI connection.
+ * Class representing a connection to the daemon.
  * @class
  */
 class Connection extends BetterEvents {
   /**
-   * Create a new CLI connection.
+   * Create a new connection to the daemon.
    * @param {*} socket 
    */
   constructor(socket) {
@@ -36,8 +35,6 @@ class Connection extends BetterEvents {
    */
   _parse() {
     const i = this._message.indexOf('\n')
-    console.log(`message: "${this._message}"`)
-    console.log('index: ', i)
     if (i === -1) {
       return
     }
@@ -54,48 +51,6 @@ class Connection extends BetterEvents {
     }
 
     this._parse()
-  }
-
-  /**
-   * Send a json response and close the socket.
-   * @param {Error} error - An error if one occured.
-   * @param {*} [result] - The result of the command.
-   */
-  json(error, result) {
-    let res
-
-    if (error) {
-      res = {
-        type: 'error',
-        error: {
-          message: error.message,
-          stack: error.stack,
-          code: error.code
-        }
-      }
-    } else {
-      res = {
-        type: 'result',
-        result
-      }
-    }
-
-    this.socket.end(JSON.stringify(res) + '\n')
-  }
-
-  /**
-   * Send a log to the CLI.
-   * @param {*} msg - The message to log.
-   */
-  log(...msg) {
-    const log = msg.map(part => util.inspect(part))
-
-    const data = {
-      type: 'log',
-      log: log.join(' ')
-    }
-
-    this.socket.write(JSON.stringify(data) + '\n')
   }
 }
 

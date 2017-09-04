@@ -30,9 +30,9 @@ function remoteServer(filename, run) {
 
       try {
         const result = await run(data, connection)
-        socket.json(null, result)
+        connection.json(null, result)
       } catch (err) {
-        socket.json(err)
+        connection.json(err)
       }
     })
   })

@@ -4,19 +4,23 @@ const fs = require('fs')
 const cp = require('child_process')
 const path = require('path')
 const promisify = require('smart-promisify')
-const { once } = require('better-events')
-const StringDecoder = require('string_decoder').StringDecoder
+const {
+  once,
+  BetterEvents
+} = require('better-events')
+const Connection = require('./Connection')
 
 /**
  * A class representing a set of commands to control z1.
  * @class
  */
-class Remote {
+class Remote extends BetterEvents {
   /**
    * Create a new Remote instance.
    * @param {string} socketFile - Path to the socket file of the z1 daemon.
    */
   constructor(socketFile) {
+    super()
     /** @type {string} */
     this.socketFile = socketFile
   }
@@ -303,37 +307,22 @@ class Remote {
   async _send(object) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
+        object.type = 'command'
         socket.write(JSON.stringify(object) + '\n')
-
-        const decoder = new StringDecoder()
-        let message = ''
-
-        socket.once('data', chunk => {
-          message += decoder.write(chunk)
-        })
-
-        socket.once('end', () => {
-          message += decoder.end()
-
-          try {
-            let obj = JSON.parse(message)
-            if (obj.type === 'error') {
-              const err = new Error(obj.error.message)
-              err.stack = obj.error.stack
-              if (obj.error.code) {
-                err.code = obj.error.code
-              }
-              reject(err)
-            } else if (obj.type === 'result') {
-              resolve(obj.result)
-            }
-          } catch (err) {
-            reject(err)
-          }
-        })
       })
 
-      socket.on('error', reject)
+      const connection = new Connection(socket)
+
+      connection.on('message', message => {
+        if (message.type === 'result') {
+          resolve(message.result)
+        } else if (message.type === 'log') {
+          this.emit('log', message.log, message)
+        }
+      })
+
+      connection.once('error', reject)
+      socket.once('error', reject)
     })
   }
 
