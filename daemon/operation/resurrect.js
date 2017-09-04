@@ -1,6 +1,6 @@
-const startWorkers = require('./../module/startWorkers')
-const Worker = require('./../class/Worker')
-const getPack = require('./../module/getPack')
+const startWorkers = require('../lib/startWorkers')
+const Worker = require('../lib/class/Worker')
+const getPack = require('../lib/getPack')
 
 global.isResurrectable = true
 

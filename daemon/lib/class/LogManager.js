@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 
 const stream = require('stream')
-const formatDate = require('./../snippet/formatDate')
+const formatDate = require('../formatDate')
 
 const APPEND = {
   flags: 'a'

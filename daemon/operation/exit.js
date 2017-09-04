@@ -1,4 +1,4 @@
-const remoteServer = require('../module/remoteServer')
+const remoteServer = require('../lib/remoteServer')
 
 module.exports = () => {
   function exit() {

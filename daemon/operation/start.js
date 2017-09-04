@@ -1,5 +1,5 @@
-const startWorkers = require('./../module/startWorkers')
-const getPack = require('./../module/getPack')
+const startWorkers = require('../lib/startWorkers')
+const getPack = require('../lib/getPack')
 
 /**
  * @typedef startOptions

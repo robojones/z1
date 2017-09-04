@@ -1,7 +1,7 @@
 const util = require('util')
 const fs = require('fs')
 
-const LogManager = require('./../class/LogManager')
+const LogManager = require('./class/LogManager')
 
 const log = module.exports = new LogManager()
 

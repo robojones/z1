@@ -1,6 +1,6 @@
-const Worker = require('./../class/Worker')
-const startWorkers = require('./../module/startWorkers')
-const getPack = require('./../module/getPack')
+const Worker = require('../lib/class/Worker')
+const startWorkers = require('../lib/startWorkers')
+const getPack = require('../lib/getPack')
 
 /*
 command {

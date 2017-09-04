@@ -1,6 +1,6 @@
-const Worker = require('./../class/Worker')
-const killWorkers = require('./../module/killWorkers')
-const log = require('./../module/log')
+const Worker = require('../lib/class/Worker')
+const killWorkers = require('../lib/killWorkers')
+const log = require('../lib/log')
 
 /*
 command {

@@ -3,7 +3,7 @@ const cpuCount = require('os').cpus().length
 const cluster = require('cluster')
 const mkdirp = require('mkdirp-promise')
 
-const Worker = require('./../class/Worker')
+const Worker = require('../lib/class/Worker')
 const logs = require('./log')
 const killWorkers = require('./killWorkers')
 

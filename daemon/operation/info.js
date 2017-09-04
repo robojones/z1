@@ -1,7 +1,7 @@
-const AppStats = require('./../class/AppStats')
-const Worker = require('./../class/Worker')
+const AppStats = require('../lib/class/AppStats')
+const Worker = require('../lib/class/Worker')
 const states = Worker.states
-const mergePorts = require('./../snippet/mergePorts')
+const mergePorts = require('../lib/mergePorts')
 
 module.exports = function info(config, command) {
   return new Promise(resolve => {

@@ -1,8 +1,8 @@
 const path = require('path')
 const fs = require('fs')
-const getConfig = require('./module/getConfig')
+const getConfig = require('./lib/getConfig')
 
-const pack = require('./../package.json')
+const pack = require('../package.json')
 const z1Dir = path.join(process.env.HOME, '.z1')
 
 try {
@@ -16,13 +16,13 @@ try {
 process.chdir(z1Dir)
 
 // setup global log functions
-require('./module/log')
+require('./lib/log')
 
 process.on('uncaughtException', handle)
 
-const Worker = require('./class/Worker')
+const Worker = require('./lib/class/Worker')
 Worker.errorHandler = handle
-const remoteServer = require('./module/remoteServer')
+const remoteServer = require('./lib/remoteServer')
 
 const config = getConfig(pack.version)
 

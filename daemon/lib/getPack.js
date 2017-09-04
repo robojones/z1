@@ -1,5 +1,5 @@
 const path = require('path')
-const verifyPorts = require('./../snippet/verifyPorts')
+const verifyPorts = require('./verifyPorts')
 
 function getPack(dir, opt, env) {
   // reload package.json

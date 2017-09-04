@@ -1,7 +1,6 @@
 const net = require('net')
 const path = require('path')
 const StringDecoder = require('string_decoder').StringDecoder
-const log = require('./log')
 
 const OPT = {
   allowHalfOpen: true
