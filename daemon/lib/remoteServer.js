@@ -1,5 +1,6 @@
 const net = require('net')
 const path = require('path')
+const util = require('util')
 const StringDecoder = require('string_decoder').StringDecoder
 
 const OPT = {
@@ -16,45 +17,73 @@ function remoteServer(filename, run) {
 
   const server = net.createServer(OPT, socket => {
     const decoder = new StringDecoder()
-    const message = []
+    let message = ''
 
     socket.json = (err, data) => {
-      const res = {}
+      let res
 
       if (err) {
-        res.error = {
-          message: err.message,
-          stack: err.stack,
-          code: err.code
+        res = {
+          type: 'error',
+          error: {
+            message: err.message,
+            stack: err.stack,
+            code: err.code
+          }
         }
       } else {
-        res.data = data
+        res = {
+          type: 'result',
+          result: data
+        }
       }
 
       socket.end(JSON.stringify(res))
     }
 
+    socket.log = (...msg) => {
+      const log = msg.map(part => util.inspect(part))
+
+      const data = {
+        type: 'log',
+        log: log.join(' ')
+      }
+
+      socket.write(JSON.stringify(data))
+    }
+
     socket.on('error', handle)
 
-    socket.once('data', chunk => {
-      message.push(decoder.write(chunk))
+    socket.on('data', async chunk => {
+      message += decoder.write(chunk)
+
+      await parse()
     })
 
-    socket.once('end', () => {
-      message.push(decoder.end())
+    socket.once('end', async () => {
+      message += decoder.end()
+      await parse()
+    })
+
+    async function parse() {
+      const i = message.indexOf('\n')
+      if (i === -1) {
+        return
+      }
+      const msg = message.substr(0, i)
+      message = message.substr(i + 1)
 
       try {
-        let obj = JSON.parse(message.join(''))
+        const obj = JSON.parse(msg)
 
-        run(obj).then(data => {
-          socket.json(null, data)
-        }).catch(err => {
-          socket.json(err)
-        })
+        const result = await run(socket, obj)
+        socket.json(null, result)
       } catch (err) {
         socket.json(err)
       }
-    })
+
+      await parse()
+    }
   })
 
   if (!global.test) {
