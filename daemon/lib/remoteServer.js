@@ -1,6 +1,7 @@
 const net = require('net')
 const path = require('path')
 const Connection = require('./class/Connection')
+const z1 = require('../../remote')
 
 const OPT = {
   allowHalfOpen: true
@@ -41,11 +42,20 @@ function remoteServer(filename, run) {
     server.listen(file)
   }
 
-  server.on('error', err => {
-    handle(err)
+  server.on('error', async err => {
+    if (err.code !== 'EADDRINUSE') {
+      handle(err)
+      // try to restart server
+      remoteServer(filename, run)
+      return
+    }
 
-    // try to restart server
-    remoteServer(filename, run)
+    const removed = await z1._removeDeadSocket()
+
+    if (removed) {
+      console.log('removed and started')
+      remoteServer(filename, run)
+    }
   })
 
   remoteServer.server = server
