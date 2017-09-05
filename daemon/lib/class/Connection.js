@@ -49,6 +49,28 @@ class Connection extends OrigConnection {
 
     this.socket.write(JSON.stringify(data) + '\n')
   }
+
+  /**
+   * Transmits a chunk of data to the stdout stream of the CLI.
+   * @param {string|Buffer} chunk - The chunk to transmit.
+   */
+  stdout(chunk) {
+    this.sendMessage({
+      type: 'stdout',
+      chunk
+    })
+  }
+
+  /**
+   * Transmits a chunk of data to the stderr stream of the CLI.
+   * @param {string|Buffer} chunk - The chunk to transmit.
+   */
+  stderr(chunk) {
+    this.sendMessage({
+      type: 'stderr',
+      chunk
+    })
+  }
 }
 
 module.exports = Connection

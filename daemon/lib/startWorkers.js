@@ -13,19 +13,18 @@ const NOEND = {
 
 module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, command) {
   const workers = []
-  const logString = chunk => {
-    if (!command || !command.log) {
-      return
-    }
-    command.log(chunk + '')
-  }
+  const sendOutToCLI = chunk => command.stdout(chunk)
+  const sendErrToCLI = chunk => command.stderr(chunk)
 
   if (pack.name === 'z1') {
     throw new Error('the name "z1" is invalid')
   }
 
   const ports = pack.ports
-  const out = logs.get(pack.name)
+  const streams = logs.get(pack.name)
+
+  streams.log.on('data', sendOutToCLI)
+  streams.err.on('data', sendErrToCLI)
 
   // output path
   let output = null
@@ -65,10 +64,8 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
   for (let i = 0; i < workerCount; i += 1) {
     const worker = new Worker(dir, pack.main, pack.name, ports, ENV)
     const w = worker.w
-    w.process.stdout.pipe(out.log, NOEND)
-    w.process.stderr.pipe(out.err, NOEND)
-    w.process.stdout.on('data', logString)
-    w.process.stderr.on('data', logString)
+    w.process.stdout.pipe(streams.log, NOEND)
+    w.process.stderr.pipe(streams.err, NOEND)
     w.on('error', handle)
 
     workers.push(worker)
@@ -80,8 +77,8 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
 
     worker.once('available').then(async () => {
       // don't send logs to cli anymore
-      w.process.stdout.removeListener('data', logString)
-      w.process.stderr.removeListener('data', logString)
+      streams.log.removeListener('data', sendOutToCLI)
+      streams.err.removeListener('data', sendErrToCLI)
 
       // wait to resurrect the worker
       const code = await worker.once('exit')

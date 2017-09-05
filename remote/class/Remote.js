@@ -324,10 +324,23 @@ class Remote extends BetterEvents {
 
         connection.on('message', message => {
           if (message.type === 'result') {
-            resolve(message.result)
-          } else if (message.type === 'log') {
-            this.emit('log', message.log, message)
-          } else if (message.type === 'error') {
+            return resolve(message.result)
+          }
+
+          if (message.type === 'log') {
+            return this.emit('log', message.log, message)
+          }
+
+          if (message.type === 'stdout' || message.type === 'stderr') {
+            let chunk = message.chunk
+            if (typeof message.chunk === 'object' && message.chunk.type === 'Buffer') {
+              chunk = Buffer.from(message.chunk.data)
+            }
+
+            this.emit(message.type, chunk)
+          }
+
+          if (message.type === 'error') {
             // reassemble the error
             const error = new Error(message.error.message)
             error.stack = message.error.stack

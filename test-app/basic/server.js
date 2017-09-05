@@ -10,3 +10,5 @@ setInterval(() => {
 
 server.listen(+process.env.PORT)
 
+console.log('test log written to stdout')
+console.error('test log written to stderr')
