@@ -4,7 +4,9 @@ const server = http.createServer((req, res) => {
   res.end('it worked')
 })
 
-console.log('test :D')
+setInterval(() => {
+  console.log('test :D')
+}, 4000)
 
 server.listen(+process.env.PORT)
 

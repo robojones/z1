@@ -8,7 +8,7 @@ const {
   once,
   BetterEvents
 } = require('better-events')
-const Connection = require('../../lib/class/Connection')
+const Connection = require('./Connection')
 
 /**
  * A class representing a set of commands to control z1.
@@ -171,6 +171,29 @@ class Remote extends BetterEvents {
     })
   }
 
+  /** 
+   * Stop the z1 daemon.
+   * @returns {Promise.<void>}
+   */
+  async exit() {
+    await this._connectAndSend({
+      name: 'exit'
+    })
+
+    await this._waitForDisconnect()
+  }
+
+  /**
+   * Upgrade the z1 daemon to a new version. Do not call this in a child process of z1!
+   * @returns {Promise.<void>}
+   */
+  async upgrade() {
+    this._impossibleInZ1()
+
+    await this.exit()
+    await this.resurrect()
+  }
+
   /**
    * @typedef infoResult
    * @property {string} name - The name of the app.
@@ -219,27 +242,13 @@ class Remote extends BetterEvents {
     })
   }
 
-  /** 
-   * Stop the z1 daemon.
-   * @returns {Promise.<void>}
-   */
-  async exit() {
-    await this._connectAndSend({
-      name: 'exit'
+  async logs(app) {
+    return this._connectAndSend({
+      name: 'logs',
+      app
+    }, connection => {
+      connection.shareSIGINT()
     })
-
-    await this._waitForDisconnect()
-  }
-
-  /**
-   * Upgrade the z1 daemon to a new version. Do not call this in a child process of z1!
-   * @returns {Promise.<void>}
-   */
-  async upgrade() {
-    this._impossibleInZ1()
-
-    await this.exit()
-    await this.resurrect()
   }
 
   /**
@@ -302,33 +311,39 @@ class Remote extends BetterEvents {
   /**
    * Sends a command to the server.
    * @param {Object} object - An object representing the command.
+   * @param {function} connectionHandler - Call this with the connection object.
    * @returns {Promise.<*>} - The result of the command.
    */
-  async _send(object) {
+  async _send(object, connectionHandler) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
         object.type = 'command'
         socket.write(JSON.stringify(object) + '\n')
-      })
 
-      const connection = new Connection(socket)
+        const connection = new Connection(socket)
 
-      connection.on('message', message => {
-        if (message.type === 'result') {
-          resolve(message.result)
-        } else if (message.type === 'log') {
-          this.emit('log', message.log, message)
-        } else if (message.type === 'error') {
-          // reassemble the error
-          const error = new Error(message.error.message)
-          error.stack = message.error.stack
-          error.code = message.error.code
+        connection.on('message', message => {
+          if (message.type === 'result') {
+            resolve(message.result)
+          } else if (message.type === 'log') {
+            this.emit('log', message.log, message)
+          } else if (message.type === 'error') {
+            // reassemble the error
+            const error = new Error(message.error.message)
+            error.stack = message.error.stack
+            error.code = message.error.code
 
-          reject(error)
+            reject(error)
+          }
+        })
+
+        connection.once('error', reject)
+
+        if (typeof connectionHandler === 'function') {
+          connectionHandler(connection)
         }
       })
 
-      connection.once('error', reject)
       socket.once('error', reject)
     })
   }
@@ -336,11 +351,12 @@ class Remote extends BetterEvents {
   /**
    * Sends a command to the daemon. It starts the daemon if it is not running.
    * @param {Object} object - An object representing the command.
+   * @param {function} connectionHandler - Call this with the connection object.
    * @returns {Promise.<*>} - The result of the command.
    */
-  async _connectAndSend(object) {
+  async _connectAndSend(object, connectionHandler) {
     await this._connect()
-    return this._send(object)
+    return this._send(object, connectionHandler)
   }
 
   /**

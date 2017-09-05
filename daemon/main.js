@@ -46,15 +46,16 @@ remoteServer('sick.sock', (command, connection) => {
 })
 
 operation = {
-  resurrect: require('./operation/resurrect'),
-  start: require('./operation/start'),
-  stop: require('./operation/stop'),
-  restart: require('./operation/restart'),
-  'restart-all': require('./operation/restart-all'),
+  exit: require('./operation/exit')(),
   info: require('./operation/info'),
   list: require('./operation/list'),
+  logs: require('./operation/logs'),
   ping: require('./operation/ping'),
-  exit: require('./operation/exit')()
+  'restart-all': require('./operation/restart-all'),
+  restart: require('./operation/restart'),
+  resurrect: require('./operation/resurrect'),
+  start: require('./operation/start'),
+  stop: require('./operation/stop')
 }
 
 console.log('daemon: daemon started')

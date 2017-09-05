@@ -136,65 +136,9 @@ program
   .command('logs [appname]')
   .description('show the output of an app')
   .action((appname = getAppName()) => {
-    const configPath = path.join(process.env.HOME, '.z1', 'config.json')
-
-    let config = null
-    try {
-      config = require(configPath)
-    } catch (err) {
-      handle(new Error('config.json not found'))
-    }
-
-    let streams = []
-    let oldFiles = []
-
-    const app = config.apps.find(e => e.name === appname)
-
-    const output = (app && app.opt.output) || path.join(process.env.HOME, '.z1', appname)
-
-    updateLogs()
-    setInterval(updateLogs, 5000)
-
-    function updateLogs() {
-      fs.readdir(output, (err, files) => {
-        if (err) {
-          if (err.code === 'ENOENT') {
-            handle(new Error(`app "${appname}" not found`))
-          } else {
-            handle(err)
-          }
-        }
-
-        files = files.sort().slice(-2)
-
-        if (oldFiles.join() === files.join()) {
-          return
-        }
-
-        // stop old streams
-        streams.forEach(stream => {
-          stream.unwatch()
-        })
-
-        oldFiles = files
-
-        if (!files.length) {
-          return
-        }
-
-        // add new streams
-        streams = files.map(file => {
-          const stream = new Tail(path.join(output, file))
-          stream.on('line', line => {
-            console.log(line)
-          })
-          stream.on('error', handle)
-          stream.watch()
-
-          return stream
-        })
-      })
-    }
+    z1.logs(appname).then(() => {
+      console.log('terminated')
+    }).catch(handle)
   })
 
 program
