@@ -1,11 +1,9 @@
 #! /usr/bin/env node
 
-const fs = require('fs')
 const path = require('path')
 const assert = require('assert')
 const program = require('commander')
 const spawn = require('child_process').spawn
-const Tail = require('tail').Tail
 const leftpad = require('leftpad')
 const rightpad = require('rightpad')
 
