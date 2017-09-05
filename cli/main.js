@@ -11,7 +11,6 @@ const rightpad = require('rightpad')
 
 const z1 = require('..')
 const features = require('./lib/features')
-const spam = require('./lib/message')
 const parser = require('./lib/parser')
 const version = require('./lib/version')
 const z1Logs = require('./lib/z1-logs')
@@ -43,9 +42,7 @@ program
   .description('start the apps that were started before exit')
   .option('-i, --immediate', 'exit immediately')
   .action((opts) => {
-    spam.start()
     z1.resurrect(opts.immediate).then(data => {
-      spam.stop()
       if (opts.immediate) return
       console.log('workers started:', data.started)
     }).catch(handle)
@@ -71,9 +68,7 @@ program
 
     const env = {}
 
-    spam.start()
     z1.start(dir, args, opt, env, opts.immediate).then(data => {
-      spam.stop()
       if (opts.immediate) return
       console.log('name:', data.app)
       console.log('ports:', data.ports.join() || '-')
@@ -92,9 +87,7 @@ program
       timeout: opts.timeout,
       signal: opts.signal
     }
-    spam.start()
     z1.stop(appname, opt, opts.immediate).then(data => {
-      spam.stop()
       if (opts.immediate) return
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
@@ -112,9 +105,7 @@ program
       timeout: opts.timeout,
       signal: opts.signal
     }
-    spam.start()
     z1.restart(appname, opt, opts.immediate).then(data => {
-      spam.stop()
       if (opts.immediate) return
       console.log('name:', data.app)
       console.log('ports:', data.ports.join() || '-')
@@ -134,9 +125,7 @@ program
       timeout: opts.timeout,
       signal: opts.signal
     }
-    spam.start()
     z1.restartAll(opt, opts.immediate).then(data => {
-      spam.stop()
       if (opts.immediate) return
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
