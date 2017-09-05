@@ -13,8 +13,8 @@ const NOEND = {
 
 module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, command) {
   const workers = []
-  const sendOutToCLI = chunk => command.stdout(chunk)
-  const sendErrToCLI = chunk => command.stderr(chunk)
+  const sendOutToCLI = chunk => command && command.stdout(chunk)
+  const sendErrToCLI = chunk => command && command.stderr(chunk)
 
   if (pack.name === 'z1') {
     throw new Error('the name "z1" is invalid')
@@ -76,10 +76,6 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     availablePromises.push(worker.once('available'))
 
     worker.once('available').then(async () => {
-      // don't send logs to cli anymore
-      streams.log.removeListener('data', sendOutToCLI)
-      streams.err.removeListener('data', sendErrToCLI)
-
       // wait to resurrect the worker
       const code = await worker.once('exit')
       if (code) {
@@ -116,6 +112,12 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
   const availablePromise = Promise.all(availablePromises)
   const exitPromise = Promise.race(exitPromises)
 
+  const removeListeners = () => {
+    // don't send output to cli anymore
+    streams.log.removeListener('data', sendOutToCLI)
+    streams.err.removeListener('data', sendErrToCLI)
+  }
+
   try {
     // Wait for all workers to start.
     await Promise.race([exitPromise, availablePromise])
@@ -123,9 +125,11 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     // if one worker crashes => kill all workers
     await killWorkers(workers, 0)
 
+    removeListeners()
     throw err
   }
 
+  removeListeners()
   return {
     app: pack.name,
     dir,
