@@ -12,6 +12,7 @@ const features = require('./lib/features')
 const parser = require('./lib/parser')
 const version = require('./lib/version')
 const z1Logs = require('./lib/z1-logs')
+const hr = require('./lib/hr')
 const {
   log,
   handle
@@ -42,6 +43,7 @@ program
   .action((opts) => {
     z1.resurrect(opts.immediate).then(data => {
       if (opts.immediate) return
+      hr()
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -68,6 +70,7 @@ program
 
     z1.start(dir, args, opt, env, opts.immediate).then(data => {
       if (opts.immediate) return
+      hr()
       console.log('name:', data.app)
       console.log('ports:', data.ports.join() || '-')
       console.log('workers started:', data.started)
@@ -87,6 +90,7 @@ program
     }
     z1.stop(appname, opt, opts.immediate).then(data => {
       if (opts.immediate) return
+      hr()
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -105,6 +109,7 @@ program
     }
     z1.restart(appname, opt, opts.immediate).then(data => {
       if (opts.immediate) return
+      hr()
       console.log('name:', data.app)
       console.log('ports:', data.ports.join() || '-')
       console.log('workers started:', data.started)
@@ -125,6 +130,7 @@ program
     }
     z1.restartAll(opt, opts.immediate).then(data => {
       if (opts.immediate) return
+      hr()
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -134,9 +140,7 @@ program
   .command('logs [appname]')
   .description('show the output of an app')
   .action((appname = getAppName()) => {
-    z1.logs(appname).then(() => {
-      console.log('terminated')
-    }).catch(handle)
+    z1.logs(appname).catch(handle)
   })
 
 program
@@ -218,6 +222,7 @@ program
   .description('kill the z1 daemon')
   .action(() => {
     z1.exit().then(() => {
+      hr()
       console.log('daemon stopped')
     }).catch(handle)
   })
