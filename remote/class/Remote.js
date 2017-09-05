@@ -1,6 +1,6 @@
 const xTime = require('x-time')
 const net = require('net')
-const fs = require('fs')
+const fs = require('mz/fs')
 const cp = require('child_process')
 const path = require('path')
 const promisify = require('smart-promisify')
@@ -373,13 +373,13 @@ class Remote extends BetterEvents {
   }
 
   /**
-   * Tries to connect to the daemon. It starts the daemon if it is not running.
-   * @returns {Promise.<void>}
+   * Removes the socket-file if it is dead. Returns true if the file was removed.
+   * @returns {Promise.<boolean>}
    */
-  async _connect() {
+  async _removeDeadSocket() {
     try {
       await this._ping()
-      return
+      return false
     } catch (err) {
       if (err.code !== 'ECONNREFUSED' && err.code !== 'ENOENT') {
         throw err
@@ -387,14 +387,26 @@ class Remote extends BetterEvents {
     }
 
     try {
-      fs.unlinkSync(this.socketFile)
+      await fs.unlink(this.socketFile)
     } catch (err) {
       if (err.code !== 'ENOENT') {
         throw err
       }
     }
 
-    await this._startDaemon()
+    return true
+  }
+
+  /**
+   * Tries to connect to the daemon. It starts the daemon if it is not running.
+   * @returns {Promise.<void>}
+   */
+  async _connect() {
+    const removed = await this._removeDeadSocket()
+
+    if (removed) {
+      await this._startDaemon()
+    }
   }
 
   /**
