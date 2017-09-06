@@ -53,8 +53,11 @@ function remoteServer(filename, run) {
     const removed = await z1._removeDeadSocket()
 
     if (removed) {
-      console.log('removed and started')
+      console.log('Removed and started.')
       remoteServer(filename, run)
+    } else {
+      console.log('Another daemon process ist running. Exiting with exit code 0.')
+      process.exit(0)
     }
   })
 
