@@ -222,7 +222,6 @@ program
   .description('kill the z1 daemon')
   .action(() => {
     z1.exit().then(() => {
-      hr()
       console.log('daemon stopped')
     }).catch(handle)
   })
