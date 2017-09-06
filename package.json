@@ -5,7 +5,7 @@
   "description": "Node.js cluster manager",
   "main": "index.js",
   "scripts": {
-    "test": "z1 exit && rm -f ~/.z1/sick.sock && rm -rf coverage && istanbul cover _mocha --dir ./coverage/mocha",
+    "test": "z1 exit && rm -rf coverage && istanbul cover _mocha --dir ./coverage/mocha",
     "lint": "node_modules/eslint/bin/eslint.js ."
   },
   "bin": "cli/main.js",
