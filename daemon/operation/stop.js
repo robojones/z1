@@ -1,6 +1,6 @@
 const Worker = require('../lib/class/Worker')
 const killWorkers = require('../lib/killWorkers')
-const log = require('../lib/log')
+const sendLogsToCLI = require('../lib/send-logs-to-CLI.js')
 
 /*
 command {
@@ -9,16 +9,11 @@ command {
 }
 */
 
-async function stop(config, command) {
-  const sendOutToCLI = chunk => command && command.stdout(chunk)
-  const sendErrToCLI = chunk => command && command.stderr(chunk)
-
+async function stop(config, command, connection) {
   const app = config.apps.find(app => app.name === command.app)
 
   // transmit output to cli
-  const streams = log.get(app.name)
-  streams.log.on('data', sendOutToCLI)
-  streams.err.on('data', sendErrToCLI)
+  const logs = sendLogsToCLI(app.name, connection)
 
   let timeout = (app && app.env.NODE_ENV !== 'development') ? 30000 : 0
 
@@ -38,8 +33,7 @@ async function stop(config, command) {
 
   if (i !== -1) {
     // don't send output to cli anymore
-    streams.log.removeListener('data', sendOutToCLI)
-    streams.err.removeListener('data', sendErrToCLI)
+    logs.stop()
 
     log.remove(config.apps[i].name)
     config.apps.splice(i, 1)
