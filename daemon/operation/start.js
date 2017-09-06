@@ -1,5 +1,6 @@
 const startWorkers = require('../lib/start-workers')
 const getPack = require('../lib/getPack')
+const sendLogsToCLI = require('../lib/send-logs-to-CLI.js')
 
 /**
  * @typedef startOptions
@@ -36,6 +37,8 @@ async function start(config, command, connection) {
     throw new Error(`an app called "${pack.name}" is already running.`)
   }
 
+  const logs = sendLogsToCLI(pack.name, connection)
+
   config.apps.push({
     dir: command.dir,
     name: pack.name,
@@ -46,9 +49,13 @@ async function start(config, command, connection) {
   config.save()
 
   try {
-    return await startWorkers(config, command.dir, pack, command.args, command.env, connection)
+    await startWorkers(config, command.dir, pack, command.args, command.env)
+
+    logs.stop()
   } catch (err) {
     // remove app from config
+
+    logs.stop()
     const i = config.apps.findIndex(app => app.name === pack.name)
     if (i !== -1) {
       config.apps.splice(i, 1)
