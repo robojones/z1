@@ -13,8 +13,6 @@ const NOEND = {
 
 module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, connection) {
   const workers = []
-  const sendOutToCLI = chunk => connection && connection.stdout(chunk)
-  const sendErrToCLI = chunk => connection && connection.stderr(chunk)
 
   if (pack.name === 'z1') {
     throw new Error('the name "z1" is invalid')
@@ -22,9 +20,6 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
 
   const ports = pack.ports
   const streams = logs.get(pack.name)
-
-  streams.log.on('data', sendOutToCLI)
-  streams.err.on('data', sendErrToCLI)
 
   // output path
   let output = null
@@ -112,12 +107,6 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
   const availablePromise = Promise.all(availablePromises)
   const exitPromise = Promise.race(exitPromises)
 
-  const removeListeners = () => {
-    // don't send output to cli anymore
-    streams.log.removeListener('data', sendOutToCLI)
-    streams.err.removeListener('data', sendErrToCLI)
-  }
-
   try {
     // Wait for all workers to start.
     await Promise.race([exitPromise, availablePromise])
@@ -125,11 +114,9 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     // if one worker crashes => kill all workers
     await killWorkers(workers, 0)
 
-    removeListeners()
     throw err
   }
 
-  removeListeners()
   return {
     app: pack.name,
     dir,
