@@ -9,36 +9,47 @@ command {
 }
 */
 
-module.exports = function stop(config, command) {
-  return new Promise((resolve, reject) => {
-    const app = config.apps.find(app => app.name === command.app)
+async function stop(config, command) {
+  const sendOutToCLI = chunk => command && command.stdout(chunk)
+  const sendErrToCLI = chunk => command && command.stderr(chunk)
 
-    let timeout = (app && app.env.NODE_ENV !== 'development') ? 30e3 : 0
+  const app = config.apps.find(app => app.name === command.app)
 
-    if (command.opt.timeout) {
-      if (isNaN(+command.opt.timeout)) {
-        timeout = null
-      } else {
-        timeout = +command.opt.timeout
-      }
+  // transmit output to cli
+  const streams = log.get(app.name)
+  streams.log.on('data', sendOutToCLI)
+  streams.err.on('data', sendErrToCLI)
+
+  let timeout = (app && app.env.NODE_ENV !== 'development') ? 30000 : 0
+
+  if (command.opt.timeout) {
+    if (isNaN(+command.opt.timeout)) {
+      timeout = null
+    } else {
+      timeout = +command.opt.timeout
     }
+  }
 
-    const workers = Worker.workerList.filter(worker => worker.name === command.app)
-    const killed = killWorkers(workers, timeout, command.opt.signal)
+  const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
-    killed.then(() => {
-      let i = config.apps.findIndex(app => app.name === command.app)
+  const workersKilled = await killWorkers(workers, timeout, command.opt.signal)
 
-      if (i !== -1) {
-        log.remove(config.apps[i].name)
-        config.apps.splice(i, 1)
-        config.save()
-      }
+  let i = config.apps.findIndex(app => app.name === command.app)
 
-      resolve({
-        app: command.app,
-        killed: workers.length
-      })
-    }).catch(reject)
-  })
+  if (i !== -1) {
+    // don't send output to cli anymore
+    streams.log.removeListener('data', sendOutToCLI)
+    streams.err.removeListener('data', sendErrToCLI)
+
+    log.remove(config.apps[i].name)
+    config.apps.splice(i, 1)
+    config.save()
+  }
+
+  return {
+    app: command.app,
+    killed: workersKilled
+  }
 }
+
+module.exports = stop
