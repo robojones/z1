@@ -61,7 +61,7 @@ async function restart(config, command, connection) {
   const data = await startWorkers(config, app.dir, pack, app.args, app.env, connection)
 
   // kill old workers
-  const workersKilled = await killWorkers(workers, timeout, command.opt.signal)
+  const workersKilled = await killWorkers(workers, timeout, command.opt.signal, connection)
 
   if (nameChanged) {
     // remove old version

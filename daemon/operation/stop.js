@@ -26,7 +26,7 @@ async function stop(config, command, connection) {
 
   const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
-  const workersKilled = await killWorkers(workers, timeout, command.opt.signal)
+  const workersKilled = await killWorkers(workers, timeout, command.opt.signal, connection)
 
   let i = config.apps.findIndex(app => app.name === command.app)
 

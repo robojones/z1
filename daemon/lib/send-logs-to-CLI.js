@@ -2,28 +2,46 @@ const logs = require('./log')
 
 /**
  * Send logs to CLI.
- * @param {string} appname - The name of the app.
+ * @param {string|*} target - The name of the app. Or a worker.
  * @param {*} connection - The connection to the CLI.
  */
-function sendLogsToCLI(appname, connection) {
+function sendLogsToCLI(target, connection) {
   const sendOutToCLI = chunk => connection && connection.stdout(chunk)
   const sendErrToCLI = chunk => connection && connection.stderr(chunk)
 
-  const streams = logs.get(appname)
+  let streams
 
-  streams.log.on('data', sendOutToCLI)
-  streams.err.on('data', sendErrToCLI)
+  if (typeof target === 'string') {
+    streams = logs.get(target)
 
-  /**
-   * Stop sending logs to CLI.
-   */
-  function stop() {
-    streams.log.removeListener('data', sendOutToCLI)
-    streams.err.removeListener('data', sendErrToCLI)
+    streams.log.on('data', sendOutToCLI)
+    streams.err.on('data', sendErrToCLI)
+  } else {
+    if (target.w && target.w.isConnected()) {
+      const w = target.w
+
+      w.process.stdout.on('data', sendOutToCLI)
+      w.process.stderr.on('data', sendErrToCLI)
+    }
   }
 
   return {
-    stop
+    /**
+     * Stop sending logs to CLI.
+     */
+    stop() {
+      if (typeof target === 'string') {
+        streams.log.removeListener('data', sendOutToCLI)
+        streams.err.removeListener('data', sendErrToCLI)
+        return
+      }
+
+      if (target.w && target.w.process && target.w.process.stdout) {
+        const w = target.w
+        w.process.stdout.removeListener('data', sendOutToCLI)
+        w.process.stderr.removeListener('data', sendErrToCLI)
+      }
+    }
   }
 }
 

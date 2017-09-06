@@ -115,6 +115,7 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     await Promise.race([exitPromise, availablePromise])
 
     logs.stop()
+
     return {
       app: pack.name,
       dir,
@@ -125,7 +126,7 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     // must be called before killWorkers to prevent duplication
     logs.stop()
 
-    await killWorkers(workers, 0)
+    await killWorkers(workers, 0, 'SIGTERM', connection)
     logManager.remove(pack.name)
 
     throw err
