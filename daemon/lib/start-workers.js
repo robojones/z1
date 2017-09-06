@@ -4,7 +4,7 @@ const cluster = require('cluster')
 const mkdirp = require('mkdirp-promise')
 
 const Worker = require('../lib/class/Worker')
-const logs = require('./log')
+const logManager = require('./log')
 const killWorkers = require('./killWorkers')
 
 const NOEND = {
@@ -19,7 +19,7 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
   }
 
   const ports = pack.ports
-  const streams = logs.get(pack.name)
+  const streams = logManager.get(pack.name)
 
   // output path
   let output = null
@@ -111,8 +111,9 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     // Wait for all workers to start.
     await Promise.race([exitPromise, availablePromise])
   } catch (err) {
-    // if one worker crashes => kill all workers
+    // if one worker crashes => kill all workers & cleanup
     await killWorkers(workers, 0)
+    logManager.remove(pack.name)
 
     throw err
   }
