@@ -10,4 +10,5 @@ after_success:
   - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
   - npm publish
 after_failure:
+  - ps ax | grep istanbul
   - cat ~/.z1/z1/*
