@@ -11,7 +11,7 @@ const NOEND = {
   end: false
 }
 
-module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, connection) {
+module.exports = async function startWorkers(config, dir, pack, args = [], env = {}) {
   const workers = []
 
   if (pack.name === 'z1') {
