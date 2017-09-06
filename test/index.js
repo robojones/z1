@@ -3,10 +3,12 @@ const { once } = require('better-events')
 const { spawn } = require('child_process')
 let daemon
 
+const TIMEOUT = 30000 // 30s
+
 before(async function () {
   // wait for the test-daemon to start
 
-  this.timeout(10000)
+  this.timeout(TIMEOUT)
   daemon = spawn('istanbul', ['cover', './daemon/main.js', '--dir', './coverage/daemon'], {
     stdio: 'inherit'
   })
@@ -20,7 +22,7 @@ before(async function () {
 after(async function () {
   // wait for daemon to stop
 
-  this.timeout(10000)
+  this.timeout(TIMEOUT)
 
   z1.exit()
 
@@ -29,7 +31,7 @@ after(async function () {
 
 describe('z1', function () {
   describe('command', function () {
-    this.timeout(15000)
+    this.timeout(TIMEOUT)
 
     beforeEach(function () {
       this.apps = []
