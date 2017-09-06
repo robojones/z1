@@ -5,13 +5,14 @@ const mkdirp = require('mkdirp-promise')
 
 const Worker = require('../lib/class/Worker')
 const logManager = require('./log')
+const sendLogsToCLI = require('./send-logs-to-CLI')
 const killWorkers = require('./killWorkers')
 
 const NOEND = {
   end: false
 }
 
-module.exports = async function startWorkers(config, dir, pack, args = [], env = {}) {
+module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, connection) {
   const workers = []
 
   if (pack.name === 'z1') {
@@ -41,7 +42,9 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
   // setup logs
   await mkdirp(output)
 
-  logs.setup(pack.name, output)
+  logManager.setup(pack.name, output)
+
+  const logs = sendLogsToCLI(pack.name, connection)
 
   // setup master
   cluster.setupMaster({
@@ -110,18 +113,21 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
   try {
     // Wait for all workers to start.
     await Promise.race([exitPromise, availablePromise])
+
+    logs.stop()
+    return {
+      app: pack.name,
+      dir,
+      started: workerCount,
+      ports
+    }
   } catch (err) {
-    // if one worker crashes => kill all workers & cleanup
+    // must be called before killWorkers to prevent duplication
+    logs.stop()
+
     await killWorkers(workers, 0)
     logManager.remove(pack.name)
 
     throw err
-  }
-
-  return {
-    app: pack.name,
-    dir,
-    started: workerCount,
-    ports
   }
 }

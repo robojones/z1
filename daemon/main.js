@@ -26,7 +26,18 @@ const remoteServer = require('./lib/remoteServer')
 
 const config = getConfig(pack.version)
 
-let operation = null
+let operation = {
+  exit: require('./operation/exit')(),
+  info: require('./operation/info'),
+  list: require('./operation/list'),
+  logs: require('./operation/logs'),
+  ping: require('./operation/ping'),
+  'restart-all': require('./operation/restart-all'),
+  restart: require('./operation/restart'),
+  resurrect: require('./operation/resurrect'),
+  start: require('./operation/start'),
+  stop: require('./operation/stop')
+}
 
 remoteServer('sick.sock', (command, connection) => {
   if (process.env.NODE_ENV === 'development') {
@@ -44,18 +55,5 @@ remoteServer('sick.sock', (command, connection) => {
 
   return operation[command.name](config, command, connection)
 })
-
-operation = {
-  exit: require('./operation/exit')(),
-  info: require('./operation/info'),
-  list: require('./operation/list'),
-  logs: require('./operation/logs'),
-  ping: require('./operation/ping'),
-  'restart-all': require('./operation/restart-all'),
-  restart: require('./operation/restart'),
-  resurrect: require('./operation/resurrect'),
-  start: require('./operation/start'),
-  stop: require('./operation/stop')
-}
 
 console.log('daemon: daemon started')
