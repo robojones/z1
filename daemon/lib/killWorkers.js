@@ -1,9 +1,22 @@
-module.exports = function killWorkers(workers, timeout, signal) {
-  const killed = workers.map(worker => {
+/**
+ * Kills all workers. Returns the number of killed workers.
+ * @param {*} workers 
+ * @param {number} timeout 
+ * @param {string} signal 
+ * @returns {number}
+ */
+async function killWorkers(workers, timeout, signal) {
+  const killed = workers.map(async worker => {
     if (worker.kill(signal, timeout)) {
-      return worker.once('exit')
+      await worker.once('exit')
+      return true
     }
-  }).filter(p => p)
+    return false
+  })
 
-  return Promise.all(killed)
+  const result = await Promise.all(killed)
+
+  return result.filter(w => w).length
 }
+
+module.exports = killWorkers
