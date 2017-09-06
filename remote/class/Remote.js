@@ -373,28 +373,20 @@ class Remote extends BetterEvents {
   }
 
   /**
-   * Removes the socket-file if it is dead. Returns true if the file was removed.
+   * Returns true if the daemon is online.
    * @returns {Promise.<boolean>}
    */
-  async _removeDeadSocket() {
+  async _isOnline() {
     try {
       await this._ping()
-      return false
+      return true
     } catch (err) {
       if (err.code !== 'ECONNREFUSED' && err.code !== 'ENOENT') {
         throw err
       }
-    }
 
-    try {
-      await fs.unlink(this.socketFile)
-    } catch (err) {
-      if (err.code !== 'ENOENT') {
-        throw err
-      }
+      return false
     }
-
-    return true
   }
 
   /**
@@ -402,9 +394,9 @@ class Remote extends BetterEvents {
    * @returns {Promise.<void>}
    */
   async _connect() {
-    const removed = await this._removeDeadSocket()
+    const online = await this._isOnline()
 
-    if (removed) {
+    if (!online) {
       await this._startDaemon()
     }
   }

@@ -1,5 +1,6 @@
 const net = require('net')
 const path = require('path')
+const fs = require('mz/fs')
 const Connection = require('./class/Connection')
 const z1 = require('../../remote')
 
@@ -50,14 +51,15 @@ function remoteServer(filename, run) {
       return
     }
 
-    const removed = await z1._removeDeadSocket()
+    const online = await z1._isOnline()
 
-    if (removed) {
-      console.log('Removed and started.')
-      remoteServer(filename, run)
-    } else {
+    if (online) {
       console.log('Another daemon process ist running. Exiting with exit code 0.')
       process.exit(0)
+    } else {
+      await fs.unlink(filename)
+      console.log('Dead socket removed.')
+      remoteServer(filename, run)
     }
   })
 
