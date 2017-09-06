@@ -1,4 +1,4 @@
-const startWorkers = require('../lib/startWorkers')
+const startWorkers = require('../lib/start-workers')
 const Worker = require('../lib/class/Worker')
 const getPack = require('../lib/getPack')
 

@@ -11,10 +11,10 @@ const NOEND = {
   end: false
 }
 
-module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, command) {
+module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, connection) {
   const workers = []
-  const sendOutToCLI = chunk => command && command.stdout(chunk)
-  const sendErrToCLI = chunk => command && command.stderr(chunk)
+  const sendOutToCLI = chunk => connection && connection.stdout(chunk)
+  const sendErrToCLI = chunk => connection && connection.stderr(chunk)
 
   if (pack.name === 'z1') {
     throw new Error('the name "z1" is invalid')
