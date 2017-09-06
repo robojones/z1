@@ -1,6 +1,5 @@
 const xTime = require('x-time')
 const net = require('net')
-const fs = require('mz/fs')
 const cp = require('child_process')
 const path = require('path')
 const promisify = require('smart-promisify')
