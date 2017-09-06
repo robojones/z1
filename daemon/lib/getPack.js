@@ -31,7 +31,7 @@ function getPack(dir, opt, env) {
     // apply devWorkers
     pack.workers = opt.workers || pack.devWorkers || originalPackage.workers
   }
-  log(pack.ports)
+
   return pack
 }
 
