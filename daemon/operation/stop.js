@@ -1,5 +1,5 @@
 const Worker = require('../lib/class/Worker')
-const killWorkers = require('../lib/killWorkers')
+const killWorkers = require('../lib/kill-workers')
 const logManager = require('./../lib/log')
 
 /*

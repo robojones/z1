@@ -6,7 +6,7 @@ const mkdirp = require('mkdirp-promise')
 const Worker = require('../lib/class/Worker')
 const logManager = require('./log')
 const sendLogsToCLI = require('./send-logs-to-CLI')
-const killWorkers = require('./killWorkers')
+const killWorkers = require('./kill-workers')
 
 const NOEND = {
   end: false

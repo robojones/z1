@@ -1,6 +1,6 @@
 const Worker = require('../lib/class/Worker')
 const startWorkers = require('../lib/start-workers')
-const killWorkers = require('../lib/killWorkers')
+const killWorkers = require('../lib/kill-workers')
 const getPack = require('../lib/getPack')
 
 /*
