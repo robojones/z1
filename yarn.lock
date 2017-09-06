@@ -1270,10 +1270,6 @@ table@^4.0.1:
     slice-ansi "0.0.4"
     string-width "^2.0.0"
 
-tail@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/tail/-/tail-1.2.2.tgz#3c40a47d53e137c541a14cc133532ecb2a75cc51"
-
 text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
