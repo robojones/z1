@@ -24,9 +24,7 @@ after(async function () {
 
   this.timeout(TIMEOUT)
 
-  z1.exit()
-
-  await once(daemon, 'exit')
+  await Promise.all([z1.exit(), once(daemon, 'exit')])
 })
 
 describe('z1', function () {
