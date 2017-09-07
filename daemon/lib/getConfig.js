@@ -31,14 +31,16 @@ function getConfig(version) {
 
   if (!config) {
     config = {
-      version,
       apps: []
     }
-
-    save()
   }
 
   config.save = save
+
+  if (config.version !== version) {
+    config.version = version
+    save()
+  }
 
   return config
 }
