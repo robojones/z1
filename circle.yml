@@ -1,0 +1,12 @@
+machine:
+  node:
+    version: machine:
+  node:
+    version: 8.4.0
+dependencies:
+  override:
+    - yarn
+test:
+  override:
+    - yarn test
+    
