@@ -5,7 +5,7 @@ const Connection = require('./class/Connection')
 const z1 = require('../../remote')
 
 const OPT = {
-  allowHalfOpen: true
+  allowHalfOpen: false
 }
 
 /**
