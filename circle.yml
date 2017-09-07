@@ -2,13 +2,10 @@ machine:
   node:
     version: 8.4.0
 
-checkout:
-  post:
-    - sudo npm link
-
 dependencies:
   override:
     - yarn install
+    - sudo npm link
 
 test:
   override:
