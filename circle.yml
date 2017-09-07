@@ -1,12 +1,11 @@
 machine:
   node:
-    version: machine:
-  node:
     version: 8.4.0
+
 dependencies:
   override:
-    - yarn
+    - yarn install
+
 test:
   override:
     - yarn test
-    
