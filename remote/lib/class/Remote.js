@@ -406,12 +406,13 @@ class Remote extends BetterEvents {
    * @returns {Promise.<void>} - Returns a promise that resolves after the daemon is started.
    */
   async _startDaemon(options) {
-    const z1Path = path.join(__dirname, '..', '..')
+    console.log('cli cwd:', process.cwd())
+    const z1Path = path.join(__dirname, '../../..')
     const file = path.join(z1Path, 'daemon', 'main.js')
     let node = process.argv[0]
 
     const spawnOptions = Object.assign({
-      stdio: 'ignore',
+      stdio: 'inherit',
       detached: true
     }, options)
 
@@ -420,7 +421,9 @@ class Remote extends BetterEvents {
     const error = once(p, 'error')
 
     const exit = once(p, 'exit').then(code => {
-      throw new Error('daemon exited with code:', code)
+      if (code) {
+        throw new Error(`daemon exited with code: "${code}"`)
+      }
     })
 
     p.unref()
