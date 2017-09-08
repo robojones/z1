@@ -10,19 +10,12 @@ command {
 */
 
 async function stop(config, command, connection) {
-  const app = config.apps.find(app => app.name === command.app)
+  // use this for the app-status:
+  // const app = config.apps.find(app => app.name === command.app)
 
   // transmit output to cli
 
-  let timeout = (app && app.env.NODE_ENV !== 'development') ? 30000 : 0
-
-  if (command.opt.timeout) {
-    if (isNaN(+command.opt.timeout)) {
-      timeout = null
-    } else {
-      timeout = +command.opt.timeout
-    }
-  }
+  const timeout = command.opt.timeout
 
   const workers = Worker.workerList.filter(worker => worker.name === command.app)
 

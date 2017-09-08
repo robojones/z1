@@ -1,6 +1,6 @@
 const path = require('path')
 
-const Remote = require('./class/Remote')
+const Remote = require('./lib/class/Remote')
 
 const z1socket = path.join(process.env.HOME, '.z1', 'sick.sock')
 

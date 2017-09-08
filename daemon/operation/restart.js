@@ -45,15 +45,7 @@ async function restart(config, command, connection) {
   }
 
   // set default timeout
-  let timeout = (app.env.NODE_ENV === 'development') ? 0 : 30e3
-
-  if (command.opt.timeout) {
-    if (isNaN(+command.opt.timeout)) {
-      timeout = null
-    } else {
-      timeout = +command.opt.timeout
-    }
-  }
+  const timeout = command.opt.timeout
 
   // remember old workers
   const workers = Worker.workerList.filter(worker => worker.name === command.app)

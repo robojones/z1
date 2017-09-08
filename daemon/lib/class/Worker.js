@@ -113,7 +113,8 @@ class Worker extends BetterEvents {
    * @returns {boolean}
    */
   isConnected() {
-    return this.w && this.w.isConnected()
+    const w = this.w
+    return w && w.isConnected() && !w.isDead()
   }
 
   /**
@@ -123,6 +124,10 @@ class Worker extends BetterEvents {
    * @returns {boolean} - Returns true if the worker process is still connected.
    */
   kill(signal = 'SIGTERM', time) {
+    if (isNaN(time)) {
+      throw new TypeError('time must be a number or Infinity.')
+    }
+
     this.state = Worker.KILLED
 
     if (!this.isConnected()) {
@@ -133,12 +138,11 @@ class Worker extends BetterEvents {
 
     w.disconnect()
 
-    if (typeof time === 'number') {
+    if (time !== 'Infinity') {
       const timeout = setTimeout(() => {
-        if (w.isConnected()) {
-          w.kill(signal)
-        }
-      }, time)
+        w.kill(signal)
+      }, +time)
+
       w.once('exit', () => {
         clearTimeout(timeout)
       })
