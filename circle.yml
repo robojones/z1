@@ -5,7 +5,6 @@ machine:
 dependencies:
   override:
     - yarn install
-    - sudo npm link
 
 test:
   override:
