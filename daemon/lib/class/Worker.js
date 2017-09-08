@@ -41,6 +41,7 @@ class Worker extends BetterEvents {
     // fork new worker
     const w = cluster.fork(env)
     this.id = w.id
+    this.w = w
 
     // restore cwd
     process.chdir(owd)
@@ -92,10 +93,6 @@ class Worker extends BetterEvents {
     })
   }
 
-  get w() {
-    return cluster.workers[this.id]
-  }
-
   static get workers() {
     return workers
   }
@@ -114,7 +111,7 @@ class Worker extends BetterEvents {
    */
   isConnected() {
     const w = this.w
-    return w && w.isConnected() && !w.isDead()
+    return w.isConnected() && !w.isDead()
   }
 
   /**

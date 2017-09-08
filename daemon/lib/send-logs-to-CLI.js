@@ -36,7 +36,7 @@ function sendLogsToCLI(target, connection) {
         return
       }
 
-      if (target.w && target.w.process && target.w.process.stdout) {
+      if (target && target.w && target.w.process && target.w.process.stdout) {
         const w = target.w
         w.process.stdout.removeListener('data', sendOutToCLI)
         w.process.stderr.removeListener('data', sendErrToCLI)
