@@ -27,7 +27,7 @@ const remoteServer = require('./lib/remoteServer')
 const config = getConfig(pack.version)
 
 let operation = {
-  exit: require('./operation/exit')(),
+  exit: require('./operation/exit'),
   info: require('./operation/info'),
   list: require('./operation/list'),
   logs: require('./operation/logs'),

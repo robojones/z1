@@ -1,13 +1,21 @@
 const remoteServer = require('../lib/remoteServer')
+const promisify = require('smart-promisify')
+const xTime = require('x-time')
 
-module.exports = () => {
-  function exit() {
-    remoteServer.server.close(() => {
-      process.exit()
-    })
+function exit() {
+  async function closeAndExit(timeout = 10000) {
+    const close = promisify(remoteServer.server.close, remoteServer.server)
+    const closePromise = close()
+    const timeoutPromise = xTime(timeout)
 
-    return Promise.resolve({})
+    await Promise.race([closePromise, timeoutPromise])
+
+    process.exit()
   }
 
-  return exit
+  closeAndExit().catch(handle)
+
+  return Promise.resolve({})
 }
+
+module.exports = exit
