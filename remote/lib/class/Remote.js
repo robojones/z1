@@ -8,6 +8,7 @@ const {
   BetterEvents
 } = require('better-events')
 const Connection = require('./Connection')
+const parseTimeout = require('../parse-timeout')
 
 /**
  * A class representing a set of commands to control z1.
@@ -114,7 +115,7 @@ class Remote extends BetterEvents {
    * @returns {Promise.<stopResult>}
    */
   async stop(app, opt = {}, immediate = false) {
-    opt.timeout = translateInfinity(opt.timeout)
+    opt.timeout = parseTimeout(opt.timeout)
     return this._connectAndSend({
       name: 'stop',
       app,
@@ -140,7 +141,7 @@ class Remote extends BetterEvents {
    * @returns {Promise.<restartResult>}
    */
   async restart(app, opt = {}, immediate = false) {
-    opt.timeout = translateInfinity(opt.timeout)
+    opt.timeout = parseTimeout(opt.timeout)
     return this._connectAndSend({
       name: 'restart',
       app,
@@ -162,7 +163,7 @@ class Remote extends BetterEvents {
    * @returns {Promise.<restartAllResult>}
    */
   async restartAll(opt = {}, immediate = false) {
-    opt.timeout = translateInfinity(opt.timeout)
+    opt.timeout = parseTimeout(opt.timeout)
     return this._connectAndSend({
       name: 'restart-all',
       opt,
@@ -426,18 +427,6 @@ class Remote extends BetterEvents {
 
     await Promise.race([error, exit, this._waitForConnection()])
   }
-}
-
-/**
- * If the value equals infinity then "infinity" (string) is returned.
- * @param {string|number} value 
- * @returns {string|number}
- */
-function translateInfinity(value) {
-  if (value && !isFinite(+value)) {
-    return 'infinity'
-  }
-  return value
 }
 
 module.exports = Remote

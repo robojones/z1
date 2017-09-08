@@ -1,5 +1,5 @@
 
-const OrigConnection = require('../../lib/class/Connection')
+const OrigConnection = require('../../../lib/class/Connection')
 
 /**
  * Class representing a connection to the daemon.
