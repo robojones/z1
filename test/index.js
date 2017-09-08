@@ -37,7 +37,9 @@ describe('z1', function () {
 
     afterEach(async function () {
       for (let i = 0; i < this.apps.length; i += 1) {
-        await z1.stop(this.apps[i])
+        await z1.stop(this.apps[i], {
+          timeout: 10000
+        })
       }
     })
 
