@@ -10,9 +10,14 @@ const sendLogsToCLI = require('./send-logs-to-CLI.js')
  */
 async function killWorkers(workers, timeout, signal, connection) {
   const killed = workers.map(async worker => {
-    if (worker.kill(signal, timeout)) {
+    if (worker.isConnected()) {
       const logs = sendLogsToCLI(worker, connection)
-      await worker.once('exit')
+      const exit = worker.once('exit')
+
+      if (worker.kill(signal, timeout)) {
+        await exit
+      }
+
       logs.stop()
 
       return true

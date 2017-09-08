@@ -92,6 +92,30 @@ class Worker extends BetterEvents {
     })
   }
 
+  get w() {
+    return cluster.workers[this.id]
+  }
+
+  static get workers() {
+    return workers
+  }
+
+  static get workerList() {
+    return workerList
+  }
+
+  static errorHandler(err) {
+    console.error(err)
+  }
+
+  /**
+   * Returns true if the IPC connection to the worker is still available.
+   * @returns {boolean}
+   */
+  isConnected() {
+    return this.w && this.w.isConnected()
+  }
+
   /**
    * Kill the worker process.
    * @param {string} [signal] - Kill signal (Default: SIGTERM).
@@ -101,11 +125,11 @@ class Worker extends BetterEvents {
   kill(signal = 'SIGTERM', time) {
     this.state = Worker.KILLED
 
-    const w = this.w
-
-    if (!w || !w.isConnected()) {
+    if (!this.isConnected()) {
       return false
     }
+
+    const w = this.w
 
     w.disconnect()
 
@@ -121,22 +145,6 @@ class Worker extends BetterEvents {
     }
 
     return true
-  }
-
-  get w() {
-    return cluster.workers[this.id]
-  }
-
-  static get workers() {
-    return workers
-  }
-
-  static get workerList() {
-    return workerList
-  }
-
-  static errorHandler(err) {
-    console.error(err)
   }
 }
 
