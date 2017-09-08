@@ -11,7 +11,7 @@ describe('stop', function () {
 
   it('should kill all workers of the app', async function () {
     await z1.start('test-app/basic')
-    await works('z1 stop basic')
+    await works('z1 stop basic --timeout 10000')
   })
 
   it('should exit immediately if --immediate is set')
