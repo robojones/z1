@@ -1,6 +1,6 @@
 # z1
 
-[![Build Status](https://travis-ci.org/robojones/z1.svg?branch=master)](https://travis-ci.org/robojones/z1)
+[![Build Status](https://circleci.com/gh/robojones/z1.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/robojones/z1/tree/master)
 [![Test Coverage](https://codeclimate.com/github/robojones/z1/badges/coverage.svg)](https://codeclimate.com/github/robojones/z1/coverage)
 
 [![bitHound Code](https://www.bithound.io/github/robojones/z1/badges/code.svg)](https://www.bithound.io/github/robojones/z1)
