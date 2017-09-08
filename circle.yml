@@ -3,9 +3,21 @@ machine:
     version: 8.4.0
 
 dependencies:
+  pre:
+    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
   override:
     - yarn install
 
 test:
   override:
     - yarn test
+  post:
+    - node_modules/istanbul/lib/cli.js report
+    - npm install -g codeclimate-test-reporter
+    - codeclimate-test-reporter < coverage/lcov.info
+
+deployment:
+  npm:
+    tag: /v[0-9]+(\.[0-9]+)*/
+    commands:
+      - npm publish
