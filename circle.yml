@@ -12,7 +12,7 @@ test:
   override:
     - yarn test
   post:
-    - istanbul report
+    - node_modules/istanbul/lib/cli.js report
     - npm install -g codeclimate-test-reporter
     - codeclimate-test-reporter < coverage/lcov.info
 
