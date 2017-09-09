@@ -44,6 +44,7 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
   - [z1.ready](#z1ready)
 
 ## Features
+
 The focus of z1 is on simplicity.
 Therefore it uses the __existing package.json__ of your project and allows you to start your app by typing `z1 start` in the project folder.
 z1 also comes with a __graceful restart__ functionality which allows you to restart your cluster without rejecting any request.
