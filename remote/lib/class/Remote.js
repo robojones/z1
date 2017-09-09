@@ -412,7 +412,7 @@ class Remote extends BetterEvents {
     let node = process.argv[0]
 
     const spawnOptions = Object.assign({
-      stdio: 'inherit',
+      stdio: 'ignore',
       detached: true
     }, options)
 
