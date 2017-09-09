@@ -14,10 +14,6 @@ command {
 */
 
 async function restart(config, command, connection) {
-  if (global.isResurrectable) {
-    throw new Error('no apps running')
-  }
-
   // find old app
   const app = config.apps.find(app => app.name === command.app)
 
