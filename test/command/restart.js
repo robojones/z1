@@ -10,7 +10,7 @@ describe('restart', function () {
     await fails('z1 restart asdf')
   })
 
-  it('should kill all workers of the app', async function () {
+  it('should restart all workers of the app', async function () {
     this.apps.push('basic')
     await z1.start('test-app/basic')
     await works('z1 restart basic --timeout 10000')
