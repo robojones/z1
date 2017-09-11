@@ -14,6 +14,13 @@ describe('stop', function () {
     await works('z1 stop basic --timeout 10000')
   })
 
+  it('should autodetect the appname from the directory if no appname is given', async function () {
+    process.chdir('test-app/basic')
+
+    await z1.start()
+    await works('z1 stop --timeout 10000')
+  })
+
   it('should exit immediately if --immediate is set')
 
   it('should send the --signal after the --timeout')

@@ -1,6 +1,7 @@
 const command = require('command-test')
 const path = require('path')
 const dirList = []
+const cliFile = path.resolve('cli/main.js')
 
 function getDir(cmd) {
   let dir = path.join('coverage', cmd.replace(/\W+/g, '-'))
@@ -22,7 +23,7 @@ function getDir(cmd) {
 
 function modify(cmd) {
   const dir = getDir(cmd)
-  return cmd.replace(/z1/, `istanbul cover --dir ${dir} cli/main.js --`)
+  return cmd.replace(/z1/, `istanbul cover --dir ${dir} ${cliFile} --`)
 }
 
 /**

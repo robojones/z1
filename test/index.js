@@ -34,9 +34,12 @@ describe('z1', function () {
 
     beforeEach(function () {
       this.apps = []
+      this.defaultWd = process.cwd()
     })
 
     afterEach(async function () {
+      process.chdir(this.defaultWd)
+
       for (let i = 0; i < this.apps.length; i += 1) {
         await z1.stop(this.apps[i], {
           timeout: 10000

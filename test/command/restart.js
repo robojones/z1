@@ -16,6 +16,14 @@ describe('restart', function () {
     await works('z1 restart basic --timeout 10000')
   })
 
+  it('should autodetect the appname from the directory if no appname is given', async function () {
+    process.chdir('test-app/basic')
+
+    this.apps.push('basic')
+    await z1.start()
+    await works('z1 restart')
+  })
+
   it('should exit immediately if --immediate is set')
 
   it('should send the --signal after the --timeout')
