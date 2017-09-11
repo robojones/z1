@@ -6,7 +6,7 @@ const {
 } = require('../lib/command')
 
 describe('restart', function () {
-  it('should throw the app is not running', async function () {
+  it('should throw if the app is not running', async function () {
     await fails('z1 restart asdf')
   })
 
