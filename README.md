@@ -72,7 +72,7 @@ you need to add a few things to your
 
 1. __name__ - your app name
 2. __main__ - the entry point of your app
-3. __ports__ - _(optional)_an array of port numbers that your app uses
+3. __ports__ _(optional)_ - an array of port numbers that your app uses
 4. __workers__ _(optional)_ - a number specifying how many workers should be created for your app. The default value is the number of CPU-cores in your system.
 5. __output__ _(optional)_ - a directory for the log and error files. (Default: `~/.z1/<yourAppname>`)
 6. __devPorts__ _(optional)_ - ports for [development](#development)
