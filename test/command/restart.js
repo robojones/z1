@@ -21,7 +21,7 @@ describe('restart', function () {
 
     this.apps.push('basic')
     await z1.start()
-    await works('z1 restart')
+    await works('z1 restart --timeout 10000')
   })
 
   it('should exit immediately if --immediate is set')
