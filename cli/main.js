@@ -1,22 +1,19 @@
 #! /usr/bin/env node
 
 const path = require('path')
-const assert = require('assert')
 const program = require('commander')
 const spawn = require('child_process').spawn
 const leftpad = require('leftpad')
 const rightpad = require('rightpad')
 
 const z1 = require('..')
+const getAppname = require('./lib/get-appname.js')
 const features = require('./lib/features')
 const parser = require('./lib/parser')
 const version = require('./lib/version')
 const z1Logs = require('./lib/z1-logs')
 const hr = require('./lib/hr')
-const {
-  log,
-  handle
-} = require('./lib/logs')
+const { handle } = require('./lib/logs')
 
 const SPACER = '--'
 
@@ -83,7 +80,7 @@ program
   .option('-t, --timeout <timeout>', 'time until the workers get killed')
   .option('-s, --signal <signal>', 'kill signal')
   .option('-i, --immediate', 'exit immediately')
-  .action((appname = getAppName(), opts) => {
+  .action((appname = getAppname(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
@@ -102,7 +99,7 @@ program
   .option('-t, --timeout <timeout>', 'time until the old workers get killed')
   .option('-s, --signal <signal>', 'kill signal for the old workers')
   .option('-i, --immediate', 'exit immediately')
-  .action((appname = getAppName(), opts) => {
+  .action((appname = getAppname(), opts) => {
     const opt = {
       timeout: opts.timeout,
       signal: opts.signal
@@ -139,7 +136,7 @@ program
 program
   .command('logs [appname]')
   .description('show the output of an app')
-  .action((appname = getAppName()) => {
+  .action((appname = getAppname()) => {
     z1.logs(appname).catch(handle)
   })
 
@@ -153,7 +150,7 @@ program
   .option('--available', 'output the number of available workers')
   .option('--killed', 'output the number of killed workers')
   .option('--revive-count', 'output how often the app has been revived')
-  .action((appname = getAppName(), opts) => {
+  .action((appname = getAppname(), opts) => {
     z1.info(appname).then(stats => {
       const props = ['name', 'dir', 'ports', 'pending', 'available', 'killed', 'reviveCount']
       const prop = props.find(prop => opts.hasOwnProperty(prop))
@@ -306,19 +303,3 @@ if (!global.test) {
 
   program.parse(argv)
 }
-
-function getAppName() {
-  log('no appname given')
-  log('searching directory for package.json')
-  try {
-    const file = path.join(process.cwd(), 'package.json')
-    const pack = require(file)
-    assert(pack.name)
-    log(`found name "${pack.name}" in package.json`)
-    return pack.name
-  } catch (err) {
-    console.error(`no package.json file found`)
-    handle(new Error('missing argument `appname\''))
-  }
-}
-
