@@ -12,8 +12,7 @@ test:
   override:
     - yarn test
   post:
-    - npm install -g codeclimate-test-reporter
-    - codeclimate-test-reporter < coverage/lcov.info
+    - node_modules/codeclimate-test-reporter/bin/codeclimate.js < coverage/lcov.info
 
 deployment:
   npm:

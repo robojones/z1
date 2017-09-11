@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/robojones/z1#readme",
   "devDependencies": {
+    "codeclimate-test-reporter": "^0.5.0",
     "eslint": "^4.6.0",
     "eslint-config-ultra": "^0.4.5",
     "istanbul": "1.1.0-alpha.1",
