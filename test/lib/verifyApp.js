@@ -33,9 +33,9 @@ async function verifyApp(name, props = {}) {
     assert.strictEqual(stats.ports[i], props.ports[i], `"${name}" should listen to port ${stats.ports[i]}.`)
   }
 
-  assert.strictEqual(stats.pending, props.pending, `"${name}" should habe ${props.available} pending worker(s).`)
-  assert.strictEqual(stats.available, props.available, `"${name}" should habe ${props.available} available worker(s).`)
-  assert.strictEqual(stats.killed, props.killed, `"${name}" should habe ${props.available} killed worker(s).`)
+  assert.strictEqual(stats.pending, props.pending, `"${name}" should have ${props.pending} pending worker(s).`)
+  assert.strictEqual(stats.available, props.available, `"${name}" should have ${props.available} available worker(s).`)
+  assert.strictEqual(stats.killed, props.killed, `"${name}" should have ${props.killed} killed worker(s).`)
   assert.strictEqual(stats.reviveCount, props.reviveCount, `"${name}" should be revived ${props.reviveCount} time(s).`)
 }
 
