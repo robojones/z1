@@ -1,4 +1,5 @@
 const z1 = require('..')
+const fs = require('fs')
 const { once } = require('better-events')
 const { spawn } = require('child_process')
 let daemon
@@ -43,8 +44,10 @@ describe('z1', function () {
       }
     })
 
-    require('./command/stop')
-    require('./command/invalid')
-    require('./command/start')
+    const files = fs.readdirSync('test/command')
+
+    files.forEach(file => {
+      require(`./command/${file}`)
+    })
   })
 })
