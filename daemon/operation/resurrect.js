@@ -20,6 +20,7 @@ module.exports = function resurrect(config, command, connection) {
 
     Promise.all(q).then(() => {
       resolve({
+        app: '*',
         started: Worker.workerList.length
       })
     }).catch(reject)

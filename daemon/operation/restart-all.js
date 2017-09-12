@@ -17,6 +17,7 @@ module.exports = function restartAll(config, command, connection) {
       a.killed += b.killed
       return a
     }, {
+      app: '*',
       started: 0,
       killed: 0
     })

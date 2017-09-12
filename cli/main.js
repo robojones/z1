@@ -13,6 +13,7 @@ const version = require('./lib/version')
 const z1Logs = require('./lib/z1-logs')
 const heading = require('./lib/heading')
 const { handle } = require('./lib/logs')
+const logResult = require('./lib/log-result')
 
 const SPACER = '--'
 
@@ -39,8 +40,7 @@ program
   .action((opts) => {
     z1.resurrect(opts.immediate).then(data => {
       if (opts.immediate) return
-      heading()
-      console.log('workers started:', data.started)
+      logResult(data)
     }).catch(handle)
   })
 
@@ -66,10 +66,7 @@ program
 
     z1.start(dir, args, opt, env, opts.immediate).then(data => {
       if (opts.immediate) return
-      heading()
-      console.log('name:', data.app)
-      console.log('ports:', data.ports.join() || '-')
-      console.log('workers started:', data.started)
+      logResult(data)
     }).catch(handle)
   })
 
@@ -86,9 +83,7 @@ program
     }
     z1.stop(appname, opt, opts.immediate).then(data => {
       if (opts.immediate) return
-      heading()
-      console.log('name:', data.app)
-      console.log('workers killed:', data.killed)
+      logResult(data)
     }).catch(handle)
   })
 
@@ -105,11 +100,7 @@ program
     }
     z1.restart(appname, opt, opts.immediate).then(data => {
       if (opts.immediate) return
-      heading()
-      console.log('name:', data.app)
-      console.log('ports:', data.ports.join() || '-')
-      console.log('workers started:', data.started)
-      console.log('workers killed:', data.killed)
+      logResult(data)
     }).catch(handle)
   })
 
@@ -126,9 +117,7 @@ program
     }
     z1.restartAll(opt, opts.immediate).then(data => {
       if (opts.immediate) return
-      heading()
-      console.log('workers started:', data.started)
-      console.log('workers killed:', data.killed)
+      logResult(data)
     }).catch(handle)
   })
 
