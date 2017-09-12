@@ -34,7 +34,7 @@ module.exports = function list(config) {
         pending: 0,
         available: 0,
         killed: 0,
-        ports: 0,
+        ports: [],
         reviveCount: app.reviveCount || 0,
         workers: app.workers || 0
       }

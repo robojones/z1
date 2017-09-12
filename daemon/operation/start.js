@@ -41,7 +41,6 @@ async function start(config, command, connection) {
     name: pack.name,
     args: command.args,
     opt: command.opt,
-    workers: pack.workers,
     env: command.env
   })
   config.save()
