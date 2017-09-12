@@ -406,7 +406,6 @@ class Remote extends BetterEvents {
    * @returns {Promise.<void>} - Returns a promise that resolves after the daemon is started.
    */
   async _startDaemon(options) {
-    console.log('cli cwd:', process.cwd())
     const z1Path = path.join(__dirname, '../../..')
     const file = path.join(z1Path, 'daemon', 'main.js')
     let node = process.argv[0]
