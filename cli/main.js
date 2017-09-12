@@ -3,8 +3,7 @@
 const path = require('path')
 const program = require('commander')
 const spawn = require('child_process').spawn
-const leftpad = require('leftpad')
-const rightpad = require('rightpad')
+const colors = require('colors/safe')
 
 const z1 = require('..')
 const getAppname = require('./lib/get-appname.js')
@@ -12,7 +11,7 @@ const features = require('./lib/features')
 const parser = require('./lib/parser')
 const version = require('./lib/version')
 const z1Logs = require('./lib/z1-logs')
-const hr = require('./lib/hr')
+const heading = require('./lib/heading')
 const { handle } = require('./lib/logs')
 
 const SPACER = '--'
@@ -40,7 +39,7 @@ program
   .action((opts) => {
     z1.resurrect(opts.immediate).then(data => {
       if (opts.immediate) return
-      hr()
+      heading()
       console.log('workers started:', data.started)
     }).catch(handle)
   })
@@ -67,7 +66,7 @@ program
 
     z1.start(dir, args, opt, env, opts.immediate).then(data => {
       if (opts.immediate) return
-      hr()
+      heading()
       console.log('name:', data.app)
       console.log('ports:', data.ports.join() || '-')
       console.log('workers started:', data.started)
@@ -87,7 +86,7 @@ program
     }
     z1.stop(appname, opt, opts.immediate).then(data => {
       if (opts.immediate) return
-      hr()
+      heading()
       console.log('name:', data.app)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -106,7 +105,7 @@ program
     }
     z1.restart(appname, opt, opts.immediate).then(data => {
       if (opts.immediate) return
-      hr()
+      heading()
       console.log('name:', data.app)
       console.log('ports:', data.ports.join() || '-')
       console.log('workers started:', data.started)
@@ -127,7 +126,7 @@ program
     }
     z1.restartAll(opt, opts.immediate).then(data => {
       if (opts.immediate) return
-      hr()
+      heading()
       console.log('workers started:', data.started)
       console.log('workers killed:', data.killed)
     }).catch(handle)
@@ -188,28 +187,27 @@ program
         return
       }
 
-      if (!props.length) {
-        console.log('no workers running')
-        return
-      }
+      heading('workers name                 directory')
 
-      console.log('workers  name                 ports')
-      for (const prop of props) {
-        const obj = data.stats[prop]
-        const p = leftpad(obj.pending, 2, ' ')
-        const a = leftpad(obj.available, 2, ' ')
-        const k = leftpad(obj.killed, 2, ' ')
-        const name = rightpad(prop, 20)
-        const ports = obj.ports.join() || '-'
-        console.log(p, a, k, name, ports)
-      }
-      console.log(' |  |  |')
-      console.log(' |  | killed')
-      console.log(' | available')
-      console.log('pending')
+      props.forEach(name => {
+        const app = data.stats[name]
+
+        let workers = colors.bold(`${app.available}/${app.workers}`.padEnd(7))
+        if (app.available < app.workers) {
+          workers = colors.red(workers)
+        } else if (app.available > app.workers) {
+          workers = colors.yellow(workers)
+        } else {
+          workers = colors.green(workers)
+        }
+
+        console.log(`${workers} ${name.padEnd(20)} ${app.dir}`)
+      })
 
       if (data.isResurrectable) {
-        console.log('\nThe listed apps are currently not running.\nType "z1 resurrect" to start them.')
+        console.log()
+        console.log(colors.dim('The listed apps are currently not running.'))
+        console.log(colors.dim('You can use "z1 resurrect" to start them.'))
       }
     }).catch(handle)
   })
