@@ -1,4 +1,5 @@
 const path = require('path')
+const cpuCount = require('os').cpus().length
 const verifyPorts = require('./verifyPorts')
 
 function getPack(dir, opt, env) {
@@ -31,6 +32,8 @@ function getPack(dir, opt, env) {
     // apply devWorkers
     pack.workers = opt.workers || pack.devWorkers || originalPackage.workers
   }
+
+  pack.workers = Math.abs(+pack.workers) || cpuCount
 
   return pack
 }

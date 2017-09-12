@@ -1,5 +1,4 @@
 const path = require('path')
-const cpuCount = require('os').cpus().length
 const cluster = require('cluster')
 const mkdirp = require('mkdirp-promise')
 
@@ -34,7 +33,7 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     output = path.join(process.env.HOME, '.z1', pack.name)
   }
 
-  const workerCount = Math.abs(+pack.workers) || cpuCount
+  const workerCount = pack.workers
 
   const exitPromises = []
   const availablePromises = []
