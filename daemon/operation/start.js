@@ -41,13 +41,13 @@ async function start(config, command, connection) {
     name: pack.name,
     args: command.args,
     opt: command.opt,
+    workers: pack.workers,
     env: command.env
   })
   config.save()
 
   try {
-    const result = await startWorkers(config, command.dir, pack, command.args, command.env, connection)
-    return result
+    return await startWorkers(config, command.dir, pack, command.args, command.env, connection)
   } catch (err) {
     // remove app from config
 
