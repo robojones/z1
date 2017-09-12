@@ -1,5 +1,3 @@
-const leftpad = require('leftpad')
-
 /**
  * Creates a date string of the format "YYYY-MM-DD".
  * @param {Date} date - The date to stringify.
@@ -7,8 +5,8 @@ const leftpad = require('leftpad')
  */
 function format(date) {
   const year = date.getUTCFullYear()
-  const month = leftpad(date.getUTCMonth(), 2)
-  const day = leftpad(date.getUTCDate(), 2)
+  const month = date.getUTCMonth().toString().padStart(2, '0')
+  const day = date.getUTCDate().toString().padStart(2, '0')
 
   return `${year}-${month}-${day}`
 }
