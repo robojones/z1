@@ -35,6 +35,10 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
 
   const workerCount = pack.workers
 
+  const app = config.apps.find(app => app.name === pack.name)
+  app.workers = workerCount
+  config.save()
+
   const exitPromises = []
   const availablePromises = []
 
