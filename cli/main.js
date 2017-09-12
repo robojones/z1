@@ -187,7 +187,7 @@ program
         return
       }
 
-      heading('workers name                 directory')
+      heading('workers ports     name                 directory')
 
       props.forEach(name => {
         const app = data.stats[name]
@@ -201,7 +201,9 @@ program
           workers = colors.green(workers)
         }
 
-        console.log(`${workers} ${name.padEnd(20)} ${app.dir}`)
+        const ports = app.ports.join() || '-'
+
+        console.log(`${workers} ${ports.padEnd(9)} ${name.padEnd(20)} ${app.dir}`)
       })
 
       if (data.isResurrectable) {
