@@ -234,14 +234,13 @@ __Options:__
 
 To stop an app just type:
 
-![Stop command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/stop.png)
+```
+z1 stop homepage
+```
 
 Example output:
 
-```
-name: homepage
-workers killed: 2
-```
+![Stop command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/stop.png)
 
 __Options__
 
