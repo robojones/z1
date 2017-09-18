@@ -114,7 +114,7 @@ The default timeout for __stop__ and __restart__ will be set to 0ms.
 ### Environment variables
 
 You can set different environment variables for each app.
-The [start](#start) command automatically applies the environment variables of the current CLI to the app.
+The [start](#start) command automatically applies the environment variables of the current shell to the app.
 
 ```
 EXAMPLE=hello z1 start path/to/your/app
@@ -132,18 +132,17 @@ These variables can not be overwritten.
 ### Start
 
 Starting the app:
-First go to the directory where the `package.json` is located. Type the following command into your terminal:
+First go to the directory where the `package.json` of you project is located. Type the following command into your terminal:
 
 ```
 z1 start
 ```
 
-In our example the output would be:
+The output could look like this:
 
-```
-name: homepage
-workers started: 2
-```
+![Start command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/start.png)
+
+_As you may have noticed, each log is displayed twice. This happens because two workers are started for the app and the logs of all workers are being displayed._
 
 __Options__
 
@@ -168,15 +167,11 @@ Just type the following command:
 z1 restart homepage
 ```
 
-The first argument for the `z1 restart` command is the app name that was in the `package.json` when you started the app.
+The first argument for the `z1 restart` command is the app name that was specified in the `package.json` when you started the app.
 
 Output of the example from above:
 
-```
-name: homepage
-workers started: 2
-workers killed: 2
-```
+![Restart command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/restart.png)
 
 __Options__
 
@@ -196,14 +191,8 @@ Displays a list of all running apps.
 
 Example:
 
-```
- workers name                 ports
- 0  2  0 homepage             80
- |  |  |
- |  | killed
- | available
-pending
-```
+
+![List command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/list.png)
 
 1. __Pending__ - processes are currently starting.
 2. __Available__ - workers are listening to all the ports specified in the `package.json`
@@ -245,9 +234,7 @@ __Options:__
 
 To stop an app just type:
 
-```
-z1 stop homepage
-```
+![Stop command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/stop.png)
 
 Example output:
 
