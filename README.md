@@ -189,15 +189,10 @@ z1 list
 
 Displays a list of all running apps.
 
-Example:
+The output could look like this:
 
 
 ![List command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/list.png)
-
-1. __Pending__ - processes are currently starting.
-2. __Available__ - workers are listening to all the ports specified in the `package.json`
-3. __Killed__ - workers are not listening for new connections.
-They will finish their outstanding requests before they exit.
 
 ### Info
 
@@ -219,6 +214,12 @@ workers:
   killed: 0
 revive count: 0
 ```
+
+- __Pending__ - processes are currently starting.
+- __Available__ - workers are listening to all the ports specified in the `package.json`
+- __Killed__ - workers are not listening for new connections.
+They will finish their outstanding requests before they exit.
+- __revive count__ - shows you how often the workers of your app crashed since the last restart.
 
 __Options:__
 
