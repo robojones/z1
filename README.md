@@ -49,6 +49,16 @@ The focus of z1 is on simplicity.
 Therefore it uses the __existing package.json__ of your project and allows you to start your app by typing `z1 start` in the project folder.
 z1 also comes with a __graceful restart__ functionality which allows you to restart your cluster without rejecting any request.
 
+## Changes
+- v3.16.1
+  - dim the white background for headings
+- v3.16.0
+  - add colors to cli
+- v3.15.0
+  - display the app's logs during command execution
+- v3.14.0
+  - add JSDoc to API
+
 ## Setup
 
 ### Installation
