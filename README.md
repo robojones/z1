@@ -16,6 +16,8 @@ The main goal of z1 is to __simplify__ the creation and management of clusters.
 
 ![Terminal example](https://raw.githubusercontent.com/robojones/z1/master/screenshots/terminal.gif)
 
+_This animation shows how simple it is to start a Node.js application with z1._
+
 ## Table of contents
 
 - [Features](#features)
@@ -91,7 +93,7 @@ you need to add a few things to your
 __Important:__
 If you app does not use any ports, you must require z1 in your app and call the [z1.ready](#z1ready) method.
 
-Example:
+Example package.json file:
 
 ```json
 {
@@ -204,16 +206,7 @@ Shows more detailed information than z1 list.
 
 Example output:
 
-```
-name: homepage
-directory: path/to/your/app
-ports: 80
-workers:
-  pending: 0
-  available: 2
-  killed: 0
-revive count: 0
-```
+![Info command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/info.png)
 
 - __Pending__ - processes are currently starting.
 - __Available__ - workers are listening to all the ports specified in the `package.json`
