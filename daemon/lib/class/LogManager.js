@@ -31,6 +31,7 @@ class LogManager extends BetterEvents {
   constructor() {
     super()
 
+    /** @type {{string: streams}} */
     this.streams = {}
   }
 
@@ -76,15 +77,32 @@ class LogManager extends BetterEvents {
     const logFile = path.resolve(dir, dateString + '-log.txt')
     const errFile = path.resolve(dir, dateString + '-error.txt')
 
+    /**
+     * Open a WriteStream and pipe the source into it.
+     * @param {string} name - Name for the WriteStream.
+     * @param {string} file - The name of the file.
+     * @param {stream.PassThrough} source - A stream to pipe into the WriteStream.
+     */
+    function openStream(name, file, source) {
+      if (streams[name] && streams[name].writable) {
+        streams[name].end()
+      }
+
+      const stream = fs.createWriteStream(file, APPEND)
+
+      stream.on('error', error => {
+        handle(error)
+        openStream(name, file, source)
+      })
+
+      source.pipe(stream, NOEND)
+
+      streams[name] = stream
+    }
+
     // WriteStreams for the files.
-    streams.logStream = fs.createWriteStream(logFile, APPEND)
-    streams.errStream = fs.createWriteStream(errFile, APPEND)
-
-    // TODO: Handle errors (try to reopen the streams)
-
-    // Pipe the PassThrough streams into the WriteStreams.
-    streams.log.pipe(streams.logStream, NOEND)
-    streams.err.pipe(streams.errStream, NOEND)
+    openStream('logStream', logFile, streams.log)
+    openStream('errStream', errFile, streams.err)
 
     const nextDay = new Date()
     nextDay.setUTCDate(nextDay.getDate() + 1)
