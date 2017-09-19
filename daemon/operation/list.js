@@ -49,6 +49,7 @@ module.exports = function list(config) {
       // show stopped apps that have running workers
       if (!stats[name]) {
         addApp({
+          name,
           dir: worker.dir
         })
       }
