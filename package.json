@@ -23,7 +23,8 @@
     "manager",
     "clusters",
     "management",
-    "process"
+    "process",
+    "cli"
   ],
   "author": "robojones",
   "license": "MIT",
