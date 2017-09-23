@@ -1,10 +1,8 @@
 const z1 = require('..')
-const fs = require('fs')
 const { once } = require('better-events')
 const { spawn } = require('child_process')
+const { TIMEOUT } = require('./lib/config')
 let daemon
-
-const TIMEOUT = 30000 // 30s
 
 before(async function () {
   // wait for the test-daemon to start
@@ -21,36 +19,27 @@ before(async function () {
 })
 
 after(async function () {
-  // wait for daemon to stop
-
   this.timeout(TIMEOUT)
 
+  // wait for daemon to stop
   await Promise.all([z1.exit(), once(daemon, 'exit')])
 })
 
-describe('z1', function () {
-  describe('command', function () {
-    this.timeout(TIMEOUT)
+beforeEach(function () {
+  this.timeout(TIMEOUT)
 
-    beforeEach(function () {
-      this.apps = []
-      this.defaultWd = process.cwd()
+  this.apps = []
+  this.defaultWd = process.cwd()
+})
+
+afterEach(async function () {
+  this.timeout(TIMEOUT)
+
+  process.chdir(this.defaultWd)
+
+  for (let i = 0; i < this.apps.length; i += 1) {
+    await z1.stop(this.apps[i], {
+      timeout: 10000
     })
-
-    afterEach(async function () {
-      process.chdir(this.defaultWd)
-
-      for (let i = 0; i < this.apps.length; i += 1) {
-        await z1.stop(this.apps[i], {
-          timeout: 10000
-        })
-      }
-    })
-
-    const files = fs.readdirSync('test/command')
-
-    files.forEach(file => {
-      require(`./command/${file}`)
-    })
-  })
+  }
 })

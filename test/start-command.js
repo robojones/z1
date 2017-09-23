@@ -1,12 +1,15 @@
 const xTime = require('x-time')
-const verifyApp = require('../lib/verifyApp')
-const z1 = require('../..')
+const verifyApp = require('./lib/verifyApp')
+const z1 = require('..')
 const {
   works,
   fails
-} = require('../lib/command')
+} = require('./lib/command')
+const { TIMEOUT } = require('./lib/config')
 
-describe('start', function () {
+describe('start command', function () {
+  this.timeout(TIMEOUT)
+
   it('should start the basic app with all options', async function () {
     this.apps.push('huhn')
     await works('z1 start test-app/basic --name huhn --ports 5050 --workers 1 --output ~/asdf')

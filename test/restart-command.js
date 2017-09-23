@@ -1,11 +1,14 @@
-const z1 = require('../..')
+const z1 = require('..')
 
 const {
   works,
   fails
-} = require('../lib/command')
+} = require('./lib/command')
+const { TIMEOUT } = require('./lib/config')
 
-describe('restart', function () {
+describe('restart command', function () {
+  this.timeout(TIMEOUT)
+
   it('should throw if the app is not running', async function () {
     await fails('z1 restart asdf')
   })

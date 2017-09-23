@@ -1,10 +1,11 @@
-const z1 = require('../..')
+const z1 = require('..')
 
-const {
-  works
-} = require('../lib/command')
+const { works } = require('./lib/command')
+const { TIMEOUT } = require('./lib/config')
 
-describe('stop', function () {
+describe('stop command', function () {
+  this.timeout(TIMEOUT)
+
   it('should work even if the app is not running', async function () {
     await works('z1 stop asdf')
   })
