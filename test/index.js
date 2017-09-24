@@ -8,7 +8,7 @@ before(async function () {
   // wait for the test-daemon to start
 
   this.timeout(TIMEOUT)
-  daemon = spawn('istanbul', ['cover', './daemon/main.js', '--dir', './coverage/daemon'], {
+  daemon = spawn('./daemon/main.js', {
     stdio: 'inherit'
   })
 
