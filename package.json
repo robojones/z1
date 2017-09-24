@@ -34,7 +34,8 @@
   "homepage": "https://github.com/robojones/z1#readme",
   "nyc": {
     "exclude": [
-      "test-app/*"
+      "test-app/*",
+      "test/*"
     ],
     "reporter": [
       "lcov"
