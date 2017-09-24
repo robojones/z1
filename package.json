@@ -32,6 +32,16 @@
     "url": "https://github.com/robojones/z1/issues"
   },
   "homepage": "https://github.com/robojones/z1#readme",
+  "nyc": {
+    "check-coverage": true,
+    "exclude": [
+      "test-app/*"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.0",
     "command-test": "^1.0.0",
