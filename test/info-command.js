@@ -34,7 +34,7 @@ describe('info command', function () {
      * @param {string} expectedResult 
      */
     function checkOption(optionName, expectedResult) {
-      describe(optionName, function () {
+      describe(`--${optionName}`, function () {
         it(`should output the ${optionName} of the app`, async function () {
           const result = await works(`z1 info basic --${optionName}`)
           assert.strictEqual(result.out, expectedResult + '\n')
