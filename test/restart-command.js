@@ -4,7 +4,10 @@ const {
   works,
   fails
 } = require('./lib/command')
-const { TIMEOUT } = require('./lib/config')
+const {
+  TIMEOUT,
+  KILL_TIMEOUT
+} = require('./lib/config')
 
 describe('restart command', function () {
   this.timeout(TIMEOUT)
@@ -16,7 +19,7 @@ describe('restart command', function () {
   it('should restart all workers of the app', async function () {
     this.apps.push('basic')
     await z1.start('test-app/basic')
-    await works('z1 restart basic --timeout 10000')
+    await works(`z1 restart basic --timeout ${KILL_TIMEOUT}`)
   })
 
   it('should autodetect the appname from the directory if no appname is given', async function () {
@@ -24,7 +27,7 @@ describe('restart command', function () {
 
     this.apps.push('basic')
     await z1.start()
-    await works('z1 restart --timeout 10000')
+    await works(`z1 restart --timeout ${KILL_TIMEOUT}`)
   })
 
   it('should exit immediately if --immediate is set')

@@ -3,7 +3,10 @@ const path = require('path')
 
 const z1 = require('..')
 const { works } = require('./lib/command')
-const { TIMEOUT } = require('./lib/config')
+const {
+  TIMEOUT,
+  KILL_TIMEOUT
+} = require('./lib/config')
 
 describe('info command', function () {
   this.timeout(TIMEOUT)
@@ -17,7 +20,7 @@ describe('info command', function () {
 
     after(async function () {
       await z1.stop('basic', {
-        timeout: 10000
+        timeout: KILL_TIMEOUT
       })
     })
 

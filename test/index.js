@@ -1,7 +1,11 @@
 const z1 = require('..')
 const { once } = require('better-events')
 const { spawn } = require('child_process')
-const { TIMEOUT } = require('./lib/config')
+const {
+  TIMEOUT,
+  KILL_TIMEOUT
+} = require('./lib/config')
+
 let daemon
 
 before(async function () {
@@ -39,7 +43,7 @@ afterEach(async function () {
 
   for (let i = 0; i < this.apps.length; i += 1) {
     await z1.stop(this.apps[i], {
-      timeout: 10000
+      timeout: KILL_TIMEOUT
     })
   }
 })
