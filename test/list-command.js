@@ -8,7 +8,7 @@ const {
   KILL_TIMEOUT
 } = require('./lib/config')
 
-describe('info command', function () {
+describe('list command', function () {
   this.timeout(TIMEOUT)
 
   before(async function () {
