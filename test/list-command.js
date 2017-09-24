@@ -1,5 +1,4 @@
 const assert = require('assert')
-const path = require('path')
 
 const z1 = require('..')
 const { works } = require('./lib/command')

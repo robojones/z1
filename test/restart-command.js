@@ -31,6 +31,4 @@ describe('restart command', function () {
   })
 
   it('should exit immediately if --immediate is set')
-
-  it('should send the --signal after the --timeout')
 })
