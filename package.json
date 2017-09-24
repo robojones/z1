@@ -37,7 +37,6 @@
     "command-test": "^1.0.0",
     "eslint": "^4.7.1",
     "eslint-config-ultra": "^0.4.5",
-    "istanbul": "1.1.0-alpha.1",
     "mocha": "^3.5.3"
   },
   "dependencies": {
@@ -46,6 +45,7 @@
     "commander": "^2.11.0",
     "mkdirp-promise": "^5.0.1",
     "mz": "^2.7.0",
+    "nyc": "^11.2.1",
     "smart-promisify": "^1.0.4",
     "x-time": "^1.1.8"
   }
