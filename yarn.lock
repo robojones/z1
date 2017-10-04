@@ -227,9 +227,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-better-events@^3.0.3, better-events@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/better-events/-/better-events-3.0.4.tgz#bef654ef1100ddf4126ff79a9e941758318c429e"
+better-events@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/better-events/-/better-events-3.0.5.tgz#2fdb1f9b4f60f7b383c373552a88f2fc986b6a48"
 
 boom@2.x.x:
   version "2.10.1"
@@ -386,11 +386,11 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-command-test@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/command-test/-/command-test-1.0.0.tgz#f9da1f12b47ee3c1634f8856e48ab7c23d4d268e"
+command-test@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/command-test/-/command-test-1.1.1.tgz#764713399d231cda2b87b3818213dbead984d1df"
   dependencies:
-    better-events "^3.0.3"
+    better-events "^3.0.5"
 
 commander@2.11.0, commander@^2.11.0, commander@^2.9.0:
   version "2.11.0"
@@ -1882,9 +1882,9 @@ slide@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
 
-smart-promisify@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/smart-promisify/-/smart-promisify-1.0.4.tgz#8908d5b91e24159c0eab95943865cf9f24d27074"
+smart-promisify@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/smart-promisify/-/smart-promisify-1.0.5.tgz#557673c3b20b6701254ed40e903b164274d99163"
 
 sntp@1.x.x:
   version "1.0.9"
@@ -2186,9 +2186,9 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-x-time@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/x-time/-/x-time-1.1.8.tgz#a5545fa576871bc82a651c08b10a35812b32fe2d"
+x-time@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/x-time/-/x-time-1.1.9.tgz#b7c07385c5dd1686835abb6718d91f4368f5ef57"
 
 xtend@^4.0.0:
   version "4.0.1"

@@ -43,19 +43,19 @@
   },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.0",
-    "command-test": "^1.0.0",
+    "command-test": "^1.1.1",
     "eslint": "^4.8.0",
     "eslint-config-ultra": "^0.4.5",
     "mocha": "^4.0.0",
     "nyc": "^11.2.1"
   },
   "dependencies": {
-    "better-events": "^3.0.4",
+    "better-events": "^3.0.5",
     "colors": "^1.1.2",
     "commander": "^2.11.0",
     "mkdirp-promise": "^5.0.1",
     "mz": "^2.7.0",
-    "smart-promisify": "^1.0.4",
-    "x-time": "^1.1.8"
+    "smart-promisify": "^1.0.5",
+    "x-time": "^1.1.9"
   }
 }
