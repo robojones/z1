@@ -44,9 +44,9 @@
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.0",
     "command-test": "^1.0.0",
-    "eslint": "^4.7.1",
+    "eslint": "^4.8.0",
     "eslint-config-ultra": "^0.4.5",
-    "mocha": "^3.5.3",
+    "mocha": "^4.0.0",
     "nyc": "^11.2.1"
   },
   "dependencies": {
