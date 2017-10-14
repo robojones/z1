@@ -123,10 +123,11 @@ EXAMPLE=hello z1 start path/to/your/app
 
 There are some environment variables that z1 sets automatically:
 
-- __PORT__ - the first port
-- __PORTS__ - all ports that your app uses (separated by commas)
-- __APPNAME__ - the name of your app
-- __PWD__ - the directory of your app
+- __PORT__ - The first port.
+- __PORTS__ - All ports that your app uses (separated by commas).
+- __APPNAME__ - The name of your app.
+- __PWD__ - The directory of your app.
+- __WORKERS__ - The number of workers started for the app.
 
 These variables can not be overwritten.
 
