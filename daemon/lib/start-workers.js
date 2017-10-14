@@ -59,7 +59,8 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     PWD: dir,
     APPNAME: pack.name,
     PORT: ports[0],
-    PORTS: ports.join()
+    PORTS: ports.join(),
+    WORKERS: workerCount
   })
 
   for (let i = 0; i < workerCount; i += 1) {
