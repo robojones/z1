@@ -7,7 +7,7 @@ module.exports = function list(config) {
     const stats = {}
 
     /**
-     * @typedef appStats
+     * @typedef AppStats
      * @property {string} dir
      * @property {number} pending
      * @property {number} available
@@ -19,6 +19,7 @@ module.exports = function list(config) {
     /**
      * @typedef app
      * @property {string} dir
+     * @property {string} name
      * @property {number} [reviveCount]
      * @property {number} [workers]
      */
@@ -26,7 +27,6 @@ module.exports = function list(config) {
     /**
      * Add an app to the stats.
      * @param {app} app
-     * @returns {appStats}
      */
     function addApp(app) {
       stats[app.name] = {
@@ -54,6 +54,7 @@ module.exports = function list(config) {
         })
       }
 
+      /** @type {AppStats} */
       const appStats = stats[name]
 
       // increase state counter
