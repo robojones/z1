@@ -30,7 +30,8 @@ class Connection extends OrigConnection {
       }
     }
 
-    this.socket.end(JSON.stringify(res) + '\n')
+    this.sendMessage(res)
+    this.socket.end()
   }
 
   /**
@@ -38,16 +39,10 @@ class Connection extends OrigConnection {
    * @param {*} msg - The message to log.
    */
   log(...msg) {
-    if (this.isDestroyed) {
-      return
-    }
-
-    const data = {
+    this.sendMessage({
       type: 'log',
       log: logify(...msg)
-    }
-
-    this.socket.write(JSON.stringify(data) + '\n')
+    })
   }
 
   /**
