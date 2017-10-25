@@ -55,6 +55,7 @@
     "commander": "^2.11.0",
     "mkdirp-promise": "^5.0.1",
     "mz": "^2.7.0",
+    "revents": "^1.0.1",
     "smart-promisify": "^1.0.5",
     "x-time": "^1.1.9"
   }
