@@ -273,20 +273,6 @@ program
     }
   })
 
-program
-  .command('upgrade')
-  .description('upgrade daemon to a newly installed version')
-  .action(() => {
-    if (version.cli === version.daemon) {
-      console.log('already up-to-date')
-      return
-    }
-
-    z1.upgrade().then(() => {
-      console.log('upgrade successful')
-    }).catch(handle)
-  })
-
 if (!global.test) {
   if (process.argv.length === 2) {
     program.outputHelp()
