@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 const path = require('path')
+const util = require('util')
 const program = require('commander')
 const spawn = require('child_process').spawn
 const colors = require('colors/safe')
@@ -274,7 +275,7 @@ program
 program
   .command('upgrade')
   .description('upgrade daemon to a newly installed version')
-  .action(() => {
+  .action(util.deprecate(() => {
     if (version.cli === version.daemon) {
       console.log('already up-to-date')
       return
@@ -283,7 +284,7 @@ program
     z1.upgrade().then(() => {
       console.log('upgrade successful')
     }).catch(handle)
-  })
+  }, 'z1 upgrade - Use "z1 exit && z1 resurrect" or "pkill node && z1 resurrect" instead.'))
 
 if (!global.test) {
   if (process.argv.length === 2) {
