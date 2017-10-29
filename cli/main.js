@@ -274,23 +274,6 @@ program
     }
   })
 
-<<<<<<< HEAD
-program
-  .command('upgrade')
-  .description('upgrade daemon to a newly installed version')
-  .action(util.deprecate(() => {
-    if (version.cli === version.daemon) {
-      console.log('already up-to-date')
-      return
-    }
-
-    z1.upgrade().then(() => {
-      console.log('upgrade successful')
-    }).catch(handle)
-  }, 'z1 upgrade - Use "z1 exit && z1 resurrect" or "pkill node && z1 resurrect" instead.'))
-
-=======
->>>>>>> revents
 if (!global.test) {
   if (process.argv.length === 2) {
     program.outputHelp()
