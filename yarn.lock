@@ -1816,6 +1816,12 @@ restore-cursor@^2.0.0:
     onetime "^2.0.0"
     signal-exit "^3.0.2"
 
+revents@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/revents/-/revents-1.0.1.tgz#c23f7497a0b007fba8a2227c0ab764b44fad9599"
+  dependencies:
+    socket-json-wrapper "^1.0.0"
+
 right-align@^0.1.1:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/right-align/-/right-align-0.1.3.tgz#61339b722fe6a3515689210d24e14c96148613ef"
@@ -1891,6 +1897,12 @@ sntp@1.x.x:
   resolved "https://registry.yarnpkg.com/sntp/-/sntp-1.0.9.tgz#6541184cc90aeea6c6e7b35e2659082443c66198"
   dependencies:
     hoek "2.x.x"
+
+socket-json-wrapper@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/socket-json-wrapper/-/socket-json-wrapper-1.0.1.tgz#6dd69c76d89058f4cd9321b449331332fcfd7d6b"
+  dependencies:
+    better-events "^3.0.5"
 
 source-map@^0.4.4:
   version "0.4.4"

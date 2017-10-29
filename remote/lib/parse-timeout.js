@@ -8,7 +8,7 @@ const defaultValue = dev ? 0 : 30000 // 0 or 30s
  */
 function parseTimeout(value = defaultValue) {
   if (isNaN(value)) {
-    throw new TypeError('timeout must be a number, undefined or Infinity.')
+    throw new TypeError('Timeout must be a number, undefined or Infinity.')
   }
 
   if (!isFinite(value)) {

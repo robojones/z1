@@ -41,18 +41,18 @@ let operation = {
   stop: require('./operation/stop')
 }
 
-remoteServer('sick.sock', (command, connection) => {
+remoteServer('sick.sock', async (command, connection) => {
   if (process.env.NODE_ENV === 'development') {
     log('daemon: run command', command.name)
   }
 
   if (!operation.hasOwnProperty(command.name)) {
-    return Promise.reject(new Error(`invalid operation name "${command.name}"`))
+    throw new Error(`Unknown operation "${command.name}".`)
   }
 
   if (command.immediate) {
     operation[command.name](config, command, connection).catch(handle)
-    return Promise.resolve({})
+    return {}
   }
 
   return operation[command.name](config, command, connection)

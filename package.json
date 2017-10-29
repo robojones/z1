@@ -1,6 +1,10 @@
 {
   "name": "z1",
+<<<<<<< HEAD
   "version": "3.17.3",
+=======
+  "version": "4.0.0-0",
+>>>>>>> revents
   "preferGlobal": true,
   "description": "Node.js cluster manager",
   "main": "index.js",
@@ -55,6 +59,7 @@
     "commander": "^2.11.0",
     "mkdirp-promise": "^5.0.1",
     "mz": "^2.7.0",
+    "revents": "^1.0.1",
     "smart-promisify": "^1.0.5",
     "x-time": "^1.1.9"
   }

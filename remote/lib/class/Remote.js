@@ -7,7 +7,7 @@ const {
   once,
   BetterEvents
 } = require('better-events')
-const Connection = require('./Connection')
+const Connection = require('revents')
 const parseTimeout = require('../parse-timeout')
 
 /**
@@ -34,7 +34,6 @@ class Remote extends BetterEvents {
       throw new Error('Can not send the "ready" signal to z1 because process.send() is not defined.')
     }
 
-    console.log('ready signal sent')
     const send = promisify(process.send, process)
     await send('ready')
   }
@@ -246,8 +245,6 @@ class Remote extends BetterEvents {
     return this._connectAndSend({
       name: 'logs',
       app
-    }, connection => {
-      connection.shareSIGINT()
     })
   }
 
@@ -311,50 +308,41 @@ class Remote extends BetterEvents {
   /**
    * Sends a command to the server.
    * @param {Object} object - An object representing the command.
-   * @param {function} connectionHandler - Call this with the connection object.
    * @returns {Promise.<*>} - The result of the command.
    */
-  async _send(object, connectionHandler) {
+  async _send(object) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
-        object.type = 'command'
-        socket.write(JSON.stringify(object) + '\n')
-
         const connection = new Connection(socket)
 
-        connection.on('message', message => {
-          if (message.type === 'result') {
-            return resolve(message.result)
-          }
+        connection.remoteEmit('command', object)
 
-          if (message.type === 'log') {
-            return this.emit('log', message.log, message)
-          }
+        const SIGINTHandler = () => {
+          connection.remoteEmit('SIGINT')
+        }
 
-          if (message.type === 'stdout' || message.type === 'stderr') {
-            let chunk = message.chunk
-            if (typeof message.chunk === 'object' && message.chunk.type === 'Buffer') {
-              chunk = Buffer.from(message.chunk.data)
-            }
+        process.once('SIGINT', SIGINTHandler)
 
-            this.emit(message.type, chunk)
-          }
-
-          if (message.type === 'error') {
-            // reassemble the error
-            const error = new Error(message.error.message)
-            error.stack = message.error.stack
-            error.code = message.error.code
-
-            reject(error)
-          }
+        connection.on('result', result => {
+          resolve(result)
+          process.removeListener('SIGINT', SIGINTHandler)
+          connection.close()
         })
 
-        connection.once('error', reject)
+        connection.on('stdout', chunk => {
+          const buffer = Buffer.from(chunk)
+          this.emit('stdout', buffer)
+        })
 
-        if (typeof connectionHandler === 'function') {
-          connectionHandler(connection)
-        }
+        connection.on('stderr', chunk => {
+          const buffer = Buffer.from(chunk)
+          this.emit('stderr', buffer)
+        })
+
+        connection.once('error', err => {
+          reject(err)
+          connection.close()
+        })
       })
 
       socket.once('error', reject)
@@ -408,7 +396,7 @@ class Remote extends BetterEvents {
   async _startDaemon(options) {
     const z1Path = path.join(__dirname, '../../..')
     const file = path.join(z1Path, 'daemon', 'main.js')
-    let node = process.argv[0]
+    const node = process.argv[0]
 
     const spawnOptions = Object.assign({
       stdio: 'ignore',
@@ -421,7 +409,7 @@ class Remote extends BetterEvents {
 
     const exit = once(p, 'exit').then(code => {
       if (code) {
-        throw new Error(`daemon exited with code: "${code}"`)
+        throw new Error(`Unable to start daemon. Exited with code "${code}".`)
       }
     })
 

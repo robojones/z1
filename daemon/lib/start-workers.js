@@ -106,7 +106,8 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
           workers: 1
         })
 
-        await startWorkers(config, dir, pkg, args, env)
+        // passing the connection (even if it's dead) is necessary because some modules depend on it.
+        await startWorkers(config, dir, pkg, args, env, connection)
       }
     }).catch(handle)
   }
@@ -116,7 +117,7 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
 
   try {
     // Wait for all workers to start.
-    await Promise.race([exitPromise, availablePromise])
+    await Promise.race([exitPromise, availablePromise, connection.SIGINT])
 
     logs.stop()
 
