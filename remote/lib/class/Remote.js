@@ -7,7 +7,7 @@ const {
   once,
   BetterEvents
 } = require('better-events')
-const Connection = require('./Connection')
+const Connection = require('revents')
 const parseTimeout = require('../parse-timeout')
 
 /**
@@ -317,37 +317,22 @@ class Remote extends BetterEvents {
   async _send(object, connectionHandler) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
-        object.type = 'command'
-        socket.write(JSON.stringify(object) + '\n')
-
         const connection = new Connection(socket)
 
-        connection.on('message', message => {
-          if (message.type === 'result') {
-            return resolve(message.result)
-          }
+        connection.remoteEmit('command', object)
 
-          if (message.type === 'log') {
-            return this.emit('log', message.log, message)
-          }
+        connection.on('result', result => {
+          resolve(result)
+        })
 
-          if (message.type === 'stdout' || message.type === 'stderr') {
-            let chunk = message.chunk
-            if (typeof message.chunk === 'object' && message.chunk.type === 'Buffer') {
-              chunk = Buffer.from(message.chunk.data)
-            }
+        connection.on('stdout', chunk => {
+          const buffer = Buffer.from(chunk)
+          this.emit('stdout', buffer)
+        })
 
-            this.emit(message.type, chunk)
-          }
-
-          if (message.type === 'error') {
-            // reassemble the error
-            const error = new Error(message.error.message)
-            error.stack = message.error.stack
-            error.code = message.error.code
-
-            reject(error)
-          }
+        connection.on('stderr', chunk => {
+          const buffer = Buffer.from(chunk)
+          this.emit('stderr', buffer)
         })
 
         connection.once('error', reject)
@@ -408,7 +393,7 @@ class Remote extends BetterEvents {
   async _startDaemon(options) {
     const z1Path = path.join(__dirname, '../../..')
     const file = path.join(z1Path, 'daemon', 'main.js')
-    let node = process.argv[0]
+    const node = process.argv[0]
 
     const spawnOptions = Object.assign({
       stdio: 'ignore',
@@ -421,7 +406,7 @@ class Remote extends BetterEvents {
 
     const exit = once(p, 'exit').then(code => {
       if (code) {
-        throw new Error(`daemon exited with code: "${code}"`)
+        throw new Error(`Unable to start daemon. Exited with code "${code}".`)
       }
     })
 
