@@ -6,8 +6,10 @@ const logs = require('./log')
  * @param {*} connection - The connection to the CLI.
  */
 function sendLogsToCLI(target, connection) {
-  const sendOutToCLI = chunk => connection && connection.stdout(chunk)
-  const sendErrToCLI = chunk => connection && connection.stderr(chunk)
+  const convert = chunk => Array.from(Buffer.from(chunk))
+  const emit = (ev, chunk) => connection.remoteEmit(ev, convert(chunk))
+  const sendOutToCLI = chunk => emit('stdout', chunk)
+  const sendErrToCLI = chunk => emit('stderr', chunk)
 
   let streams
 
