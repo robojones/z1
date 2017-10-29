@@ -34,7 +34,6 @@ class Remote extends BetterEvents {
       throw new Error('Can not send the "ready" signal to z1 because process.send() is not defined.')
     }
 
-    console.log('ready signal sent')
     const send = promisify(process.send, process)
     await send('ready')
   }
@@ -318,12 +317,16 @@ class Remote extends BetterEvents {
 
         connection.remoteEmit('command', object)
 
-        process.on('SIGINT', () => {
+        const SIGINTHandler = () => {
           connection.remoteEmit('SIGINT')
-        })
+        }
+
+        process.once('SIGINT', SIGINTHandler)
 
         connection.on('result', result => {
           resolve(result)
+          process.removeListener('SIGINT', SIGINTHandler)
+          connection.close()
         })
 
         connection.on('stdout', chunk => {
@@ -336,7 +339,10 @@ class Remote extends BetterEvents {
           this.emit('stderr', buffer)
         })
 
-        connection.once('error', reject)
+        connection.once('error', err => {
+          reject(err)
+          connection.close()
+        })
       })
 
       socket.once('error', reject)
