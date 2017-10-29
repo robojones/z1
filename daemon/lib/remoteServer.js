@@ -33,6 +33,18 @@ function remoteServer(filename, run) {
         connection.remoteEmit('error', err)
       }
     })
+
+    connection.SIGINT = connection.once('SIGINT').then(() => {
+      const msg = 'Received "SIGINT" from CLI. No new workers were started.'
+
+      const error = new Error(msg)
+      error.code = 'SIGINT'
+
+      throw error
+    })
+
+    // prevent unhandled promise rejection warning
+    connection.SIGINT.catch(() => {})
   })
 
   if (!global.test) {

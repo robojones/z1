@@ -116,7 +116,7 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
 
   try {
     // Wait for all workers to start.
-    await Promise.race([exitPromise, availablePromise])
+    await Promise.race([exitPromise, availablePromise, connection.SIGINT])
 
     logs.stop()
 

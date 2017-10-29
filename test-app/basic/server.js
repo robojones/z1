@@ -8,7 +8,9 @@ setInterval(() => {
   console.log('test :D')
 }, 4000)
 
-server.listen(+process.env.PORT)
+setTimeout(() => {
+  server.listen(+process.env.PORT)
+}, 5000)
 
 console.log('test log written to stdout')
 console.error('test log written to stderr')
