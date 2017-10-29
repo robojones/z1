@@ -53,6 +53,10 @@ Therefore it uses the __existing package.json__ of your project and allows you t
 z1 also comes with a __graceful restart__ functionality which allows you to restart your cluster without rejecting any request.
 
 ## Changes
+- v4.0.0
+  - use [revents](https://npmjs.com/package/revents) for data transmission between the CLI and the daemon.
+  - `Ctrl + C` can now be used to abort the starting process of apps.
+  - remove upgrade command.
 - v3.17.0
   - add [WORKERS](#environment-variables) environment variable
 - v3.16.0
