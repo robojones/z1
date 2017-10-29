@@ -5,6 +5,9 @@ const program = require('commander')
 const spawn = require('child_process').spawn
 const colors = require('colors/safe')
 
+// initialize global.handle and global.log methods
+require('./lib/logs')
+
 const z1 = require('..')
 const getAppname = require('./lib/get-appname.js')
 const features = require('./lib/features')
@@ -12,7 +15,6 @@ const parser = require('./lib/parser')
 const version = require('./lib/version')
 const z1Logs = require('./lib/z1-logs')
 const heading = require('./lib/heading')
-const { handle } = require('./lib/logs')
 const logResult = require('./lib/log-result')
 
 const SPACER = '--'
