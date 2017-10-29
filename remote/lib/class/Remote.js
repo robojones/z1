@@ -246,8 +246,6 @@ class Remote extends BetterEvents {
     return this._connectAndSend({
       name: 'logs',
       app
-    }, connection => {
-      connection.shareSIGINT()
     })
   }
 
@@ -311,15 +309,18 @@ class Remote extends BetterEvents {
   /**
    * Sends a command to the server.
    * @param {Object} object - An object representing the command.
-   * @param {function} connectionHandler - Call this with the connection object.
    * @returns {Promise.<*>} - The result of the command.
    */
-  async _send(object, connectionHandler) {
+  async _send(object) {
     return new Promise((resolve, reject) => {
       const socket = net.connect(this.socketFile, () => {
         const connection = new Connection(socket)
 
         connection.remoteEmit('command', object)
+
+        process.on('SIGINT', () => {
+          connection.remoteEmit('SIGINT')
+        })
 
         connection.on('result', result => {
           resolve(result)
@@ -336,10 +337,6 @@ class Remote extends BetterEvents {
         })
 
         connection.once('error', reject)
-
-        if (typeof connectionHandler === 'function') {
-          connectionHandler(connection)
-        }
       })
 
       socket.once('error', reject)
