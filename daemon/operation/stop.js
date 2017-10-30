@@ -10,11 +10,6 @@ command {
 */
 
 async function stop(config, command, connection) {
-  // use this for the app-status:
-  // const app = config.apps.find(app => app.name === command.app)
-
-  // transmit output to cli
-
   const timeout = command.opt.timeout
 
   const workers = Worker.workerList.filter(worker => worker.name === command.app)
