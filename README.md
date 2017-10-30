@@ -90,9 +90,9 @@ you need to add a few things to your
 7. __devWorkers__ _(optional)_ - Workers for [development](#development)
 
 __Important:__
-`z1` needs to know when you Node.js program (e.g. a web server) was successfully started.
-If you app uses ports, z1 will automatically know, when is listens to all the specified ports. It will then assume, that you app is completely started.
-If you app does not use any ports, you must require z1 in your program and call the [z1.ready()](#z1ready) method.
+z1 needs to know when your Node.js program (e.g. a web server) is successfully started.
+If you app uses ports, z1 will automatically know when it listens to all the specified ports. It will then assume, that you app is completely started.
+__If you app does not use any ports, you must require z1 in your program and call the [z1.ready()](#z1ready) method.__
 
 Example package.json file:
 
@@ -100,16 +100,16 @@ Example package.json file:
 {
   "name": "homepage",
   "main": "index.js",
-  "ports": [80],
+  "ports": [8080],
   "workers": 2
 }
 ```
 
 ### Development
 
-If you are running z1 locally, you can set the `NODE_ENV` environment variable to `'development'`.
+If you are running z1 locally, you can set `NODE_ENV=development`.
 This will cause z1 to use the `devPorts` and `devWorkers` (if specified) instead of the `ports` and `workers` properties from the `package.json`.
-The default timeout for __stop__ and __restart__ will be set to 0ms.
+The __default timeout__ for stop and restart will be set to __0ms__.
 
 
 ## CLI
@@ -136,7 +136,7 @@ These variables __can't be overwritten__.
 ### Start
 
 After you [prepared the package.json](#prepare-packagejson) file of your app, you can now start it.
-First go to the directory where the `package.json` of you project is located. Type the following command into your terminal:
+First go to the directory where the `package.json` of your project is located. Type the following command into your terminal:
 
 ```
 z1 start
@@ -172,7 +172,7 @@ Just type the following command:
 z1 restart homepage
 ```
 
-The first argument for the `z1 restart` command is the app name that was specified in the `package.json` when you started the app.
+The first argument for the `z1 restart` command is the name that was specified in the `package.json` when you started the app.
 If you are running this command inside the directory of the Node.js application, z1 will automatically detect the name.
 
 Output of the example from above:
@@ -185,10 +185,10 @@ __Options__
 --timeout 10000
 ```
 
-`--timeout` is a number specifying the maximal time that the old workers are allowed to run after they are killed (in ms).
-The timeout allows old processes to finish their active requests while not accepting new ones.
+`--timeout` is a number specifying the maximal time (in ms) that the old workers can __continue to run__ after they are killed.
+The timeout allows old processes to __finish their active requests__ while not accepting new ones.
 If all requests are finished, or the timeout is exceeded, the old processes get killed.
-The default value is 30000 (30s). If you set it to "infinity" the old processes might run forever.
+The default value is 30000 (30s). If you set it to "Infinity" the old processes might run forever.
 
 
 ### List
@@ -216,9 +216,9 @@ Example output:
 
 ![Info command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/info.png)
 
-- __Pending__ - processes are currently starting.
-- __Available__ - workers are listening to all the ports specified in the `package.json`
-- __Killed__ - workers are not listening for new connections.
+- __pending__ - processes are currently starting.
+- __available__ - workers are listening to all the ports specified in the `package.json`
+- __killed__ - workers are not listening for new connections.
 They will finish their outstanding requests before they exit.
 - __revive count__ - shows you how often the workers of your app crashed since the last restart.
 
@@ -259,11 +259,11 @@ The default value is 30,000ms. If you set it to "infinity" the old processes mig
 z1 exit
 ```
 
-Will kill the z1 daemon process and therefore all apps and workers.
+This will kill the z1 daemon process and therefore all apps and workers.
 
 ### Resurrect
 
-After you typed exit, you can use the following to start all the apps that were running before:
+After you typed [exit](#exit), you can use the following to start all the apps that were running before:
 
 ```
 z1 resurrect
