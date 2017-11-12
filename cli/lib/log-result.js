@@ -10,7 +10,7 @@ const heading = require('./heading')
 
 /**
  * Logs the contents of a result object.
- * @param {result} result 
+ * @param {result} result
  */
 function logResult(result) {
   heading('workers ports     name')

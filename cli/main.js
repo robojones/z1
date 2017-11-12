@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 const path = require('path')
-const util = require('util')
 const program = require('commander')
 const spawn = require('child_process').spawn
 const colors = require('colors/safe')

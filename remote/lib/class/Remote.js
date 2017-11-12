@@ -109,7 +109,7 @@ class Remote extends BetterEvents {
   /**
    * Stop all workers of an app.
    * @param {string} app - The name of th app.
-   * @param {killOptions} [opt] - Options for the command. 
+   * @param {killOptions} [opt] - Options for the command.
    * @param {boolean} [immediateResolve] - Resolve the returned promise immediately after the command has been transmitted.
    * @returns {Promise.<stopResult>}
    */
@@ -170,7 +170,7 @@ class Remote extends BetterEvents {
     })
   }
 
-  /** 
+  /**
    * Stop the z1 daemon.
    * @returns {Promise.<void>}
    */

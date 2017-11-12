@@ -30,8 +30,8 @@ describe('info command', function () {
   describe('option', function () {
     /**
      * Test if the given option outputs the expected result
-     * @param {string} optionName 
-     * @param {string} expectedResult 
+     * @param {string} optionName
+     * @param {string} expectedResult
      */
     function checkOption(optionName, expectedResult) {
       describe(`--${optionName}`, function () {
