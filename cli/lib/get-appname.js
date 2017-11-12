@@ -1,6 +1,5 @@
 const path = require('path')
 const assert = require('assert')
-const { log } = require('./logs')
 
 /**
  * Get the name of the app from the current cwd.

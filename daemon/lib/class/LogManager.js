@@ -38,7 +38,7 @@ class LogManager extends BetterEvents {
   /**
    * Get the streams for an app.
    * @property {string} - The id of the app.
-   * @returns {streams} 
+   * @returns {streams}
    */
   get(id) {
     if (!this.streams[id]) {
@@ -56,7 +56,7 @@ class LogManager extends BetterEvents {
 
   /**
    * Sets up the streams for the logs.
-   * @param {string} id - The id of the app. 
+   * @param {string} id - The id of the app.
    * @param {string} dir - The directory for the logs.
    * @param {Date} date - The current date.
    */

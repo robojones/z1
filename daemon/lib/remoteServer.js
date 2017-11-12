@@ -1,7 +1,7 @@
 const net = require('net')
 const path = require('path')
 const fs = require('mz/fs')
-const Connection = require('./class/Connection')
+const Connection = require('revents')
 const z1 = require('../../remote')
 
 const OPT = {
@@ -22,21 +22,29 @@ function remoteServer(filename, run) {
     const connection = new Connection(socket)
 
     connection.on('error', error => {
-      connection.json(error)
+      connection.remoteEmit('error', error)
     })
 
-    connection.on('message', async (data) => {
-      if (data.type !== 'command') {
-        return
-      }
-
+    connection.on('command', async data => {
       try {
         const result = await run(data, connection)
-        connection.json(null, result)
+        connection.remoteEmit('result', result)
       } catch (err) {
-        connection.json(err)
+        connection.remoteEmit('error', err)
       }
     })
+
+    connection.SIGINT = connection.once('SIGINT').then(() => {
+      const msg = 'Received "SIGINT" from CLI. No new workers were started.'
+
+      const error = new Error(msg)
+      error.code = 'SIGINT'
+
+      throw error
+    })
+
+    // prevent unhandled promise rejection warning
+    connection.SIGINT.catch(() => {})
   })
 
   if (!global.test) {

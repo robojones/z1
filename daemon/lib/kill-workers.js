@@ -2,9 +2,9 @@ const sendLogsToCLI = require('./send-logs-to-CLI.js')
 
 /**
  * Kills all workers. Returns the number of killed workers.
- * @param {*} workers 
- * @param {number} timeout 
- * @param {string} signal 
+ * @param {*} workers
+ * @param {number} timeout
+ * @param {string} signal
  * @param {*} connection
  * @returns {number}
  */

@@ -1,21 +1,21 @@
 const dev = process.env.NODE_ENV === 'development'
-const defaultValue = dev ? 0 : 30000 // 0 or 30s
+const DEFAULT_VALUE = dev ? 0 : 30000 // 0 or 30s
 
 /**
- * If value === Infinity it returns "Infinity". If value === undefined it returns the default value. If the value is a Number it returns the value.
- * @param {string|number} value 
+ * If timeout === Infinity it returns "Infinity". If timeout === undefined it returns the default timeout. If the timeout is a Number it returns the timeout.
+ * @param {string|number} timeout
  * @returns {string|number}
  */
-function parseTimeout(value = defaultValue) {
-  if (isNaN(value)) {
-    throw new TypeError('timeout must be a number, undefined or Infinity.')
+function parseTimeout(timeout = DEFAULT_VALUE) {
+  if (isNaN(timeout)) {
+    throw new TypeError('Timeout must be a number, undefined or Infinity.')
   }
 
-  if (!isFinite(value)) {
+  if (!isFinite(timeout)) {
     return 'Infinity'
   }
 
-  return +value
+  return +timeout
 }
 
 module.exports = parseTimeout

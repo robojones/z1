@@ -1,10 +1,12 @@
 #! /usr/bin/env node
 
 const path = require('path')
-const util = require('util')
 const program = require('commander')
 const spawn = require('child_process').spawn
 const colors = require('colors/safe')
+
+// initialize global.handle and global.log methods
+require('./lib/logs')
 
 const z1 = require('..')
 const getAppname = require('./lib/get-appname.js')
@@ -13,7 +15,6 @@ const parser = require('./lib/parser')
 const version = require('./lib/version')
 const z1Logs = require('./lib/z1-logs')
 const heading = require('./lib/heading')
-const { handle } = require('./lib/logs')
 const logResult = require('./lib/log-result')
 
 const SPACER = '--'
@@ -271,20 +272,6 @@ program
       handle(new Error('feature not found'))
     }
   })
-
-program
-  .command('upgrade')
-  .description('upgrade daemon to a newly installed version')
-  .action(util.deprecate(() => {
-    if (version.cli === version.daemon) {
-      console.log('already up-to-date')
-      return
-    }
-
-    z1.upgrade().then(() => {
-      console.log('upgrade successful')
-    }).catch(handle)
-  }, 'z1 upgrade - Use "z1 exit && z1 resurrect" or "pkill node && z1 resurrect" instead.'))
 
 if (!global.test) {
   if (process.argv.length === 2) {
