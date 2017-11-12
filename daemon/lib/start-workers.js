@@ -11,7 +11,18 @@ const NOEND = {
   end: false
 }
 
-module.exports = async function startWorkers(config, dir, pack, args = [], env = {}, connection) {
+/**
+ * Starts the workers for a specific app.
+ * @param {*} config - The config file with a .save option.
+ * @param {string} dir - The direcotry of the app.
+ * @param {*} pack - The package object of the app.
+ * @param {number} workerCount - The count of workers you want to start. Note: This may differ from the pack.workers
+ * @param {string[]} args - Arguments for the worker processes.
+ * @param {*} env - Environment variables for the worker processes.
+ * @param {*} connection - A connection to the CLI.
+ * @returns {Promise.<{app: string, dir: string, started: number, ports: number[]}>}
+ */
+module.exports = async function startWorkers(config, dir, pack, workerCount, args = [], env = {}, connection) {
   const workers = []
 
   if (pack.name === 'z1') {
@@ -33,10 +44,8 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     output = path.join(process.env.HOME, '.z1', pack.name)
   }
 
-  const workerCount = pack.workers
-
   const app = config.apps.find(app => app.name === pack.name)
-  app.workers = workerCount
+  app.workers = pack.workers
   config.save()
 
   const exitPromises = []
@@ -60,7 +69,7 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
     APPNAME: pack.name,
     PORT: ports[0],
     PORTS: ports.join(),
-    WORKERS: workerCount
+    WORKERS: pack.workers
   })
 
   for (let i = 0; i < workerCount; i += 1) {
@@ -102,12 +111,8 @@ module.exports = async function startWorkers(config, dir, pack, args = [], env =
 
         app.reviveCount += 1
 
-        const pkg = Object.assign({}, pack, {
-          workers: 1
-        })
-
         // passing the connection (even if it's dead) is necessary because some modules depend on it.
-        await startWorkers(config, dir, pkg, args, env, connection)
+        await startWorkers(config, dir, pack, 1, args, env, connection)
       }
     }).catch(handle)
   }

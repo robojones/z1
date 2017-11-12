@@ -15,7 +15,7 @@ module.exports = function resurrect(config, command, connection) {
     const q = config.apps.map(app => {
       const pack = getPack(app.dir, app.opt, app.env)
 
-      return startWorkers(config, app.dir, pack, app.args, app.env, connection)
+      return startWorkers(config, app.dir, pack, pack.workers, app.args, app.env, connection)
     })
 
     Promise.all(q).then(() => {

@@ -46,7 +46,7 @@ async function start(config, command, connection) {
   config.save()
 
   try {
-    return await startWorkers(config, command.dir, pack, command.args, command.env, connection)
+    return await startWorkers(config, command.dir, pack, pack.workers, command.args, command.env, connection)
   } catch (err) {
     // remove app from config
 

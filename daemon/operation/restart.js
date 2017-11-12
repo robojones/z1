@@ -46,7 +46,7 @@ async function restart(config, command, connection) {
   // remember old workers
   const workers = Worker.workerList.filter(worker => worker.name === command.app)
 
-  const data = await startWorkers(config, app.dir, pack, app.args, app.env, connection)
+  const data = await startWorkers(config, app.dir, pack, pack.workers, app.args, app.env, connection)
 
   // kill old workers
   const workersKilled = await killWorkers(workers, timeout, command.opt.signal, connection)
