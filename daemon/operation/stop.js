@@ -22,10 +22,10 @@ async function stop(config, command, connection) {
     // don't send output to cli anymore
 
     logManager.remove(config.apps[i].name)
+    // remove the app from the config
+    config.apps.splice(i, 1)
   }
 
-  // remove the app from the config
-  config.apps.splice(i, 1)
   config.save()
 
   return {
