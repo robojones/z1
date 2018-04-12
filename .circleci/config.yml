@@ -9,11 +9,9 @@ jobs:
           name: Restore dependencies
           key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run: mkdir -p node_modules
-      - run: ls node_modules
       - run:
           name: Install dependencies
           command: yarn install
-      - run: ls node_modules
       - save_cache:
           name: Save dependencies
           key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -30,22 +28,6 @@ jobs:
       - run:
           name: Run linter
           command: yarn lint
-  build:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore dependencies
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run:
-          name: Build typescript
-          command: yarn build
-      - save_cache:
-          name: Save build files
-          key: build-{{ .BuildNum }}
-          paths:
-            - build/
   test:
     docker:
       - image: circleci/node
@@ -54,10 +36,6 @@ jobs:
       - restore_cache:
           name: Restore dependencies
           key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - restore_cache:
-          name: Restore build files
-          key: build-{{ .BuildNum }}
-      - run: ls node_modules      
       - run:
           name: Run tests
           command: yarn test
@@ -72,10 +50,6 @@ jobs:
       - restore_cache:
           name: Restore dependencies
           key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - restore_cache:
-          name: Restore build files
-          key: build-{{ .BuildNum }}
-      - run: ls node_modules
       - run:
           name: Set NPM token
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
@@ -84,18 +58,15 @@ jobs:
           command: npm publish
 workflows:
   version: 2
-  build_test_publish:
+  test_publish:
     jobs:
       - dependencies
       - lint:
           requires:
             - dependencies
-      - build:
-          requires:
-            - lint
       - test:
           requires:
-            - build
+            - lint
       - publish:
           filters:
             tags:
