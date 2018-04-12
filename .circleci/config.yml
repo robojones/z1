@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  dependencies:
+  test:
     docker:
       - image: circleci/node
     steps:
@@ -16,25 +16,9 @@ jobs:
           key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules/
-  lint:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore dependencies
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Run linter
           command: yarn lint
-  test:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore dependencies
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
           command: yarn test
@@ -46,9 +30,6 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
-      - restore_cache:
-          name: Restore dependencies
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Set NPM token
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
@@ -57,20 +38,18 @@ jobs:
           command: npm publish
 workflows:
   version: 2
-  test_publish:
+  test_and_publish:
     jobs:
-      - dependencies
-      - lint:
-          requires:
-            - dependencies
       - test:
-          requires:
-            - lint
-      - publish:
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+){2}(-[0-9]+)?$/
-            branches:
-              ignore: /.*/
+              only: /.*/
+      - publish:
+          context: NPM
           requires:
             - test
+          filters:
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9]+)?$/
+            branches:
+              ignore: /.*/
