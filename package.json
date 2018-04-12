@@ -5,8 +5,10 @@
   "description": "Node.js cluster manager",
   "main": "remote/index.js",
   "scripts": {
+    "build": "JS → no build needed.",
     "test": "./cli/main.js exit && rm -rf coverage && nyc mocha",
-    "lint": "node_modules/eslint/bin/eslint.js ."
+    "lint": "node_modules/eslint/bin/eslint.js .",
+    "report-coverage": "codeclimate-test-reporter < coverage/lcov.info"
   },
   "bin": "cli/main.js",
   "engines": {
