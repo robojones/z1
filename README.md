@@ -1,12 +1,9 @@
 # z1
 
-[![Build Status](https://circleci.com/gh/robojones/z1.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/robojones/z1/tree/master)
-[![Test Coverage](https://codeclimate.com/github/robojones/z1/badges/coverage.svg)](https://codeclimate.com/github/robojones/z1/coverage)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CircleCI](https://circleci.com/gh/robojones/z1.svg?style=svg)](https://circleci.com/gh/robojones/z1)
 
-[![bitHound Code](https://www.bithound.io/github/robojones/z1/badges/code.svg)](https://www.bithound.io/github/robojones/z1)
-[![bitHound Overall Score](https://www.bithound.io/github/robojones/z1/badges/score.svg)](https://www.bithound.io/github/robojones/z1)
-[![bitHound Dependencies](https://www.bithound.io/github/robojones/z1/badges/dependencies.svg)](https://www.bithound.io/github/robojones/z1/master/dependencies/npm)
+[![Maintainability](https://api.codeclimate.com/v1/badges/1a728c9ea21b2bbe7c3b/maintainability)](https://codeclimate.com/github/robojones/z1/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/1a728c9ea21b2bbe7c3b/test_coverage)](https://codeclimate.com/github/robojones/z1/test_coverage)
 
 __z1__ is a Node.js cluster management program. It works on Linux Debian, Ubuntu, and other Debian based distributions.
 

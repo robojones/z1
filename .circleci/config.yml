@@ -17,14 +17,26 @@ jobs:
           paths:
             - node_modules/
       - run:
+          name: Install & initialize codeclimate test reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter before-build
+      - run:
           name: Run linter
           command: yarn lint
       - run:
           name: Run tests
           command: yarn test
+          environment:
+            MOCHA_FILE: reports/junit.xml
+      - store_test_results:
+          path: ./reports
+      - store_artifacts:
+          path: ./reports
       - run:
           name: Report coverage to Codeclimate
-          command: yarn report-coverage
+          command: ./cc-test-reporter after-build -r ${CODECLIMATE_REPO_TOKEN}
   publish:
     docker:
       - image: circleci/node
@@ -35,7 +47,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run:
           name: Publish to NPM
-          command: npm publish
+          command: npm publish --access=public
 workflows:
   version: 2
   test_and_publish:
