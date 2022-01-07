@@ -2,9 +2,6 @@
 
 [![CircleCI](https://circleci.com/gh/robojones/z1.svg?style=svg)](https://circleci.com/gh/robojones/z1)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/1a728c9ea21b2bbe7c3b/maintainability)](https://codeclimate.com/github/robojones/z1/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/1a728c9ea21b2bbe7c3b/test_coverage)](https://codeclimate.com/github/robojones/z1/test_coverage)
-
 __z1__ is a Node.js cluster management program. It works on Linux Debian, Ubuntu, and other Debian based distributions.
 
 When using Node.js on a __web server__, one will somehow come to the point where he wants to start __multiple processes__ for one app.

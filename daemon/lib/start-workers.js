@@ -1,6 +1,6 @@
 const path = require('path')
 const cluster = require('cluster')
-const mkdirp = require('mkdirp-promise')
+const mkdirp = require('mkdirp')
 
 const Worker = require('../lib/class/Worker')
 const logManager = require('./log')
