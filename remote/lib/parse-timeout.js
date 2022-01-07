@@ -7,15 +7,15 @@ const DEFAULT_VALUE = dev ? 0 : 30000 // 0 or 30s
  * @returns {string|number}
  */
 function parseTimeout(timeout = DEFAULT_VALUE) {
-  if (isNaN(timeout)) {
-    throw new TypeError('Timeout must be a number, undefined or Infinity.')
-  }
+	if (isNaN(timeout)) {
+		throw new TypeError('Timeout must be a number, undefined or Infinity.')
+	}
 
-  if (!isFinite(timeout)) {
-    return 'Infinity'
-  }
+	if (!isFinite(timeout)) {
+		return 'Infinity'
+	}
 
-  return +timeout
+	return +timeout
 }
 
 module.exports = parseTimeout

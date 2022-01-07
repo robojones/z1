@@ -5,7 +5,7 @@ const Connection = require('revents')
 const z1 = require('../../remote')
 
 const OPT = {
-  allowHalfOpen: false
+	allowHalfOpen: false,
 }
 
 /**
@@ -14,64 +14,65 @@ const OPT = {
  * @param {function} run - A function that gets called every time an object is received.
  */
 function remoteServer(filename, run) {
-  const file = path.resolve(filename)
+	const file = path.resolve(filename)
 
-  const server = net.createServer(OPT, socket => {
-    socket.on('error', handle)
+	const server = net.createServer(OPT, socket => {
+		socket.on('error', handle)
 
-    const connection = new Connection(socket)
+		const connection = new Connection(socket)
 
-    connection.on('error', error => {
-      connection.remoteEmit('error', error)
-    })
+		connection.on('error', error => {
+			connection.remoteEmit('error', error)
+		})
 
-    connection.on('command', async data => {
-      try {
-        const result = await run(data, connection)
-        connection.remoteEmit('result', result)
-      } catch (err) {
-        connection.remoteEmit('error', err)
-      }
-    })
+		connection.on('command', async data => {
+			try {
+				const result = await run(data, connection)
+				connection.remoteEmit('result', result)
+			} catch (err) {
+				connection.remoteEmit('error', err)
+			}
+		})
 
-    connection.SIGINT = connection.once('SIGINT').then(() => {
-      const msg = 'Received "SIGINT" from CLI. No new workers were started.'
+		connection.SIGINT = connection.once('SIGINT').then(() => {
+			const msg = 'Received "SIGINT" from CLI. No new workers were started.'
 
-      const error = new Error(msg)
-      error.code = 'SIGINT'
+			const error = new Error(msg)
+			error.code = 'SIGINT'
 
-      throw error
-    })
+			throw error
+		})
 
-    // prevent unhandled promise rejection warning
-    connection.SIGINT.catch(() => {})
-  })
+		// prevent unhandled promise rejection warning
+		connection.SIGINT.catch(() => {
+		})
+	})
 
-  if (!global.test) {
-    server.listen(file)
-  }
+	if (!global.test) {
+		server.listen(file)
+	}
 
-  server.on('error', async err => {
-    if (err.code !== 'EADDRINUSE') {
-      handle(err)
-      // try to restart server
-      remoteServer(filename, run)
-      return
-    }
+	server.on('error', async err => {
+		if (err.code !== 'EADDRINUSE') {
+			handle(err)
+			// try to restart server
+			remoteServer(filename, run)
+			return
+		}
 
-    const online = await z1._isOnline()
+		const online = await z1._isOnline()
 
-    if (online) {
-      console.log('Another daemon process ist running. Exiting with exit code 0.')
-      process.exit(0)
-    } else {
-      await fs.unlink(filename)
-      console.log('Dead socket removed.')
-      remoteServer(filename, run)
-    }
-  })
+		if (online) {
+			console.log('Another daemon process ist running. Exiting with exit code 0.')
+			process.exit(0)
+		} else {
+			await fs.unlink(filename)
+			console.log('Dead socket removed.')
+			remoteServer(filename, run)
+		}
+	})
 
-  remoteServer.server = server
+	remoteServer.server = server
 }
 
 remoteServer.Connection = Connection

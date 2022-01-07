@@ -3,10 +3,10 @@ const states = Worker.states
 const mergePorts = require('../lib/mergePorts')
 
 module.exports = function list(config) {
-  return new Promise(resolve => {
-    const stats = {}
+	return new Promise(resolve => {
+		const stats = {}
 
-    /**
+		/**
      * @typedef AppStats
      * @property {string} dir
      * @property {number} pending
@@ -16,7 +16,7 @@ module.exports = function list(config) {
      * @property {number} workers - The number of workers that should be available.
      */
 
-    /**
+		/**
      * @typedef app
      * @property {string} dir
      * @property {string} name
@@ -24,50 +24,50 @@ module.exports = function list(config) {
      * @property {number} [workers]
      */
 
-    /**
+		/**
      * Add an app to the stats.
      * @param {app} app
      */
-    function addApp(app) {
-      stats[app.name] = {
-        dir: app.dir,
-        pending: 0,
-        available: 0,
-        killed: 0,
-        ports: [],
-        reviveCount: app.reviveCount || 0,
-        workers: app.workers || 0
-      }
-    }
+		function addApp(app) {
+			stats[app.name] = {
+				dir: app.dir,
+				pending: 0,
+				available: 0,
+				killed: 0,
+				ports: [],
+				reviveCount: app.reviveCount || 0,
+				workers: app.workers || 0,
+			}
+		}
 
-    // show every started app (even if no workers are running)
-    config.apps.forEach(addApp)
+		// show every started app (even if no workers are running)
+		config.apps.forEach(addApp)
 
-    Worker.workerList.forEach(worker => {
-      const { name } = worker
+		Worker.workerList.forEach(worker => {
+			const { name } = worker
 
-      // show stopped apps that have running workers
-      if (!stats[name]) {
-        addApp({
-          name,
-          dir: worker.dir
-        })
-      }
+			// show stopped apps that have running workers
+			if (!stats[name]) {
+				addApp({
+					name,
+					dir: worker.dir,
+				})
+			}
 
-      /** @type {AppStats} */
-      const appStats = stats[name]
+			/** @type {AppStats} */
+			const appStats = stats[name]
 
-      // increase state counter
-      const state = states[worker.state].toLowerCase()
-      appStats[state]++
+			// increase state counter
+			const state = states[worker.state].toLowerCase()
+			appStats[state]++
 
-      // add ports
-      appStats.ports = mergePorts(appStats.ports, worker.ports)
-    })
+			// add ports
+			appStats.ports = mergePorts(appStats.ports, worker.ports)
+		})
 
-    resolve({
-      isResurrectable: global.isResurrectable,
-      stats
-    })
-  })
+		resolve({
+			isResurrectable: global.isResurrectable,
+			stats,
+		})
+	})
 }

@@ -6,13 +6,13 @@ const util = require('util')
  * @returns {string}
  */
 function logify(...stuff) {
-  return stuff.map(item => {
-    if (typeof item === 'object' || typeof item === 'undefined') {
-      return util.inspect(item)
-    } else {
-      return item
-    }
-  }).join(' ')
+	return stuff.map(item => {
+		if (typeof item === 'object' || typeof item === 'undefined') {
+			return util.inspect(item)
+		} else {
+			return item
+		}
+	}).join(' ')
 }
 
 module.exports = logify

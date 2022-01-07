@@ -4,8 +4,8 @@
 
 __z1__ is a Node.js cluster management program. It works on Linux Debian, Ubuntu, and other Debian based distributions.
 
-When using Node.js on a __web server__, one will somehow come to the point where he wants to start __multiple processes__ for one app.
-The main goal of z1 is to __simplify__ the creation and management of Node.js processes.
+When using Node.js on a __web server__, one will somehow come to the point where he wants to start __multiple
+processes__ for one app. The main goal of z1 is to __simplify__ the creation and management of Node.js processes.
 
 ![Terminal example](https://raw.githubusercontent.com/robojones/z1/master/screenshots/terminal.gif)
 
@@ -15,44 +15,45 @@ _This animation shows how simple it is to start a Node.js application with z1._
 
 - [Features](#features)
 - [Setup](#setup)
-  - [Installation](#installation)
-  - [Automatically resurrect z1](#automatically-resurrect-z1)
-  - [Prepare package.json](#prepare-packagejson)
-  - [Development](#development)
+    - [Installation](#installation)
+    - [Automatically resurrect z1](#automatically-resurrect-z1)
+    - [Prepare package.json](#prepare-packagejson)
+    - [Development](#development)
 - [CLI](#cli)
-  - [Environment variables](#environment-variables)
-  - [Start](#start)
-  - [Restart](#restart)
-  - [List](#list)
-  - [Info](#info)
-  - [Stop](#stop)
-  - [Exit](#exit)
-  - [Resurrect](#resurrect)
-  - [Install and Uninstall](#install-and-uninstall)
-  - [Passing arguments to workers](#passing-arguments-to-workers)
+    - [Environment variables](#environment-variables)
+    - [Start](#start)
+    - [Restart](#restart)
+    - [List](#list)
+    - [Info](#info)
+    - [Stop](#stop)
+    - [Exit](#exit)
+    - [Resurrect](#resurrect)
+    - [Install and Uninstall](#install-and-uninstall)
+    - [Passing arguments to workers](#passing-arguments-to-workers)
 - [API](#api)
-  - [z1.start](#z1startdir-args-opt-env-immediate)
-  - [z1.restart](#z1restartapp-opt-immediate)
-  - [z1.stop](#z1stopapp-opt-immediate)
-  - [z1.info](#z1infoapp)
-  - [z1.list](#z1list)
-  - [z1.exit](#z1exit)
-  - [z1.resurrect](#z1resurrectimmediate)
-  - [z1.ready](#z1ready)
+    - [z1.start](#z1startdir-args-opt-env-immediate)
+    - [z1.restart](#z1restartapp-opt-immediate)
+    - [z1.stop](#z1stopapp-opt-immediate)
+    - [z1.info](#z1infoapp)
+    - [z1.list](#z1list)
+    - [z1.exit](#z1exit)
+    - [z1.resurrect](#z1resurrectimmediate)
+    - [z1.ready](#z1ready)
 
 ## Changes
+
 - v4.0.0
-  - use [revents](https://npmjs.com/package/revents) for data transmission between the CLI and the daemon.
-  - `Ctrl + C` can now be used to abort the starting process of apps.
-  - remove upgrade command.
+    - use [revents](https://npmjs.com/package/revents) for data transmission between the CLI and the daemon.
+    - `Ctrl + C` can now be used to abort the starting process of apps.
+    - remove upgrade command.
 - v3.17.0
-  - add [WORKERS](#environment-variables) environment variable
+    - add [WORKERS](#environment-variables) environment variable
 - v3.16.0
-  - add colors to cli
+    - add colors to cli
 - v3.15.0
-  - display the app's logs during command execution
+    - display the app's logs during command execution
 - v3.14.0
-  - add JSDoc to API
+    - add JSDoc to API
 
 ## Setup
 
@@ -65,27 +66,27 @@ sudo npm install z1 -g
 ```
 
 __Note:__
-You might want to run `z1 resurrect` automatically after rebooting your system.
-It will start the z1 daemon and all the apps that were running before.
+You might want to run `z1 resurrect` automatically after rebooting your system. It will start the z1 daemon and all the
+apps that were running before.
 (see: [install command](#install-and-uninstall))
 
 ### Prepare package.json
 
-Before you can start your Node.js app,
-you need to add a few things to your
+Before you can start your Node.js app, you need to add a few things to your
 `package.json` file.
 
 1. __name__ - The name of your app.
 2. __main__ - The entry point of your app (The file that you would normally run with (`node <file>`).
 3. __ports__ _(optional)_ - An array of port numbers that your app uses.
-4. __workers__ _(optional)_ - A number specifying how many processes should be created for your app. The default value is the number of CPU-cores in your system.
+4. __workers__ _(optional)_ - A number specifying how many processes should be created for your app. The default value
+   is the number of CPU-cores in your system.
 5. __output__ _(optional)_ - A directory for the log and error files. (Default: `~/.z1/<yourAppname>`)
 6. __devPorts__ _(optional)_ - Ports for [development](#development)
 7. __devWorkers__ _(optional)_ - Workers for [development](#development)
 
 __Important:__
-z1 needs to know when your Node.js program (e.g. a web server) is successfully started.
-If you app uses ports, z1 will automatically know when it listens to all the specified ports. It will then assume, that you app is completely started.
+z1 needs to know when your Node.js program (e.g. a web server) is successfully started. If you app uses ports, z1 will
+automatically know when it listens to all the specified ports. It will then assume, that you app is completely started.
 __If you app does not use any ports, you must require z1 in your program and call the [z1.ready()](#z1ready) method.__
 
 Example package.json file:
@@ -101,17 +102,16 @@ Example package.json file:
 
 ### Development
 
-If you are running z1 locally, you can set `NODE_ENV=development`.
-This will cause z1 to use the `devPorts` and `devWorkers` (if specified) instead of the `ports` and `workers` properties from the `package.json`.
-The __default timeout__ for stop and restart will be set to __0ms__.
-
+If you are running z1 locally, you can set `NODE_ENV=development`. This will cause z1 to use the `devPorts`
+and `devWorkers` (if specified) instead of the `ports` and `workers` properties from the `package.json`. The __default
+timeout__ for stop and restart will be set to __0ms__.
 
 ## CLI
 
 ### Environment variables
 
-You can set different environment variables for each app.
-The [start](#start) command automatically applies the environment variables of the current shell to the app.
+You can set different environment variables for each app. The [start](#start) command automatically applies the
+environment variables of the current shell to the app.
 
 ```
 EXAMPLE=hello z1 start path/to/your/app
@@ -129,25 +129,25 @@ These variables __can't be overwritten__.
 
 ### Start
 
-After you [prepared the package.json](#prepare-packagejson) file of your app, you can now start it.
-First go to the directory where the `package.json` of your project is located. Type the following command into your terminal:
+After you [prepared the package.json](#prepare-packagejson) file of your app, you can now start it. First go to the
+directory where the `package.json` of your project is located. Type the following command into your terminal:
 
 ```
 z1 start
 ```
 
-This command works regardless of how many workers you have specified in the `package.json` file.
-If your app was successfully startet, the output should look like this:
+This command works regardless of how many workers you have specified in the `package.json` file. If your app was
+successfully startet, the output should look like this:
 
 ![Start command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/start.png)
 
-_As you may have noticed, each log is displayed twice. This happens because two workers are started for the app and the logs of all workers are being displayed._
+_As you may have noticed, each log is displayed twice. This happens because two workers are started for the app and the
+logs of all workers are being displayed._
 
 __Options__
 
-If you want to start your app with different settings
-than the ones specified in the `package.json`,
-you can add them to to the `z1 start` command.
+If you want to start your app with different settings than the ones specified in the `package.json`, you can add them to
+to the `z1 start` command.
 
 ```
 --name anotherName
@@ -158,16 +158,16 @@ you can add them to to the `z1 start` command.
 
 ### Restart
 
-You can restart your app to apply updates for your app or changes to the `package.json`.
-The restart process will be __gapless__ and no requests will be refused.
-Just type the following command:
+You can restart your app to apply updates for your app or changes to the `package.json`. The restart process will be __
+gapless__ and no requests will be refused. Just type the following command:
 
 ```
 z1 restart homepage
 ```
 
-The first argument for the `z1 restart` command is the name that was specified in the `package.json` when you started the app.
-If you are running this command inside the directory of the Node.js application, z1 will automatically detect the name.
+The first argument for the `z1 restart` command is the name that was specified in the `package.json` when you started
+the app. If you are running this command inside the directory of the Node.js application, z1 will automatically detect
+the name.
 
 Output of the example from above:
 
@@ -179,11 +179,10 @@ __Options__
 --timeout 10000
 ```
 
-`--timeout` is a number specifying the maximal time (in ms) that the old workers can __continue to run__ after they are killed.
-The timeout allows old processes to __finish their active requests__ while not accepting new ones.
-If all requests are finished, or the timeout is exceeded, the old processes get killed.
-The default value is 30000 (30s). If you set it to "Infinity" the old processes might run forever.
-
+`--timeout` is a number specifying the maximal time (in ms) that the old workers can __continue to run__ after they are
+killed. The timeout allows old processes to __finish their active requests__ while not accepting new ones. If all
+requests are finished, or the timeout is exceeded, the old processes get killed. The default value is 30000 (30s). If
+you set it to "Infinity" the old processes might run forever.
 
 ### List
 
@@ -194,7 +193,6 @@ z1 list
 Displays a list of all running apps.
 
 The output could look like this:
-
 
 ![List command output](https://raw.githubusercontent.com/robojones/z1/master/screenshots/list.png)
 
@@ -212,8 +210,8 @@ Example output:
 
 - __pending__ - processes are currently starting.
 - __available__ - workers are listening to all the ports specified in the `package.json`
-- __killed__ - workers are not listening for new connections.
-They will finish their outstanding requests before they exit.
+- __killed__ - workers are not listening for new connections. They will finish their outstanding requests before they
+  exit.
 - __revive count__ - shows you how often the workers of your app crashed since the last restart.
 
 __Options:__
@@ -285,14 +283,12 @@ You can start your app with custom arguments.
 z1 start --name 'custom app' --ports 80 -- hello
 ```
 
-This would start an app with the name 'custom app' that is listening on port 80.
-Everything behind the `--` will be passed to the workers.
-In your code you can get the "hello" as argv.
+This would start an app with the name 'custom app' that is listening on port 80. Everything behind the `--` will be
+passed to the workers. In your code you can get the "hello" as argv.
 
 ```javascript
 process.argv[2] === 'hello' // true
 ```
-
 
 ## API
 
@@ -305,13 +301,15 @@ const z1 = require('z1')
 ### z1.start(dir, args, opt, env, immediate)
 
 __Arguments__
+
 - __dir__ `<String>` - Path to the directory where the `package.json` of the app is located (Default: current directory)
 - __args__ `<Array>` _(optional)_ - Arguments for the workers
 - __opt__ `<Object>` _(optional)_ - Options that overwrite the ones from the [package.json](#prepare-packagejson)
 - __env__ `<Object>` _(optional)_ - Key-value-pairs to be added to `process.env` in the workers.
 - __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
-__Returns__ a `<Promise>` that gets resolved when the app is started. If you set __immediate__ to `true`, the promise gets resolved immediately after your command was transmitted to the daemon.
+__Returns__ a `<Promise>` that gets resolved when the app is started. If you set __immediate__ to `true`, the promise
+gets resolved immediately after your command was transmitted to the daemon.
 
 By default It resolves to an object with the following data:
 
@@ -330,13 +328,15 @@ By default It resolves to an object with the following data:
 ### z1.restart(app, opt, immediate)
 
 __Arguments__
+
 - __app__ `<String>` - The name specified in the `package.json` of the app you want to restart.
 - __opt__ `<Object>` - _(optional)_
-  - __timeout__ `<Number>` - Maximum time until the old workers get killed (default: 30000ms).
-  - __signal__ `<String>` - Kill signal for the old workers
+    - __timeout__ `<Number>` - Maximum time until the old workers get killed (default: 30000ms).
+    - __signal__ `<String>` - Kill signal for the old workers
 - __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
-__Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves to an object with the following data:
+__Returns__ a `<Promise>` that gets resolved when the new workers are available and the old ones are killed. It resolves
+to an object with the following data:
 
 ```javascript
 {
@@ -355,13 +355,15 @@ __Returns__ a `<Promise>` that gets resolved when the new workers are available 
 ### z1.stop(app, opt, immediate)
 
 __Arguments__
+
 - __app__ `<String>` The name specified in the `package.json` of the app you want to restart.
 - __opt__ `<Object>` _(optional)_
-  - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
-  - __signal__ `<String>` Kill signal
+    - __timeout__ `<Number>` Maximum time until the old workers get killed (default: 30000ms).
+    - __signal__ `<String>` Kill signal
 - __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
-__Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the following data:
+__Returns__ a `<Promise>` that gets resolved when the old workers are killed. It resolves to an object with the
+following data:
 
 ```javascript
 {
@@ -376,6 +378,7 @@ __Returns__ a `<Promise>` that gets resolved when the old workers are killed. It
 ### z1.info(app)
 
 __Arguments__
+
 - __app__ `<String>` The name of your app.
 
 __Returns__ a `<Promise>` that gets resolved to an object that contains information about the app.
@@ -424,6 +427,7 @@ The output would be:
 __Returns__ a `<Promise>` that resolves to an empty object. It gets resolves after the z1 daemon has exited.
 
 ### z1.resurrect(immediate)
+
 - __immediate__ `<Boolean>` _(optional)_ (Default: `false`)
 
 __Returns__ a `<Promise>` that resolves to an object.
@@ -444,9 +448,11 @@ Resurrect will start all apps that were running before the daemon was killed.
 
 __Returns__ a `<Promise>` that resolves when the ready signal has been transmitted.
 
-This function __must__ be called if an app does not use any port. It will tell the z1 daemon that your app has been started successfully.
+This function __must__ be called if an app does not use any port. It will tell the z1 daemon that your app has been
+started successfully.
 
 Example:
+
 ```javascript
 const z1 = require('z1')
 

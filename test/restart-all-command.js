@@ -1,21 +1,21 @@
 const z1 = require('..')
 
 const {
-  works
+	works,
 } = require('./lib/command')
 const {
-  TIMEOUT,
-  KILL_TIMEOUT
+	TIMEOUT,
+	KILL_TIMEOUT,
 } = require('./lib/config')
 
 describe('restart-all command', function () {
-  this.timeout(TIMEOUT)
+	this.timeout(TIMEOUT)
 
-  it('should restart all workers of the app', async function () {
-    this.apps.push('basic')
-    await z1.start('test-app/basic')
-    await works(`z1 restart-all --timeout ${KILL_TIMEOUT}`)
-  })
+	it('should restart all workers of the app', async function () {
+		this.apps.push('basic')
+		await z1.start('test-app/basic')
+		await works(`z1 restart-all --timeout ${KILL_TIMEOUT}`)
+	})
 
-  it('should exit immediately if --immediate is set')
+	it('should exit immediately if --immediate is set')
 })

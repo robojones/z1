@@ -9,28 +9,28 @@ const sendLogsToCLI = require('./send-logs-to-CLI.js')
  * @returns {number}
  */
 async function killWorkers(workers, timeout, signal, connection) {
-  workers.forEach(worker => {
-    log(`kill worker ${worker.id}, connected: ${worker.w.isConnected()}, dead: ${worker.w.isDead()}`)
-  })
-  const killed = workers.map(async worker => {
-    if (worker.isConnected()) {
-      const logs = sendLogsToCLI(worker, connection)
-      const exit = worker.once('exit')
+	workers.forEach(worker => {
+		log(`kill worker ${worker.id}, connected: ${worker.w.isConnected()}, dead: ${worker.w.isDead()}`)
+	})
+	const killed = workers.map(async worker => {
+		if (worker.isConnected()) {
+			const logs = sendLogsToCLI(worker, connection)
+			const exit = worker.once('exit')
 
-      if (worker.kill(signal, timeout)) {
-        await exit
-      }
+			if (worker.kill(signal, timeout)) {
+				await exit
+			}
 
-      logs.stop()
+			logs.stop()
 
-      return true
-    }
-    return false
-  })
+			return true
+		}
+		return false
+	})
 
-  const result = await Promise.all(killed)
+	const result = await Promise.all(killed)
 
-  return result.filter(w => w).length
+	return result.filter(w => w).length
 }
 
 module.exports = killWorkers

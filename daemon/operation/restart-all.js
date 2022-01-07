@@ -1,25 +1,25 @@
 const restart = require('./restart')
 
 module.exports = function restartAll(config, command, connection) {
-  const q = []
+	const q = []
 
-  config.apps.forEach(app => {
-    const cmd = Object.assign({}, command, {
-      app: app.name
-    })
+	config.apps.forEach(app => {
+		const cmd = Object.assign({}, command, {
+			app: app.name,
+		})
 
-    q.push(restart(config, cmd, connection))
-  })
+		q.push(restart(config, cmd, connection))
+	})
 
-  return Promise.all(q).then(stats => {
-    return stats.reduce((a, b) => {
-      a.started += b.started
-      a.killed += b.killed
-      return a
-    }, {
-      app: '*',
-      started: 0,
-      killed: 0
-    })
-  })
+	return Promise.all(q).then(stats => {
+		return stats.reduce((a, b) => {
+			a.started += b.started
+			a.killed += b.killed
+			return a
+		}, {
+			app: '*',
+			started: 0,
+			killed: 0,
+		})
+	})
 }
