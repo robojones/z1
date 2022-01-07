@@ -3,7 +3,7 @@ const path = require('path')
 const cliFile = path.resolve('cli/main.js')
 
 function modify(cmd) {
-  return cmd.replace(/z1/, `${cliFile}`)
+	return cmd.replace(/z1/, `${cliFile}`)
 }
 
 /**
@@ -11,8 +11,8 @@ function modify(cmd) {
  * @param {string} cmd - The command.
  */
 function works(cmd) {
-  cmd = modify(cmd)
-  return command.works(cmd)
+	cmd = modify(cmd)
+	return command.works(cmd)
 }
 
 /**
@@ -20,11 +20,11 @@ function works(cmd) {
  * @param {string} cmd - The command.
  */
 function fails(cmd) {
-  cmd = modify(cmd)
-  return command.fails(cmd)
+	cmd = modify(cmd)
+	return command.fails(cmd)
 }
 
 module.exports = {
-  works,
-  fails
+	works,
+	fails,
 }

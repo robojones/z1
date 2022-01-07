@@ -13,36 +13,36 @@ const fs = require('fs')
  * @returns {config}
  */
 function getConfig(version) {
-  const configFile = path.resolve('config.json')
-  let config
+	const configFile = path.resolve('config.json')
+	let config
 
-  try {
-    config = require(configFile)
-  } catch (err) {
-    if (err.code !== 'MODULE_NOT_FOUND') {
-      throw err
-    }
-  }
+	try {
+		config = require(configFile)
+	} catch (err) {
+		if (err.code !== 'MODULE_NOT_FOUND') {
+			throw err
+		}
+	}
 
-  function save() {
-    const content = JSON.stringify(config, null, 2)
-    fs.writeFileSync(configFile, content)
-  }
+	function save() {
+		const content = JSON.stringify(config, null, 2)
+		fs.writeFileSync(configFile, content)
+	}
 
-  if (!config) {
-    config = {
-      apps: []
-    }
-  }
+	if (!config) {
+		config = {
+			apps: [],
+		}
+	}
 
-  config.save = save
+	config.save = save
 
-  if (config.version !== version) {
-    config.version = version
-    save()
-  }
+	if (config.version !== version) {
+		config.version = version
+		save()
+	}
 
-  return config
+	return config
 }
 
 module.exports = getConfig

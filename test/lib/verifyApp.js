@@ -18,25 +18,25 @@ const z1 = require('../..')
  * @param {appProps} props - The properties of the app.
  */
 async function verifyApp(name, props = {}) {
-  props = Object.assign({
-    dir: path.resolve('example', name),
-    ports: [],
-    pending: 0,
-    available: 0,
-    killed: 0,
-    reviveCount: 0
-  }, props)
+	props = Object.assign({
+		dir: path.resolve('example', name),
+		ports: [],
+		pending: 0,
+		available: 0,
+		killed: 0,
+		reviveCount: 0,
+	}, props)
 
-  const stats = await z1.info(name)
+	const stats = await z1.info(name)
 
-  for (let i = 0; i < props.ports.length; i += 1) {
-    assert.strictEqual(stats.ports[i], props.ports[i], `"${name}" should listen to port ${stats.ports[i]}.`)
-  }
+	for (let i = 0; i < props.ports.length; i += 1) {
+		assert.strictEqual(stats.ports[i], props.ports[i], `"${name}" should listen to port ${stats.ports[i]}.`)
+	}
 
-  assert.strictEqual(stats.pending, props.pending, `"${name}" should have ${props.pending} pending worker(s).`)
-  assert.strictEqual(stats.available, props.available, `"${name}" should have ${props.available} available worker(s).`)
-  assert.strictEqual(stats.killed, props.killed, `"${name}" should have ${props.killed} killed worker(s).`)
-  assert.strictEqual(stats.reviveCount, props.reviveCount, `"${name}" should be revived ${props.reviveCount} time(s).`)
+	assert.strictEqual(stats.pending, props.pending, `"${name}" should have ${props.pending} pending worker(s).`)
+	assert.strictEqual(stats.available, props.available, `"${name}" should have ${props.available} available worker(s).`)
+	assert.strictEqual(stats.killed, props.killed, `"${name}" should have ${props.killed} killed worker(s).`)
+	assert.strictEqual(stats.reviveCount, props.reviveCount, `"${name}" should be revived ${props.reviveCount} time(s).`)
 }
 
 module.exports = verifyApp

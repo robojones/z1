@@ -4,11 +4,11 @@
  * @returns {string}
  */
 function format(date) {
-  const year = date.getUTCFullYear()
-  const month = date.getUTCMonth().toString().padStart(2, '0')
-  const day = date.getUTCDate().toString().padStart(2, '0')
+	const year = date.getUTCFullYear()
+	const month = date.getUTCMonth().toString().padStart(2, '0')
+	const day = date.getUTCDate().toString().padStart(2, '0')
 
-  return `${year}-${month}-${day}`
+	return `${year}-${month}-${day}`
 }
 
 module.exports = format

@@ -1,7 +1,11 @@
 {
   "name": "basic",
-  "ports": [8080],
-  "devPorts": [8070],
+  "ports": [
+    8080
+  ],
+  "devPorts": [
+    8070
+  ],
   "main": "server.js",
   "workers": 2,
   "devWorkers": 1

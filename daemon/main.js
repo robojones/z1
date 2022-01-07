@@ -8,11 +8,11 @@ const pack = require('../package.json')
 const z1Dir = path.join(process.env.HOME, '.z1')
 
 try {
-  fs.mkdirSync(z1Dir)
+	fs.mkdirSync(z1Dir)
 } catch (err) {
-  if (err.code !== 'EEXIST') {
-    throw err
-  }
+	if (err.code !== 'EEXIST') {
+		throw err
+	}
 }
 
 process.chdir(z1Dir)
@@ -29,33 +29,33 @@ const remoteServer = require('./lib/remoteServer')
 const config = getConfig(pack.version)
 
 let operation = {
-  exit: require('./operation/exit'),
-  info: require('./operation/info'),
-  list: require('./operation/list'),
-  logs: require('./operation/logs'),
-  ping: require('./operation/ping'),
-  'restart-all': require('./operation/restart-all'),
-  restart: require('./operation/restart'),
-  resurrect: require('./operation/resurrect'),
-  start: require('./operation/start'),
-  stop: require('./operation/stop')
+	'exit': require('./operation/exit'),
+	'info': require('./operation/info'),
+	'list': require('./operation/list'),
+	'logs': require('./operation/logs'),
+	'ping': require('./operation/ping'),
+	'restart-all': require('./operation/restart-all'),
+	'restart': require('./operation/restart'),
+	'resurrect': require('./operation/resurrect'),
+	'start': require('./operation/start'),
+	'stop': require('./operation/stop'),
 }
 
 remoteServer('sick.sock', async (command, connection) => {
-  if (process.env.NODE_ENV === 'development') {
-    log('daemon: run command', command.name)
-  }
+	if (process.env.NODE_ENV === 'development') {
+		log('daemon: run command', command.name)
+	}
 
-  if (!operation.hasOwnProperty(command.name)) {
-    throw new Error(`Unknown operation "${command.name}".`)
-  }
+	if (!operation.hasOwnProperty(command.name)) {
+		throw new Error(`Unknown operation "${command.name}".`)
+	}
 
-  if (command.immediate) {
-    operation[command.name](config, command, connection).catch(handle)
-    return {}
-  }
+	if (command.immediate) {
+		operation[command.name](config, command, connection).catch(handle)
+		return {}
+	}
 
-  return operation[command.name](config, command, connection)
+	return operation[command.name](config, command, connection)
 })
 
 console.log('daemon: daemon started')

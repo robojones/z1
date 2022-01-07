@@ -23,41 +23,41 @@ const getPack = require('../lib/getPack')
  * @param {startCommandObject} command - An object containing the details of the command.
  */
 async function start(config, command, connection) {
-  if (global.isResurrectable) {
-    global.isResurrectable = false
-    config.apps = []
-  }
+	if (global.isResurrectable) {
+		global.isResurrectable = false
+		config.apps = []
+	}
 
-  // (re)load package
-  const pack = getPack(command.dir, command.opt, command.env)
+	// (re)load package
+	const pack = getPack(command.dir, command.opt, command.env)
 
-  // check for duplicate name
-  if (config.apps.some(app => app.name === pack.name)) {
-    throw new Error(`an app called "${pack.name}" is already running.`)
-  }
+	// check for duplicate name
+	if (config.apps.some(app => app.name === pack.name)) {
+		throw new Error(`an app called "${pack.name}" is already running.`)
+	}
 
-  config.apps.push({
-    dir: command.dir,
-    name: pack.name,
-    args: command.args,
-    opt: command.opt,
-    env: command.env
-  })
-  config.save()
+	config.apps.push({
+		dir: command.dir,
+		name: pack.name,
+		args: command.args,
+		opt: command.opt,
+		env: command.env,
+	})
+	config.save()
 
-  try {
-    return await startWorkers(config, command.dir, pack, pack.workers, command.args, command.env, connection)
-  } catch (err) {
-    // remove app from config
+	try {
+		return await startWorkers(config, command.dir, pack, pack.workers, command.args, command.env, connection)
+	} catch (err) {
+		// remove app from config
 
-    const i = config.apps.findIndex(app => app.name === pack.name)
-    if (i !== -1) {
-      config.apps.splice(i, 1)
-      config.save()
-    }
+		const i = config.apps.findIndex(app => app.name === pack.name)
+		if (i !== -1) {
+			config.apps.splice(i, 1)
+			config.save()
+		}
 
-    throw err
-  }
+		throw err
+	}
 }
 
 module.exports = start
